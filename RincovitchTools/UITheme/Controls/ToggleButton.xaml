@@ -1,0 +1,1032 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:ei="http://schemas.microsoft.com/xaml/behaviors/2010"
+  xmlns:icon="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+  xmlns:theme="clr-namespace:RincovitchTools.UITheme"
+  xmlns:command="clr-namespace:RincovitchTools.UITheme">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/LightTheme.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/RadioButton.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Converter.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+  <!-- #region BaseToggleButton -->
+  <Style
+    x:Key="ToggleButtonVertical"
+    TargetType="ToggleButton">
+    <Setter
+      Property="FontSize"
+      Value="10" />
+    <Setter
+      Property="Cursor"
+      Value="Hand" />
+    <Setter
+      Property="theme:UI.PaddingContent"
+      Value="0 0 0 10" />
+    <Setter
+      Property="Padding"
+      Value="0 0" />
+    <Setter
+      Property="Height"
+      Value="60" />
+    <Setter
+      Property="Width"
+      Value="60" />
+    <Setter
+      Property="theme:UI.IconHeight"
+      Value="24" />
+    <Setter
+      Property="theme:UI.IconWidth"
+      Value="24" />
+    <Setter
+      Property="HorizontalContentAlignment"
+      Value="Center" />
+    <Setter
+      Property="theme:UI.BDCorner"
+      Value="0" />
+    <Setter
+      Property="BorderThickness"
+      Value="1" />
+    <Setter
+      Property="BorderBrush"
+      Value="Transparent" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Setter
+      Property="CommandParameter"
+      Value="{Binding}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToggleButton">
+          <Border
+            Padding="{TemplateBinding Padding}"
+            x:Name="Bd"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.BDCorner)}">
+            <StackPanel
+              VerticalAlignment="Center"
+              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+              <Grid
+                Margin="0 10 0 5">
+                <icon:MaterialIcon
+                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconTrue), Converter={StaticResource NullConverter}}"
+                  Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                  Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                  Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconTrue)}" />
+                <icon:MaterialIcon
+                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconFalse), Converter={StaticResource NullConverter}}"
+                  Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                  Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                  Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconFalse)}" />
+              </Grid>
+              <ContentPresenter
+                Content="{TemplateBinding Content}"
+                Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.PaddingContent) }"
+                VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                Property="Background"
+                Value="{DynamicResource ControlHoverBackgroundBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsEnabled"
+              Value="False">
+              <Setter
+                Property="Background"
+                Value="{DynamicResource ControlDisabledBackgroundBrush}" />
+              <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource ControlDisabledBorderBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsChecked"
+              Value="True">
+              <Setter
+                Property="Background"
+                Value="{DynamicResource ControlSelectedBackgroundBrush}" />
+              <Setter
+                Property="Foreground"
+                Value="{DynamicResource AccentBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region BaseToggleButton -->
+  <Style
+    x:Key="BaseToggleButton"
+    TargetType="ToggleButton">
+    <Setter
+      Property="Cursor"
+      Value="Hand" />
+    <Setter
+      Property="theme:UI.PaddingContent"
+      Value="5 0" />
+    <Setter
+      Property="Padding"
+      Value="10 0" />
+    <Setter
+      Property="Height"
+      Value="30" />
+    <Setter
+      Property="theme:UI.IconHeight"
+      Value="20" />
+    <Setter
+      Property="theme:UI.IconWidth"
+      Value="20" />
+    <Setter
+      Property="HorizontalContentAlignment"
+      Value="Center" />
+    <Setter
+      Property="BorderThickness"
+      Value="1" />
+    <Setter
+      Property="BorderBrush"
+      Value="{DynamicResource ControlBorderBrush}" />
+    <Setter
+      Property="Background"
+      Value="{DynamicResource ControlBackgroundBrush}" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Setter
+      Property="CommandParameter"
+      Value="{Binding}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToggleButton">
+          <Border
+            Padding="{TemplateBinding Padding}"
+            x:Name="Bd"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.BDCorner)}">
+            <StackPanel
+              Orientation="Horizontal"
+              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+              <icon:MaterialIcon
+                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconFalse), Converter={StaticResource NullConverter}}"
+                Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconFalse)}" />
+              <ContentPresenter
+                Content="{TemplateBinding Content}"
+                Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.PaddingContent) }"
+                VerticalAlignment="Center" />
+              <icon:MaterialIcon
+                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconTrue), Converter={StaticResource NullConverter}}"
+                Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconTrue)}" />
+            </StackPanel>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                Property="Background"
+                Value="{DynamicResource ControlHoverBackgroundBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsEnabled"
+              Value="False">
+              <Setter
+                Property="Background"
+                Value="{DynamicResource ControlDisabledBackgroundBrush}" />
+              <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource ControlDisabledBorderBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region DefaultToggleButton -->
+  <Style
+    BasedOn="{StaticResource BaseToggleButton}"
+    TargetType="ToggleButton" />
+  <!--#endregion-->
+  <!-- #region ToggleButtonRound -->
+  <Style
+    TargetType="ToggleButton"
+    x:Key="ToggleButtonRound">
+    <Setter
+      Property="Cursor"
+      Value="Hand" />
+    <Setter
+      Property="Height"
+      Value="30" />
+    <Setter
+      Property="Width"
+      Value="30" />
+    <Setter
+      Property="theme:UI.IconWidth"
+      Value="20" />
+    <Setter
+      Property="theme:UI.IconHeight"
+      Value="20" />
+    <Setter
+      Property="BorderBrush"
+      Value="{DynamicResource ControlBorderBrush}" />
+    <Setter
+      Property="Background"
+      Value="{DynamicResource ControlBackgroundBrush}" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Setter
+      Property="CommandParameter"
+      Value="{Binding}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToggleButton">
+          <Border
+            x:Name="Bd"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Height}"
+            Padding="{TemplateBinding Padding}">
+            <Grid>
+              <Grid
+                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconTrue), Converter={StaticResource NullConverter}}">
+                <icon:MaterialIcon
+                  Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                  Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                  Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconTrue)}"
+                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+              </Grid>
+              <Grid
+                Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconFalse), Converter={StaticResource NullConverter}}">
+                <icon:MaterialIcon
+                  Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                  Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                  Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconFalse)}"
+                  Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsChecked, Converter={StaticResource BoolConverterReverse}}" />
+              </Grid>
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                Property="Background"
+                Value="{DynamicResource ControlHoverBackgroundBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsEnabled"
+              Value="False">
+              <Setter
+                Property="Background"
+                Value="{DynamicResource ControlDisabledBackgroundBrush}" />
+              <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource ControlDisabledBorderBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonTwoContent -->
+  <Style
+    TargetType="ToggleButton"
+    x:Key="ToggleButtonTwoContent">
+    <Setter
+      Property="Cursor"
+      Value="Hand" />
+    <Setter
+      Property="Height"
+      Value="30" />
+    <Setter
+      Property="BorderBrush"
+      Value="Transparent" />
+    <Setter
+      Property="Background"
+      Value="{DynamicResource ControlBackgroundBrush}" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Setter
+      Property="CommandParameter"
+      Value="{Binding}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToggleButton">
+          <Border
+            x:Name="Bd"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.BDCorner)}"
+            Padding="{TemplateBinding Padding}">
+            <Grid
+              Margin="1">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                  Width="*" />
+                <ColumnDefinition
+                  Width="*" />
+              </Grid.ColumnDefinitions>
+              <Border
+                Name="BdFalse"
+                Background="{TemplateBinding Background}"
+                BorderThickness="0"
+                CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                Padding="{TemplateBinding Padding}">
+                <TextBlock
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.ContentFalse)}" />
+              </Border>
+              <Border
+                Name="BdTrue"
+                Grid.Column="1"
+                Background="{TemplateBinding Background}"
+                BorderThickness="0"
+                CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                Padding="{TemplateBinding Padding}">
+                <TextBlock
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.ContentTrue)}" />
+              </Border>
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsChecked"
+              Value="True">
+              <Setter
+                TargetName="BdTrue"
+                Property="Background"
+                Value="{DynamicResource PrimaryBackgroundBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsChecked"
+              Value="False">
+              <Setter
+                TargetName="BdFalse"
+                Property="Background"
+                Value="{DynamicResource PrimaryBackgroundBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonTransparent -->
+  <Style
+    BasedOn="{StaticResource BaseToggleButton}"
+    x:Key="ToggleButtonTransparent"
+    TargetType="ToggleButton">
+    <Setter
+      Property="BorderBrush"
+      Value="Transparent" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="HorizontalContentAlignment"
+      Value="Left" />
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonTransparentAll -->
+  <Style
+    BasedOn="{StaticResource BaseToggleButton}"
+    x:Key="ToggleButtonTransparentAll"
+    TargetType="ToggleButton">
+    <Setter
+      Property="BorderBrush"
+      Value="Transparent" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="HorizontalContentAlignment"
+      Value="Left" />
+    <Style.Triggers>
+      <Trigger
+        Property="IsMouseOver"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="Transparent" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonActive -->
+  <Style
+    BasedOn="{StaticResource BaseToggleButton}"
+    x:Key="ToggleButtonActive"
+    TargetType="ToggleButton">
+    <Setter
+      Property="BorderBrush"
+      Value="{DynamicResource AccentBlackBrush}" />
+    <Setter
+      Property="Background"
+      Value="{DynamicResource AccentBlackBrush}" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource AccentBlackForegroundBrush}" />
+    <Style.Triggers>
+      <Trigger
+        Property="IsMouseOver"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="{DynamicResource AccentBlackHoverBrush}" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonIconRoundTransparent -->
+  <Style
+    BasedOn="{StaticResource ToggleButtonRound}"
+    x:Key="ToggleButtonIconRoundTransparent"
+    TargetType="ToggleButton">
+    <Setter
+      Property="BorderBrush"
+      Value="Transparent" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonIconRoundTransparentAll -->
+  <Style
+    BasedOn="{StaticResource ToggleButtonRound}"
+    x:Key="ToggleButtonIconRoundTransparentAll"
+    TargetType="ToggleButton">
+    <Setter
+      Property="BorderBrush"
+      Value="Transparent" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Style.Triggers>
+      <Trigger
+        Property="IsMouseOver"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="Transparent" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+  <!-- #endregion -->
+  
+  <!-- #region ToggleButtonIconRoundPopupAccount -->
+  <Style
+    BasedOn="{StaticResource ToggleButtonIconRoundTransparent}"
+    TargetType="ToggleButton"
+    x:Key="ToggleButtonIconRoundPopupAccount">
+    <Setter
+      Property="theme:UI.BDCorner"
+      Value="4" />
+    <Setter
+      Property="Height"
+      Value="60" />
+    <Setter
+      Property="Width"
+      Value="60" />
+    <Setter
+      Property="theme:UI.IconWidth"
+      Value="24" />
+    <Setter
+      Property="theme:UI.IconHeight"
+      Value="24" />
+    <Setter
+      Property="theme:UI.Icon"
+      Value="AccountCircleOutline" />
+    <Setter
+      Property="CommandParameter"
+      Value="{Binding}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToggleButton">
+          <Border
+            x:Name="Bd"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="0"
+            Padding="{TemplateBinding Padding}">
+            <Grid>
+              <icon:MaterialIcon
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.Icon)}" />
+              <Popup
+                PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                x:Name="PART_Popup"
+                Placement="Right"
+                IsOpen="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                StaysOpen="False"
+                AllowsTransparency="True"
+                Focusable="False"
+                PopupAnimation="None">
+                <Border
+                  CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                  Background="{DynamicResource PrimaryBackgroundBrush}"
+                  BorderBrush="{DynamicResource PrimaryBorderBrush}"
+                  BorderThickness="1"
+                  Margin="1 0 0 0">
+                  <StackPanel
+                    MinWidth="200">
+                    <Grid>
+                      <Image
+                        Width="40"
+                        Height="40">
+                        <Image.Clip>
+                          <EllipseGeometry
+                            Center="20 20"
+                            RadiusX="20"
+                            RadiusY="20" />
+                        </Image.Clip>
+                      </Image>
+                      <StackPanel
+                        VerticalAlignment="Center"
+                        Margin="50 0 10 0">
+                        <TextBlock
+                          Text="asdasfasf" />
+                        <TextBlock
+                          Text="asdasfasf" />
+                      </StackPanel>
+                    </Grid>
+                    <Separator />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="HelpCircle"
+                      Content="Help"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.HelpCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="Settings"
+                      Content="Accounts"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.AccountsCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Separator />
+                    <TextBlock
+                      Margin="10 10 0 5"
+                      Text="Theme" />
+                    <RadioButton
+                      Margin="20 0 0 0"
+                      Style="{StaticResource RadioButtonThemeStyle}"
+                      theme:UI.BDCorner="0"
+                      Content="    Dark"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.DarkThemeCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <RadioButton
+                      Margin="20 0 0 0"
+                      IsChecked="True"
+                      Style="{StaticResource RadioButtonThemeStyle}"
+                      theme:UI.BDCorner="0"
+                      Content="    Light"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.LightThemeCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Separator />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="LogoutVariant"
+                      Content="Log out"
+                      Foreground="{DynamicResource AccentBrush}"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.LogoutCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                  </StackPanel>
+                </Border>
+              </Popup>
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                TargetName="Bd"
+                Property="Background"
+                Value="{DynamicResource ControlHoverBackgroundBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonIconRoundPopupFolder -->
+  <Style
+    BasedOn="{StaticResource ToggleButtonIconRoundTransparent}"
+    TargetType="ToggleButton"
+    x:Key="ToggleButtonIconRoundPopupFolder">
+    <Setter
+      Property="theme:UI.BDCorner"
+      Value="4" />
+    <Setter
+      Property="theme:UI.Icon"
+      Value="DotsHorizontal" />
+    <Setter
+      Property="CommandParameter"
+      Value="{Binding}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToggleButton">
+          <Border
+            x:Name="Bd"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="30"
+            Padding="{TemplateBinding Padding}">
+            <Grid>
+              <icon:MaterialIcon
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.Icon)}" />
+              <Popup
+                PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                x:Name="PART_Popup"
+                Placement="Bottom"
+                IsOpen="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                StaysOpen="False"
+                AllowsTransparency="True"
+                Focusable="False"
+                PopupAnimation="None">
+                <Border
+                  CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                  Background="{DynamicResource PrimaryBackgroundBrush}"
+                  BorderBrush="{DynamicResource PrimaryBorderBrush}"
+                  BorderThickness="1"
+                  Margin="0 1 0 0">
+                  <StackPanel
+                    Width="200">
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="FolderPlusOutline"
+                      Content="New folder"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.NewFolderCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Separator />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="TrayDownload"
+                      Content="Download"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.DownloadCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="CursorMove"
+                      Content="Move"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.MoveCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Grid>
+                      <ToggleButton
+                        Style="{StaticResource ToggleButtonTransparent}"
+                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                        theme:UI.BDCorner="0"
+                        theme:UI.IconFalse="ShareVariantOutline"
+                        Content="Share"
+                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.ShareCommand)}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                      <icon:MaterialIcon
+                        Margin="0 0 10 0"
+                        Width="15"
+                        Height="15"
+                        HorizontalAlignment="Right"
+                        Kind="Launch" />
+                    </Grid>
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="EditOutline"
+                      Content="Rename"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.RenameCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Separator />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="TrashOutline"
+                      Content="Delete"
+                      Foreground="{DynamicResource AccentBrush}"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.DeleteCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                  </StackPanel>
+                </Border>
+              </Popup>
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                TargetName="Bd"
+                Property="Background"
+                Value="{DynamicResource ControlHoverBackgroundBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonIconRoundPopupFamilies -->
+  <Style
+    BasedOn="{StaticResource ToggleButtonIconRoundTransparent}"
+    TargetType="ToggleButton"
+    x:Key="ToggleButtonIconRoundPopupFamilies">
+    <Setter
+      Property="theme:UI.BDCorner"
+      Value="4" />
+    <Setter
+      Property="theme:UI.Icon"
+      Value="DotsHorizontal" />
+    <Setter
+      Property="CommandParameter"
+      Value="{Binding}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToggleButton">
+          <Border
+            x:Name="Bd"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="30"
+            Padding="{TemplateBinding Padding}">
+            <Grid>
+              <icon:MaterialIcon
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                Width="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconWidth)}"
+                Height="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.IconHeight)}"
+                Kind="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.Icon)}" />
+              <Popup
+                PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                x:Name="PART_Popup"
+                Placement="Bottom"
+                IsOpen="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                StaysOpen="False"
+                AllowsTransparency="True"
+                Focusable="False"
+                PopupAnimation="None">
+                <Border
+                  CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                  Background="{DynamicResource PrimaryBackgroundBrush}"
+                  BorderBrush="{DynamicResource PrimaryBorderBrush}"
+                  BorderThickness="1"
+                  Margin="0 1 0 0">
+                  <StackPanel
+                    Width="200">
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="ArrowRightBottom"
+                      Content="Load to project"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.LoadToProjectCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Separator />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="TrayDownload"
+                      Content="Download"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.DownloadCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="CursorMove"
+                      Content="Move"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.MoveCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Grid>
+                      <ToggleButton
+                        Style="{StaticResource ToggleButtonTransparent}"
+                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                        theme:UI.BDCorner="0"
+                        theme:UI.IconFalse="ShareVariantOutline"
+                        Content="Share"
+                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.ShareCommand)}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                      <icon:MaterialIcon
+                        Margin="0 0 10 0"
+                        Width="15"
+                        Height="15"
+                        HorizontalAlignment="Right"
+                        Kind="Launch" />
+                    </Grid>
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="EditOutline"
+                      Content="Rename"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.RenameCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Separator />
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="TrashOutline"
+                      Content="Delete"
+                      Foreground="{DynamicResource AccentBrush}"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.DeleteCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                  </StackPanel>
+                </Border>
+              </Popup>
+            </Grid>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                TargetName="Bd"
+                Property="Background"
+                Value="{DynamicResource ControlHoverBackgroundBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonPopupUpload -->
+  <Style
+    BasedOn="{StaticResource ToggleButtonActive}"
+    TargetType="ToggleButton"
+    x:Key="ToggleButtonPopupUpload">
+    <Setter
+      Property="theme:UI.BDCorner"
+      Value="4" />
+    <Setter
+      Property="Content"
+      Value="Upload" />
+    <Setter
+      Property="theme:UI.IconTrue"
+      Value="ChevronDown" />
+    <Setter
+      Property="CommandParameter"
+      Value="{Binding}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToggleButton">
+          <Border>
+            <Grid>
+              <ToggleButton
+                IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                Name="Open"
+                Content="{TemplateBinding Content}"
+                theme:UI.IconTrue="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.IconTrue)}"
+                Style="{StaticResource ToggleButtonActive}" />
+              <Popup
+                PlacementTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                x:Name="PART_Popup"
+                Placement="Bottom"
+                IsOpen="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                StaysOpen="False"
+                AllowsTransparency="True"
+                Focusable="False"
+                PopupAnimation="None">
+                <Border
+                  CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                  Background="{DynamicResource PrimaryBackgroundBrush}"
+                  BorderBrush="{DynamicResource PrimaryBorderBrush}"
+                  BorderThickness="1"
+                  Margin="0 1 0 0">
+                  <StackPanel
+                    Width="200">
+                    <ToggleButton
+                      Style="{StaticResource ToggleButtonTransparent}"
+                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                      theme:UI.BDCorner="0"
+                      theme:UI.IconFalse="TrayArrowUp"
+                      Content="Upload from project"
+                      Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.UploadFromProjectCommand)}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                    <Separator />
+                    <Grid>
+                      <ToggleButton
+                        Style="{StaticResource ToggleButtonTransparent}"
+                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                        theme:UI.BDCorner="0"
+                        theme:UI.IconFalse="SettingsOutline"
+                        Content="Upload settings"
+                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.UploadSettingsCommand)}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                      <icon:MaterialIcon
+                        Margin="0 0 10 0"
+                        Width="15"
+                        Height="15"
+                        HorizontalAlignment="Right"
+                        Kind="Launch" />
+                    </Grid>
+                    <Grid>
+                      <ToggleButton
+                        Style="{StaticResource ToggleButtonTransparent}"
+                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                        theme:UI.BDCorner="0"
+                        theme:UI.IconFalse="FileOutline"
+                        Content="Families"
+                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.UploadFamiliesCommand)}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                      <icon:MaterialIcon
+                        Margin="0 0 10 0"
+                        Width="15"
+                        Height="15"
+                        HorizontalAlignment="Right"
+                        Kind="Launch" />
+                    </Grid>
+                    <Grid>
+                      <ToggleButton
+                        Style="{StaticResource ToggleButtonTransparent}"
+                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource BoolReverseConverter}}"
+                        theme:UI.BDCorner="0"
+                        theme:UI.IconFalse="FolderOutline"
+                        Content="Folder"
+                        Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.UploadFolderCommand)}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DataContext}" />
+                      <icon:MaterialIcon
+                        Margin="0 0 10 0"
+                        Width="15"
+                        Height="15"
+                        HorizontalAlignment="Right"
+                        Kind="Launch" />
+                    </Grid>
+                  </StackPanel>
+                </Border>
+              </Popup>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion -->
+</ResourceDictionary>

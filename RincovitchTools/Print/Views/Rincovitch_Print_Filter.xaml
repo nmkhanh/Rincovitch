@@ -1,0 +1,509 @@
+﻿<UserControl
+  x:Class="RincovitchTools.Print.Views.Rincovitch_Print_Filter"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:RincovitchTools.Print.Views"
+  xmlns:modelChilds="clr-namespace:RincovitchTools.Print.Models.ModelChilds"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:views="clr-namespace:RincovitchTools.Print.Views"
+  xmlns:theme="clr-namespace:RincovitchTools.UITheme"
+  DataContext="{Binding NMK_VM.FilterVM}"
+  Background="White"
+  Name="window">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/RincovitchTools;component/UITheme/BaseTheme.xaml" />
+        <ResourceDictionary
+          Source="pack://application:,,,/RincovitchTools;component/UITheme/LightTheme.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition
+        Height="*" />
+      <RowDefinition
+        Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition
+          Height="Auto" />
+        <RowDefinition
+          Height="*" />
+      </Grid.RowDefinitions>
+      <!--#region Header-->
+      <StackPanel
+        Margin="10"
+        Orientation="Horizontal"
+        HorizontalAlignment="Left">
+        <ToggleButton
+          Command="{Binding ElementName=window,Path=DataContext.ApplyCommand}"
+          Width="150"
+          Style="{StaticResource ToggleButtonActive}"
+          Content="Apply to print" />
+        <ToggleButton
+          Margin="10 0"
+          Command="{Binding ElementName=window,Path=DataContext.SelectSheetViewCommand}"
+          Width="150"
+          Style="{StaticResource ToggleButtonActive}"
+          Content="Select Sheet/View" />
+        <ToggleButton
+          Command="{Binding ElementName=window,Path=DataContext.SelectTitleBlockCommand}"
+          Width="150"
+          Style="{StaticResource ToggleButtonActive}"
+          Content="Select TitleBlock" />
+        <ToggleButton
+          Command="{Binding ElementName=window,Path=DataContext.SelectRevisionCommand}"
+          Margin="10 0"
+          Width="150"
+          Style="{StaticResource ToggleButtonActive}"
+          Content="Select Revision" />
+      </StackPanel>
+      <ToggleButton
+        IsChecked="{Binding NMK_M.Filter_ControlBySelect, UpdateSourceTrigger=PropertyChanged}"
+        Width="150"
+        Grid.Row="0"
+        HorizontalAlignment="Right"
+        Style="{StaticResource ToggleButtonTwoContent}"
+        theme:UI.ContentFalse="By Select"
+        theme:UI.ContentTrue="By Filter"/>
+      <!--#endregion-->
+      <!--#region Body-->
+      <GroupBox
+        Header="Sheet/View Filter"
+        Margin="10 0"
+        Padding="0 10"
+        Grid.Row="1">
+        <Grid>
+          <!--#region Sheet-->
+          <Grid
+            Visibility="{Binding NMK_M.IsVisible_Window.Selection_IsSheet, Converter={StaticResource BoolConverter}}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition
+                Width="Auto" />
+              <ColumnDefinition
+                Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid>
+              <TextBox
+                VerticalAlignment="Top"
+                theme:UI.Hint="Search..."
+                Margin="10 0"
+                MinWidth="300"
+                Height="30"
+                Text="{Binding NMK_M.Search_FilterSheet, UpdateSourceTrigger=PropertyChanged}" />
+              <ListBox
+                MinWidth="300"
+                Margin="10 40 10 0"
+                ItemsSource="{Binding NMK_M.ViewSheetFilters_ListBox_Sheet}">
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid
+                      Background="Transparent"
+                      Name="item">
+                      <CheckBox
+                        Cursor="Hand"
+                        Height="25"
+                        VerticalContentAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="5 0 5 0"
+                        IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                        Command="{Binding ElementName=window,Path=DataContext.CheckedUpdatePreviewCommand}"
+                        CommandParameter="{Binding }">
+                        <TextBlock
+                          Grid.Column="1"
+                          FontWeight="{Binding FontWeight}"
+                          Margin="5 0 0 0"
+                          VerticalAlignment="Center"
+                          Text="{Binding Name}" />
+                      </CheckBox>
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                  <Style
+                    TargetType="ListBoxItem">
+                    <Setter
+                      Property="HorizontalContentAlignment"
+                      Value="Stretch" />
+                    <Setter
+                      Property="Visibility"
+                      Value="{Binding IsChecked, Converter={StaticResource BoolConverterReverse}}" />
+                    <Style.Triggers>
+                      <Trigger
+                        Property="IsSelected"
+                        Value="True">
+                        <Setter
+                          Property="Background"
+                          Value="Transparent" />
+                      </Trigger>
+                    </Style.Triggers>
+                  </Style>
+                </ListBox.ItemContainerStyle>
+              </ListBox>
+            </Grid>
+            <Grid
+              Grid.Column="1">
+              <DataGrid
+                Margin="10 0"
+                ItemsSource="{Binding NMK_M.ViewSheetFilters_DataGrid_Sheet}"
+                Grid.Row="1">
+                <DataGrid.Columns>
+                  <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <CheckBox
+                          Cursor="Hand"
+                          VerticalAlignment="Center"
+                          Margin="5 0 5 0"
+                          IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding ElementName=window,Path=DataContext.CheckedUpdatePreviewCommand}"
+                          CommandParameter="{Binding }" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                  <DataGridTemplateColumn
+                    Header="Parameter Name"
+                    Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <TextBlock
+                          VerticalAlignment="Center"
+                          Margin="10 0 5 0"
+                          Text="{Binding Name}" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                  <DataGridTemplateColumn
+                    Header="Value"
+                    Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <ComboBox
+                          IsEditable="{Binding IsValueText}"
+                          Text="{Binding ValueText, UpdateSourceTrigger=PropertyChanged}"
+                          Style="{StaticResource ComboBoxTransparentAnyAll}"
+                          VerticalAlignment="Center"
+                          DisplayMemberPath="Value"
+                          theme:UI.Hint="Value"
+                          VerticalContentAlignment="Center"
+                          Height="30"
+                          ItemsSource="{Binding Values}"
+                          SelectedItem="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                  <DataGridTemplateColumn
+                    Header="Rule"
+                    Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <ComboBox
+                          Style="{StaticResource ComboBoxTransparentAnyAll}"
+                          VerticalAlignment="Center"
+                          theme:UI.Hint="Rule"
+                          VerticalContentAlignment="Center"
+                          Height="30"
+                          ItemsSource="{Binding Rules}"
+                          SelectedItem="{Binding Rule, UpdateSourceTrigger=PropertyChanged}" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                  <Style
+                    TargetType="DataGridRow">
+                    <Setter
+                      Property="Visibility"
+                      Value="{Binding IsChecked, Converter={StaticResource BoolConverter}}" />
+                  </Style>
+                </DataGrid.RowStyle>
+              </DataGrid>
+            </Grid>
+          </Grid>
+          <!--#endregion-->
+          <!--#region View-->
+          <Grid
+            Visibility="{Binding NMK_M.IsVisible_Window.Selection_IsView, Converter={StaticResource BoolConverter}}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition
+                Width="Auto" />
+              <ColumnDefinition
+                Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid>
+              <TextBox
+                VerticalAlignment="Top"
+                theme:UI.Hint="Search..."
+                Margin="10 0"
+                MinWidth="300"
+                Height="30"
+                Text="{Binding NMK_M.Search_FilterView, UpdateSourceTrigger=PropertyChanged}" />
+              <ListBox
+                MinWidth="300"
+                Margin="10 40 10 0"
+                ItemsSource="{Binding NMK_M.ViewSheetFilters_ListBox_View}">
+                <ListBox.ItemTemplate>
+                  <DataTemplate>
+                    <Grid
+                      Background="Transparent"
+                      Name="item">
+                      <CheckBox
+                        Cursor="Hand"
+                        Height="25"
+                        VerticalContentAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="5 0 5 0"
+                        IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                        Command="{Binding ElementName=window,Path=DataContext.CheckedUpdatePreviewCommand}"
+                        CommandParameter="{Binding }">
+                        <TextBlock
+                          Grid.Column="1"
+                          FontWeight="{Binding FontWeight}"
+                          Margin="5 0 0 0"
+                          VerticalAlignment="Center"
+                          Text="{Binding Name}" />
+                      </CheckBox>
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                  <Style
+                    TargetType="ListBoxItem">
+                    <Setter
+                      Property="HorizontalContentAlignment"
+                      Value="Stretch" />
+                    <Setter
+                      Property="Visibility"
+                      Value="{Binding IsChecked, Converter={StaticResource BoolConverterReverse}}" />
+                    <Style.Triggers>
+                      <Trigger
+                        Property="IsSelected"
+                        Value="True">
+                        <Setter
+                          Property="Background"
+                          Value="Transparent" />
+                      </Trigger>
+                    </Style.Triggers>
+                  </Style>
+                </ListBox.ItemContainerStyle>
+              </ListBox>
+            </Grid>
+            <Grid
+              Grid.Column="1">
+              <DataGrid
+                Margin="10 0"
+                ItemsSource="{Binding NMK_M.ViewSheetFilters_DataGrid_View}"
+                Grid.Row="1">
+                <DataGrid.Columns>
+                  <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <CheckBox
+                          Cursor="Hand"
+                          VerticalAlignment="Center"
+                          Margin="5 0 5 0"
+                          IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                          Command="{Binding ElementName=window,Path=DataContext.CheckedUpdatePreviewCommand}"
+                          CommandParameter="{Binding }" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                  <DataGridTemplateColumn
+                    Header="Parameter Name"
+                    Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <TextBlock
+                          VerticalAlignment="Center"
+                          Margin="10 0 5 0"
+                          Text="{Binding Name}" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                  <DataGridTemplateColumn
+                    Header="Value"
+                    Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <ComboBox
+                          IsEditable="{Binding IsValueText}"
+                          Text="{Binding ValueText, UpdateSourceTrigger=PropertyChanged}"
+                          Style="{StaticResource ComboBoxTransparentAnyAll}"
+                          VerticalAlignment="Center"
+                          DisplayMemberPath="Value"
+                          theme:UI.Hint="Value"
+                          VerticalContentAlignment="Center"
+                          Height="30"
+                          ItemsSource="{Binding Values}"
+                          SelectedItem="{Binding Value, UpdateSourceTrigger=PropertyChanged}" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                  <DataGridTemplateColumn
+                    Header="Rule"
+                    Width="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                        <ComboBox
+                          Style="{StaticResource ComboBoxTransparentAnyAll}"
+                          VerticalAlignment="Center"
+                          theme:UI.Hint="Rule"
+                          VerticalContentAlignment="Center"
+                          Height="30"
+                          ItemsSource="{Binding Rules}"
+                          SelectedItem="{Binding Rule, UpdateSourceTrigger=PropertyChanged}" />
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                  </DataGridTemplateColumn>
+                </DataGrid.Columns>
+                <DataGrid.RowStyle>
+                  <Style
+                    TargetType="DataGridRow">
+                    <Setter
+                      Property="Visibility"
+                      Value="{Binding IsChecked, Converter={StaticResource BoolConverter}}" />
+                  </Style>
+                </DataGrid.RowStyle>
+              </DataGrid>
+            </Grid>
+          </Grid>
+          <!--#endregion-->
+        </Grid>
+      </GroupBox>
+      <!--#endregion-->
+    </Grid>
+    <Grid
+      Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition
+          Width="*" />
+        <ColumnDefinition
+          Width="*" />
+      </Grid.ColumnDefinitions>
+      <!--#region Rename-->
+      <GroupBox
+        Header="Rename"
+        Margin="10"
+        Padding="0 10">
+        <StackPanel>
+          <Grid>
+            <RadioButton
+              Margin="10 0"
+              IsChecked="{Binding NMK_M.ViewSheetFilters_Rename.BySelect, UpdateSourceTrigger=PropertyChanged}"
+              Content="By Select" />
+            <RadioButton
+              Margin="100 0"
+              IsChecked="{Binding NMK_M.ViewSheetFilters_Rename.ByAll, UpdateSourceTrigger=PropertyChanged}"
+              Content="By All" />
+          </Grid>
+          <TextBox
+            VerticalAlignment="Top"
+            theme:UI.Hint="From..."
+            Margin="10"
+            MinWidth="300"
+            Height="30"
+            Text="{Binding NMK_M.ViewSheetFilters_Rename.From, UpdateSourceTrigger=PropertyChanged}" />
+          <TextBox
+            VerticalAlignment="Top"
+            theme:UI.Hint="To..."
+            Margin="10"
+            MinWidth="300"
+            Height="30"
+            Text="{Binding NMK_M.ViewSheetFilters_Rename.To, UpdateSourceTrigger=PropertyChanged}" />
+          <ToggleButton
+            Margin="10 0"
+            HorizontalAlignment="Right"
+            Command="{Binding ElementName=window,Path=DataContext.RenameCommand}"
+            Width="100"
+            Style="{StaticResource ToggleButtonActive}"
+            Content="Rename" />
+        </StackPanel>
+      </GroupBox>
+      <!--#endregion-->
+      <!--#region Duplicate multi-->
+      <GroupBox
+        Header="Duplicate multi"
+        Margin="0 10 10 10"
+        Padding="0 10"
+        Grid.Column="1">
+        <StackPanel>
+          <Grid>
+            <RadioButton
+              Margin="10 0"
+              IsChecked="{Binding NMK_M.ViewSheetFilters_Duplicate.ByCurrentName, UpdateSourceTrigger=PropertyChanged}"
+              Content="By current name" />
+            <RadioButton
+              Margin="150 0"
+              IsChecked="{Binding NMK_M.ViewSheetFilters_Duplicate.ByCustomName, UpdateSourceTrigger=PropertyChanged}"
+              Content="By custom name" />
+          </Grid>
+          <Grid>
+            <TextBox
+              IsEnabled="{Binding NMK_M.ViewSheetFilters_Duplicate.ByCustomName}"
+              VerticalAlignment="Top"
+              theme:UI.Hint="Custom name..."
+              Margin="10 10 140 10"
+              Height="30"
+              Text="{Binding NMK_M.ViewSheetFilters_Duplicate.CustomName, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              theme:UI.Hint="Count..."
+              Margin="10"
+              Width="120"
+              Height="30"
+              Text="{Binding NMK_M.ViewSheetFilters_Duplicate.Count, UpdateSourceTrigger=PropertyChanged}" />
+          </Grid>
+          <Grid>
+            <TextBox
+              VerticalAlignment="Top"
+              theme:UI.Hint="Separator..."
+              Margin="10 10 140 10"
+              Height="30"
+              Text="{Binding NMK_M.ViewSheetFilters_Duplicate.Separator, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox
+              Visibility="{Binding NMK_M.IsVisible_Window.Selection_IsSheet, Converter={StaticResource BoolConverterReverse}}"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              theme:UI.Hint="Suffix(ed:1 or a)..."
+              Margin="10"
+              Width="120"
+              Height="30"
+              Text="{Binding NMK_M.ViewSheetFilters_Duplicate.Suffix, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox
+              Visibility="{Binding NMK_M.IsVisible_Window.Selection_IsSheet, Converter={StaticResource BoolConverter}}"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Top"
+              theme:UI.Hint="SheetNumberStart..."
+              Margin="10"
+              Width="120"
+              Height="30"
+              Text="{Binding NMK_M.ViewSheetFilters_Duplicate.SheetNumberStart, UpdateSourceTrigger=PropertyChanged}" />
+          </Grid>
+          <Grid>
+            <CheckBox
+              Visibility="{Binding NMK_M.IsVisible_Window.Selection_IsSheet, Converter={StaticResource BoolConverter}}"
+              VerticalAlignment="Center"
+              Margin="10 0"
+              IsChecked="{Binding NMK_M.ViewSheetFilters_Duplicate.IncludeAll, UpdateSourceTrigger=PropertyChanged}"
+              Content="Include All (View, Schedule, Legend,...)" />
+            <ToggleButton
+              Margin="10 0"
+              HorizontalAlignment="Right"
+              Command="{Binding ElementName=window,Path=DataContext.DuplicateCommand}"
+              Width="100"
+              Style="{StaticResource ToggleButtonActive}"
+              Content="Duplicate" />
+          </Grid>
+        </StackPanel>
+      </GroupBox>
+      <!--#endregion-->
+    </Grid>
+  </Grid>
+</UserControl>

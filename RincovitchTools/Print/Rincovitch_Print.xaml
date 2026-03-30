@@ -1,0 +1,600 @@
+﻿<Window
+  x:Class="RincovitchTools.Print.Rincovitch_Print"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:RincovitchTools.Print"
+  xmlns:modelChilds="clr-namespace:RincovitchTools.Print.Models.ModelChilds"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:views="clr-namespace:RincovitchTools.Print.Views"
+  xmlns:theme="clr-namespace:RincovitchTools.UITheme"
+  Icon="C:\ProgramData\Autodesk\ApplicationPlugins\Rincovitch.bundle\Contents\Resources\RincovitchIcon.png"
+  MinHeight="900"
+  MinWidth="1600"
+  Name="window">
+  <Window.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/RincovitchTools;component/UITheme/BaseTheme.xaml" />
+        <ResourceDictionary
+          Source="pack://application:,,,/RincovitchTools;component/UITheme/LightTheme.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Window.Resources>
+  <i:Interaction.Triggers>
+    <i:EventTrigger
+      EventName="Loaded">
+      <i:InvokeCommandAction
+        Command="{Binding ElementName=window,Path=DataContext.LoadCommand}"
+        CommandParameter="{Binding ElementName=window}" />
+    </i:EventTrigger>
+    <i:EventTrigger
+      EventName="Closing">
+      <i:InvokeCommandAction
+        Command="{Binding ElementName=window,Path=DataContext.ClosingCommand}" />
+    </i:EventTrigger>
+  </i:Interaction.Triggers>
+  <Grid>
+    <!--#region Main-->
+    <Grid>
+      <Grid.Effect>
+        <BlurEffect
+          Radius="{Binding NMK_M.IsVisible_Window.Dialog_Parameter, Converter={StaticResource BoolToDoubleConverter}}" />
+      </Grid.Effect>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition
+          Width="60" />
+        <ColumnDefinition
+          Width="*" />
+      </Grid.ColumnDefinitions>
+      <!--#region Navigation-->
+      <Border
+        BorderThickness="0 0 1 0"
+        BorderBrush="Silver"
+        Grid.RowSpan="2">
+        <StackPanel>
+          <RadioButton
+            theme:UI.Icon="Select"
+            Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+            Name="Select"
+            Content="Select"
+            IsChecked="True"/>
+          <RadioButton
+            theme:UI.Icon="SettingsOutline"
+            Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+            Name="Settings"
+            Content="Settings"/>
+          <ToggleButton
+            Width="60"
+            Height="60"
+            Style="{StaticResource ToggleButtonVertical}"
+            IsChecked="{Binding NMK_M.IsVisible_Window.Filter}"
+            theme:UI.IconFalse="FilterOutline"
+            theme:UI.IconTrue="FilterOutline"
+            Name="Filter"
+            Content="Filter" />
+        </StackPanel>
+      </Border>
+      <!--#endregion-->
+      <!--#region UI Settings-->
+      <views:Rincovitch_Print_SettingsView
+        Grid.Column="1"
+        Visibility="{Binding ElementName=Settings, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+      <!--#endregion-->
+      <!--#region UI Selection-->
+      <Grid
+        Background="{DynamicResource PrimaryBackgroundBrush}"
+        Grid.Column="1"
+        Visibility="{Binding ElementName=Select, Path=IsChecked, Converter={StaticResource BoolConverter}}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition
+            Width="Auto"
+            MinWidth="450" />
+          <ColumnDefinition
+            Width="Auto" />
+          <ColumnDefinition
+            Width="*" />
+        </Grid.ColumnDefinitions>
+        <!--#region UI Select-->
+        <views:Rincovitch_Print_SheetView />
+        <!--#endregion-->
+        <GridSplitter
+          Grid.Column="1"
+          Width="1"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Background="{DynamicResource PrimaryBorderBrush}"
+          ShowsPreview="True" />
+        <!--#region UI Print-->
+        <Grid
+          Grid.Column="2">
+          <Grid.RowDefinitions>
+            <RowDefinition
+              Height="Auto" />
+            <RowDefinition
+              Height="*" />
+            <RowDefinition
+              Height="Auto" />
+            <RowDefinition
+              Height="Auto" />
+          </Grid.RowDefinitions>
+          <!--#region File-->
+          <GroupBox
+            Header="File"
+            Margin="10 5 10 0">
+            <Grid
+              Margin="5 10 10 10">
+              <Grid.RowDefinitions>
+                <RowDefinition
+                  Height="Auto" />
+                <RowDefinition
+                  Height="Auto" />
+                <RowDefinition
+                  Height="Auto" />
+              </Grid.RowDefinitions>
+              <Grid>
+                <RadioButton
+                  x:Name="CreateSeparate"
+                  Content="Create separate files"
+                  IsChecked="{Binding NMK_M.Settings_Print.IsCreateSeparateFiles}" />
+                <RadioButton
+                  x:Name="Combine"
+                  Margin="200 0 0 0"
+                  Content="Combine multiple views/sheets into a single file"
+                  IsChecked="{Binding NMK_M.Settings_Print.IsCombineMultipleFiles}" />
+              </Grid>
+              <CheckBox
+                IsEnabled="{Binding ElementName=Combine, Path=IsChecked}"
+                Width="160"
+                x:Name="UseNamingConvention"
+                Grid.Row="1"
+                Margin="2 0 0 0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                IsChecked="{Binding NMK_M.Settings_Print.UseNamingConvention}"
+                Content="Use naming convention:" />
+              <Grid
+                IsEnabled="{Binding ElementName=Combine, Path=IsChecked}"
+                Grid.Row="1"
+                Margin="165 10 0 10">
+                <StackPanel
+                  Orientation="Horizontal">
+                  <TextBox
+                    Width="100"
+                    TextAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Height="30"
+                    Text="{Binding NMK_M.Settings_Print.NamingDay, UpdateSourceTrigger=PropertyChanged}" />
+                  <TextBox
+                    Margin="10 0 10 0"
+                    Width="50"
+                    TextAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Height="30"
+                    Text="_"
+                    IsEnabled="False" />
+                  <TextBox
+                    Width="100"
+                    TextAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Height="30"
+                    Text="{Binding NMK_M.Settings_Print.NamingProjectCode, UpdateSourceTrigger=PropertyChanged}" />
+                  <TextBox
+                    Margin="10 0 10 0"
+                    Width="50"
+                    TextAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Height="30"
+                    Text="-"
+                    IsEnabled="False" />
+                </StackPanel>
+                <TextBox
+                  Margin="340 0 130 0"
+                  TextAlignment="Center"
+                  VerticalContentAlignment="Center"
+                  Height="30"
+                  Text="{Binding NMK_M.Settings_Print.NamingNode, UpdateSourceTrigger=PropertyChanged}" />
+              </Grid>
+              <ToggleButton
+                Foreground="{Binding NMK_M.ForegroundCustomFileName}"
+                IsChecked="{Binding NMK_M.IsVisible_Window.Dialog_Parameter}"
+                Style="{StaticResource ToggleButtonActive}"
+                HorizontalAlignment="Right"
+                Margin="2 10 0 10"
+                Grid.Row="1"
+                IsEnabled="{Binding NMK_M.Settings_Print.IsCreateSeparateFiles}"
+                Width="120"
+                Content="Custom File Name"
+                Name="CustomFileName"
+                Command="{Binding ElementName=window, Path=DataContext.CustomFileNameCommand}"/>
+              <Grid
+                Grid.Row="2">
+                <TextBlock
+                  Margin="2 0 0 0"
+                  Width="110"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Center"
+                  Text="File Combine Name : " />
+                <Grid>
+                  <TextBox
+                    Visibility="{Binding ElementName=UseNamingConvention, Path=IsChecked, Converter={StaticResource BoolConverterReverse}}"
+                    Margin="165 0 0 0"
+                    TextAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Height="30"
+                    Text="{Binding NMK_M.Settings_Print.FileCombineName, UpdateSourceTrigger=PropertyChanged}" />
+                  <TextBox
+                    IsEnabled="False"
+                    Visibility="{Binding ElementName=UseNamingConvention, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+                    Margin="165 0 0 0"
+                    TextAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Height="30"
+                    Text="{Binding NMK_M.Settings_Print.FileCombineNameConvention, UpdateSourceTrigger=PropertyChanged}" />
+                </Grid>
+              </Grid>
+            </Grid>
+          </GroupBox>
+          <!--#endregion-->
+          <!--#region Body-->
+          <StackPanel
+            VerticalAlignment="Top"
+            Orientation="Horizontal"
+            Grid.Row="1"
+            Margin="10 5 0 0">
+            <CheckBox
+              Command="{Binding ElementName=window, Path=DataContext.PDFCommand}"
+              IsChecked="{Binding NMK_M.Format.PDF}"
+              Foreground="{DynamicResource AccentBrush}"
+              Content="PDF" />
+            <CheckBox
+              Command="{Binding ElementName=window, Path=DataContext.DWGCommand}"
+              IsChecked="{Binding NMK_M.Format.DWG}"
+              Foreground="{DynamicResource AccentBrush}"
+              Margin="20 0 0 0"
+              Content="DWG" />
+          </StackPanel>
+          <DataGrid
+            ItemsSource="{Binding NMK_M.SheetViews, UpdateSourceTrigger=PropertyChanged}"
+            Margin="10 25 10 0"
+            Grid.Row="1">
+            <DataGrid.Columns>
+              <DataGridTemplateColumn>
+                <DataGridTemplateColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <Label
+                      Width="50"
+                      HorizontalContentAlignment="Center"
+                      VerticalAlignment="Center"
+                      Content="Index" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <TextBox
+                      Background="Transparent"
+                      VerticalContentAlignment="Center"
+                      TextAlignment="Center"
+                      BorderThickness="0"
+                      Text="{Binding Index}" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn>
+                <DataGridTemplateColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <Label
+                      Width="100"
+                      HorizontalContentAlignment="Center"
+                      VerticalAlignment="Center"
+                      Content="Number/Id" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <TextBlock
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Text="{Binding SheetNumber}" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn
+                Width="300"
+                Header="Sheet Name/View Name">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <TextBlock
+                      Margin="5 0 5 0"
+                      VerticalAlignment="Center"
+                      Text="{Binding SheetName}">
+                      <TextBlock.ToolTip>
+                        <ToolTip>
+                          <TextBlock
+                            TextWrapping="Wrap"
+                            Width="300"
+                            Text="{Binding SheetName}" />
+                        </ToolTip>
+                      </TextBlock.ToolTip>
+                    </TextBlock>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn>
+                <DataGridTemplateColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <Label
+                      Width="60"
+                      HorizontalContentAlignment="Center"
+                      VerticalAlignment="Center"
+                      Content="Revision" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <TextBlock
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Text="{Binding Revision}" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn>
+                <DataGridTemplateColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <Label
+                      Width="80"
+                      HorizontalContentAlignment="Center"
+                      VerticalAlignment="Center"
+                      Content="RevisionDate" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <TextBlock
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Text="{Binding RevisionDate}" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn>
+                <DataGridTemplateColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <Label
+                      Width="60"
+                      HorizontalContentAlignment="Center"
+                      VerticalAlignment="Center"
+                      Content="Size" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <TextBlock
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Text="{Binding Size}" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn>
+                <DataGridTemplateColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <Label
+                      Width="60"
+                      HorizontalContentAlignment="Center"
+                      VerticalAlignment="Center"
+                      Content="Format" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <TextBlock
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Text="{Binding Format}" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn>
+                <DataGridTemplateColumn.HeaderTemplate>
+                  <DataTemplate>
+                    <Label
+                      Width="100"
+                      HorizontalContentAlignment="Center"
+                      VerticalAlignment="Center"
+                      Content="Orientation" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.HeaderTemplate>
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <TextBlock
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Text="{Binding Orientation}" />
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+              <DataGridTemplateColumn
+                Width="*"
+                Header="Progress">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate
+                    DataType="modelChilds:NMK_M_SheetAndView">
+                    <Grid>
+                      <ProgressBar
+                        Foreground="{Binding Foreground}"
+                        x:Name="Progress"
+                        BorderThickness="0"
+                        Background="Transparent"
+                        Visibility="{Binding ProgressVisible, Converter={StaticResource BoolConverter}}"
+                        Value="{Binding ProgressValue}" />
+                      <StackPanel
+                        Visibility="{Binding Error, Converter={StaticResource HasValueConverterReverse}}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          Text="{Binding ElementName=Progress, Path=Value}" />
+                        <TextBlock
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Center"
+                          Text=" %" />
+                      </StackPanel>
+                      <TextBlock
+                        TextWrapping="Wrap"
+                        Visibility="{Binding Error, Converter={StaticResource HasValueConverter}}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Text="{Binding Error}" />
+                    </Grid>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+            </DataGrid.Columns>
+            <DataGrid.CellStyle>
+              <Style
+                TargetType="DataGridCell">
+                <Style.Triggers>
+                  <DataTrigger
+                    Binding="{Binding Index}"
+                    Value="0">
+                    <Setter
+                      Property="Foreground"
+                      Value="{DynamicResource AccentBrush}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </DataGrid.CellStyle>
+          </DataGrid>
+          <!--#endregion-->
+          <!--#region Print-->
+          <GroupBox
+            Header="Print"
+            Margin="10 0 10 10"
+            Grid.Row="2">
+            <Grid
+              Margin="5 10 10 10">
+              <Grid.RowDefinitions>
+                <RowDefinition
+                  Height="Auto" />
+                <RowDefinition
+                  Height="Auto" />
+                <RowDefinition
+                  Height="Auto" />
+              </Grid.RowDefinitions>
+              <Grid>
+                <RadioButton
+                  Content="Save all files in the same folder location"
+                  IsChecked="{Binding NMK_M.Settings_Print.IsSaveAllFilesInSameFolder}" />
+                <RadioButton
+                  Margin="400 0 0 0"
+                  Content="Save and split files by file format"
+                  IsChecked="{Binding NMK_M.Settings_Print.IsSaveSplitFilesByFormat}" />
+                <TextBlock
+                  Margin="0 0 60 0"
+                  HorizontalAlignment="Right"
+                  Text="Print timeout (s) : " />
+                <TextBox
+                  Margin="0 -10 0 0"
+                  Width="50"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Right"
+                  Text="{Binding NMK_M.PrintTimeout, UpdateSourceTrigger=PropertyChanged}" />
+              </Grid>
+              <Grid
+                Margin="5 10 0 10"
+                Grid.Row="1">
+                <ToggleButton
+                  Style="{StaticResource ToggleButtonActive}"
+                  Command="{Binding ElementName=window, Path=DataContext.OpenFolderCommand}"
+                  Width="140"
+                  HorizontalAlignment="Left"
+                  Content="Open Folder Selection" />
+                <TextBox
+                  Margin="150 0 40 0"
+                  VerticalContentAlignment="Center"
+                  Height="30"
+                  Padding="10 0 10 0"
+                  Text="{Binding NMK_M.Settings_Print.FolderSelection, UpdateSourceTrigger=PropertyChanged}" />
+                <ToggleButton
+                  Width="30"
+                  HorizontalAlignment="Right"
+                  Command="{Binding ElementName=window,Path=DataContext.SelectFolderCommand}"
+                  Content="..." />
+              </Grid>
+              <Grid
+                Margin="5 0 0 0"
+                Grid.Row="2">
+                <Grid
+                  Margin="0 0 100 0">
+                  <ProgressBar
+                    Foreground="LightGreen"
+                    x:Name="ProgressTotal"
+                    Height="30"
+                    Minimum="0"
+                    Maximum="{Binding NMK_M.Settings_Print.ProgressMaximum}"
+                    Value="{Binding NMK_M.Settings_Print.ProgressValue}" />
+                  <StackPanel
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                      Visibility="{Binding NMK_M.Settings_Print.IsPrintStatus, Converter={StaticResource BoolConverter}}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Text="{Binding NMK_M.Settings_Print.PrintStatus}" />
+                    <TextBlock
+                      Visibility="{Binding NMK_M.Settings_Print.IsPrintStatus, Converter={StaticResource BoolConverterReverse}}"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Text="{Binding NMK_M.Settings_Print.SelectStatus}" />
+                  </StackPanel>
+                </Grid>
+                <ToggleButton
+                  Style="{StaticResource ToggleButtonActive}"
+                  Width="80"
+                  Height="30"
+                  HorizontalAlignment="Right"
+                  Command="{Binding RunCommand}"
+                  Content="Print" />
+              </Grid>
+            </Grid>
+          </GroupBox>
+          <!--#endregion-->
+        </Grid>
+        <!--#endregion-->
+        <!--#region Filter-->
+        <Grid
+          Visibility="{Binding ElementName=Filter, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+          Grid.Column="2">
+          <views:Rincovitch_Print_Filter />
+        </Grid>
+        <!--#endregion-->
+      </Grid>
+      <!--#endregion-->
+    </Grid>
+    <!--#endregion-->
+    <!--#region Message  -->
+    <Grid
+      Grid.ColumnSpan="3"
+      Visibility="{Binding NMK_M.IsVisible_Window.Dialog_Parameter, Converter={StaticResource BoolConverter}}">
+      <views:Rincovitch_Print_ParameterView
+         />
+    </Grid>
+    
+    <!--#endregion-->
+  </Grid>
+</Window>

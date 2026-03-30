@@ -1,0 +1,84 @@
+# ?? Timesheet Automation - Cách s? d?ng
+
+## ? B??c 1: Ch?y Tool
+
+M? Command Prompt ho?c PowerShell:
+
+```powershell
+cd D:\KHANHNGUYEN\Tools\nmkhanh\Rincovitch_Revit
+dotnet run --project TestConsole
+```
+
+**?ó là t?t c?!** ??
+
+---
+
+## ?? Nh?ng gì s? x?y ra:
+
+1. **Tool kh?i ??ng** ? Ki?m tra Edge
+2. **N?u Edge ch?a ch?y** ? T? ??ng kh?i ??ng v?i debug mode
+3. **N?u Edge ?ang ch?y** ? K?t n?i t?i instance ?ang m?
+4. **Gi? l?i session ??ng nh?p** ? Không c?n ??ng nh?p l?i ?
+5. **Hi?n th? menu** ? Ch?n tùy ch?n
+
+---
+
+## ?? Menu Options
+
+```
+========== TIMESHEET AUTOMATION ==========
+1. ?i?n m?t dòng timesheet
+2. ?i?n nhi?u dòng (nh?p t? console)
+3. Xem DOM hi?n t?i (debug)
+0. Thoát
+
+Ch?n tùy ch?n (0-3): 
+```
+
+### **Option 1: ?i?n 1 dòng**
+```
+Nh?p tên project: SUREFIRE-ITSM
+Nh?p s? gi?: 4
+? ?i?n xong!
+```
+
+### **Option 2: ?i?n nhi?u dòng**
+```
+Project (ho?c 'done'): SUREFIRE-ITSM
+S? gi?: 4
+Project (ho?c 'done'): BIM-TOOLS
+S? gi?: 2
+Project (ho?c 'done'): done
+
+? Hoàn thành: 2/2 dòng
+```
+
+### **Option 3: Debug**
+```
+Xu?t HTML ?? ki?m tra selectors
+H?u ích n?u trang thay ??i
+```
+
+---
+
+## ? Features
+
+? **T? ??ng kh?i ??ng Edge** (n?u ch?a m?)  
+? **K?t n?i t?i Edge ?ang m?** (gi? session ??ng nh?p)  
+? **?i?n d? li?u t? ??ng**  
+? **X? lý l?i t?t** (fallback selectors)  
+? **Debug mode** (export HTML)  
+
+---
+
+## ?? N?u có l?i
+
+| L?i | Gi?i pháp |
+|-----|----------|
+| "Không tìm th?y Edge" | Ch?c ch?n Edge ?ã cài ??t |
+| "Timeout tìm project" | T?ng delay ho?c ki?m tra tên project |
+| "Không tìm th?y nút Add Row" | Dùng Option 3 (Debug) ?? ki?m tra HTML |
+
+---
+
+**Chúc b?n s? d?ng t?t! ??**

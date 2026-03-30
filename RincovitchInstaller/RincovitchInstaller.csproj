@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<LangVersion>latest</LangVersion>
+		<PlatformTarget>x64</PlatformTarget>
+		<TargetFramework>net48</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<Configurations>Debug;Release;D2024;D2025;R2024;R2025;D2022;D2023;D2026;D2021;D2020</Configurations>
+	</PropertyGroup>
+	<Choose>
+		<When Condition="$(Configuration.Contains('22'))">
+			<PropertyGroup>
+				<DefineConstants>R22</DefineConstants>
+				<RevitVersion>2022</RevitVersion>
+				<TargetFramework>net48</TargetFramework>
+			</PropertyGroup>
+		</When>
+		<When Condition="$(Configuration.Contains('23'))">
+			<PropertyGroup>
+				<DefineConstants>R23</DefineConstants>
+				<RevitVersion>2023</RevitVersion>
+				<TargetFramework>net48</TargetFramework>
+			</PropertyGroup>
+		</When>
+		<When Condition="$(Configuration.Contains('24'))">
+			<PropertyGroup>
+				<DefineConstants>R24</DefineConstants>
+				<RevitVersion>2024</RevitVersion>
+				<TargetFramework>net48</TargetFramework>
+			</PropertyGroup>
+		</When>
+		<When Condition="$(Configuration.Contains('25'))">
+			<PropertyGroup>
+				<DefineConstants>R25</DefineConstants>
+				<RevitVersion>2025</RevitVersion>
+				<TargetFramework>net80-windows</TargetFramework>
+			</PropertyGroup>
+		</When>
+		<When Condition="$(Configuration.Contains('26'))">
+			<PropertyGroup>
+				<DefineConstants>R26</DefineConstants>
+				<RevitVersion>2026</RevitVersion>
+				<TargetFramework>net80-windows</TargetFramework>
+			</PropertyGroup>
+		</When>
+	</Choose>
+	<PropertyGroup Condition="$(Configuration.Contains('D'))">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\$(RevitVersion)</OutputPath>
+		<DefineConstants>DEBUG;TRACE;D$(RevitVersion)</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition="$(Configuration.Contains('R'))">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<OutputPath>bin\Release\$(RevitVersion)</OutputPath>
+		<DefineConstants>TRACE;R$(RevitVersion)</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Include="bin\Debug\2024\output\RincovitchTools-1.0.4.msi" />
+	  <None Include="bin\Debug\2024\output\RincovitchTools-1.0.5.msi" />
+	  <None Include="bin\Debug\2024\output\RincovitchTools-1.0.5.wixpdb" />
+	  <None Include="bin\Debug\2024\output\RincovitchTools-1.0.5.wxs" />
+	  <None Include="bin\Debug\2024\output\RincovitchTools-1.0.6.msi" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="WixSharp.bin" Version="1.26.0" />
+		<PackageReference Include="WixSharp.wix.bin" Version="3.14.1" />
+	</ItemGroup>
+</Project>

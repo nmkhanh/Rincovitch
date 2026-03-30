@@ -1,0 +1,300 @@
+﻿<UserControl
+  x:Class="RincovitchTools.Print.Views.Rincovitch_Print_SheetView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:local="clr-namespace:RincovitchTools.Print.Views"
+  xmlns:modelChilds="clr-namespace:RincovitchTools.Print.Models.ModelChilds"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:views="clr-namespace:RincovitchTools.Print.Views"
+  xmlns:theme="clr-namespace:RincovitchTools.UITheme"
+  DataContext="{Binding NMK_VM.SheetViewVM}"
+  Name="window">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/RincovitchTools;component/UITheme/BaseTheme.xaml" />
+        <ResourceDictionary
+          Source="pack://application:,,,/RincovitchTools;component/UITheme/LightTheme.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition
+        Height="Auto" />
+      <RowDefinition
+        Height="30" />
+      <RowDefinition
+        Height="*" />
+    </Grid.RowDefinitions>
+    <!--#region Selected by-->
+    <GroupBox
+      Header="Select by"
+      Margin="10 5 10 10">
+      <StackPanel
+        Margin="10">
+        <ComboBox
+          theme:UI.Hint="ScheduleList / ViewSheetSet"
+          Margin="0 0 0 10"
+          VerticalContentAlignment="Center"
+          Visibility="{Binding ElementName=SheetBySchedules, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+          Height="30"
+          ItemsSource="{Binding NMK_M.ListViewSheets}"
+          SelectedItem="{Binding NMK_M.ListViewSheet}">
+          <i:Interaction.Triggers>
+            <i:EventTrigger
+              EventName="DropDownClosed">
+              <i:InvokeCommandAction
+                Command="{Binding ElementName=window,Path=DataContext.SheetBySchedulesDropDownClosedCommand}"
+                CommandParameter="{Binding}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock
+                VerticalAlignment="Center"
+                Text="{Binding Name}">
+                <TextBlock.Style>
+                  <Style
+                    TargetType="TextBlock">
+                    <Style.Triggers>
+                      <DataTrigger
+                        Binding="{Binding Status}"
+                        Value="0">
+                        <Setter
+                          Property="Foreground"
+                          Value="{DynamicResource PrimaryForegroundBrush}" />
+                      </DataTrigger>
+                      <DataTrigger
+                        Binding="{Binding Status}"
+                        Value="1">
+                        <Setter
+                          Property="Foreground"
+                          Value="{DynamicResource AccentBrush}" />
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </TextBlock.Style></TextBlock>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Grid>
+          <ToggleButton
+            Style="{StaticResource ToggleButtonActive}"
+            HorizontalAlignment="Left"
+            Width="120"
+            Content="Save ViewSheetSet"
+            Command="{Binding ElementName=window, Path=DataContext.SaveViewSheetSetCommand}" />
+          <TextBox
+            Text="{Binding NMK_M.ViewSheetSet_Name, UpdateSourceTrigger=PropertyChanged}"
+            theme:UI.Hint="ViewSheetSet Name"
+            Margin="130 0 0 0"
+            Height="30"
+            VerticalContentAlignment="Center" />
+        </Grid>
+      </StackPanel>
+    </GroupBox>
+    <!--#endregion-->
+    <!--#region Search-->
+    <Grid
+      Margin="0 0 10 0"
+      Grid.Row="1">
+      <StackPanel
+        VerticalAlignment="Center"
+        Orientation="Horizontal">
+        <RadioButton
+          x:Name="Sheet"
+          Margin="10 0 0 0"
+          IsChecked="{Binding NMK_M.IsVisible_Window.Selection_IsSheet}"
+          Content="All Sheets" />
+        <RadioButton
+          IsChecked="{Binding NMK_M.IsVisible_Window.Selection_IsView}"
+          x:Name="View"
+          Margin="10 0 0 0"
+          Content="All Views" />
+      </StackPanel>
+      <Grid>
+        <TextBox
+          x:Name="SearchBox"
+          Height="30"
+          VerticalContentAlignment="Center"
+          Margin="200 0 40 0"
+          Text="{Binding NMK_M.Search.ViewSheet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+          theme:UI.Hint="Search...">
+          <i:Interaction.Triggers>
+            <i:EventTrigger
+              EventName="KeyUp">
+              <i:InvokeCommandAction
+                Command="{Binding ElementName=window, Path=DataContext.SearchViewSheetCommand}"
+                CommandParameter="{Binding}" />
+            </i:EventTrigger>
+          </i:Interaction.Triggers>
+        </TextBox>
+        <ToggleButton
+          Style="{StaticResource ToggleButtonRound}"
+          ToolTip="Refresh"
+          HorizontalAlignment="Right"
+          theme:UI.IconFalse="Sync"
+          theme:UI.IconTrue="Sync"
+          Command="{Binding ElementName=window,Path=DataContext.RefreshCommand}" />
+      </Grid>
+    </Grid>
+    <!--#endregion-->
+    <!--#region Sheet-->
+    <TreeView
+      Visibility="{Binding ElementName=Sheet, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+      Margin="10 10 10 10"
+      ItemsSource="{Binding NMK_M.SelectionSheets}"
+      Grid.Row="2">
+      <TreeView.Resources>
+        <HierarchicalDataTemplate
+          ItemsSource="{Binding Items}"
+          DataType="{x:Type modelChilds:NMK_M_SheetAndView}">
+          <CheckBox
+            Margin="0 2"
+            Cursor="Hand"
+            Padding="8,0,0,0"
+            IsChecked="{Binding IsChecked, Mode=TwoWay}">
+            <CheckBox.Content>
+              <StackPanel
+                Orientation="Horizontal">
+                <TextBlock
+                  Text="{Binding Name}" />
+                <StackPanel
+                  Visibility="{Binding IsItem, Converter={StaticResource BoolConverterReverse}}"
+                  Orientation="Horizontal">
+                  <TextBlock
+                    Text="   [" />
+                  <TextBlock
+                    Text="{Binding Count}" />
+                  <TextBlock
+                    Text="/" />
+                  <TextBlock
+                    Text="{Binding CountTotal}" />
+                  <TextBlock
+                    Text="]" />
+                </StackPanel>
+              </StackPanel>
+            </CheckBox.Content>
+            <i:Interaction.Triggers>
+              <i:EventTrigger
+                EventName="Click">
+                <i:InvokeCommandAction
+                  Command="{Binding ElementName=window, Path=DataContext.SheetCheckBoxClickCommand}"
+                  CommandParameter="{Binding}" />
+              </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <CheckBox.Style>
+              <Style
+                TargetType="CheckBox">
+                <Style.Triggers>
+                  <DataTrigger
+                    Binding="{Binding IsChecked}"
+                    Value="True">
+                    <Setter
+                      Property="Foreground"
+                      Value="{DynamicResource AccentBrush}" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </CheckBox.Style>
+          </CheckBox>
+        </HierarchicalDataTemplate>
+      </TreeView.Resources>
+      <TreeView.ItemContainerStyle>
+        <Style
+          TargetType="TreeViewItem">
+          <Setter
+            Property="IsExpanded"
+            Value="False" />
+          <Setter
+            Property="Visibility"
+            Value="{Binding IsVisible, Converter={StaticResource BoolConverter}}" />
+        </Style>
+      </TreeView.ItemContainerStyle>
+    </TreeView>
+    <TreeView
+      Visibility="{Binding ElementName=View, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+      Margin="10 10 10 10"
+      ItemsSource="{Binding NMK_M.SelectionViews}"
+      Grid.Row="2">
+      <TreeView.Resources>
+        <HierarchicalDataTemplate
+          ItemsSource="{Binding Items}"
+          DataType="{x:Type modelChilds:NMK_M_SheetAndView}">
+          <StackPanel
+            Orientation="Horizontal"
+            Margin="0,2">
+            <CheckBox
+              Cursor="Hand"
+              Padding="8,0,0,0"
+              IsChecked="{Binding IsChecked, Mode=TwoWay}">
+              <CheckBox.Content>
+                <StackPanel
+                  Orientation="Horizontal">
+                  <TextBlock
+                    Text="{Binding Name}" />
+                  <StackPanel
+                    Visibility="{Binding IsItem, Converter={StaticResource BoolConverterReverse}}"
+                    Orientation="Horizontal">
+                    <TextBlock
+                      Text="   [" />
+                    <TextBlock
+                      Text="{Binding Count}" />
+                    <TextBlock
+                      Text="/" />
+                    <TextBlock
+                      Text="{Binding CountTotal}" />
+                    <TextBlock
+                      Text="]" />
+                  </StackPanel>
+                </StackPanel>
+              </CheckBox.Content>
+              <i:Interaction.Triggers>
+                <i:EventTrigger
+                  EventName="Click">
+                  <i:InvokeCommandAction
+                    Command="{Binding ElementName=window, Path=DataContext.SheetCheckBoxClickCommand}"
+                    CommandParameter="{Binding}" />
+                </i:EventTrigger>
+              </i:Interaction.Triggers>
+              <CheckBox.Style>
+                <Style
+                  TargetType="CheckBox">
+                  <Style.Triggers>
+                    <DataTrigger
+                      Binding="{Binding IsChecked}"
+                      Value="True">
+                      <Setter
+                        Property="Foreground"
+                        Value="{DynamicResource AccentBrush}" />
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </CheckBox.Style>
+            </CheckBox>
+          </StackPanel>
+        </HierarchicalDataTemplate>
+      </TreeView.Resources>
+      <TreeView.ItemContainerStyle>
+        <Style
+          TargetType="TreeViewItem">
+          <Setter
+            Property="IsExpanded"
+            Value="False" />
+          <Setter
+            Property="Visibility"
+            Value="{Binding IsVisible, Converter={StaticResource BoolConverter}}" />
+        </Style>
+      </TreeView.ItemContainerStyle>
+    </TreeView>
+    <ProgressBar
+      Visibility="{Binding NMK_M.IsVisible_ProgressBar.Selection_Sheet, Converter={StaticResource BoolConverter}}"
+      Grid.Row="2"
+      Style="{StaticResource BackgroundProgressBarSpinner}" />
+    <!--#endregion-->
+  </Grid>
+</UserControl>

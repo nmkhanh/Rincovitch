@@ -1,0 +1,125 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<XamlDebuggingInformation>True</XamlDebuggingInformation>
+		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>true</ImplicitUsings>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<PackageIcon>RincovitchIcon.png</PackageIcon>
+		<ApplicationIcon>RincovitchIcon.ico</ApplicationIcon>
+
+		 <!--Build 1 file duy nhất--><!-- 
+		<PublishSingleFile>true</PublishSingleFile>
+
+		 --><!--Không cần cài .NET--><!-- 
+		<SelfContained>true</SelfContained>
+
+		--><!--<RuntimeIdentifier>win-x64</RuntimeIdentifier>--><!--
+
+		 --><!--Nén toàn bộ--><!-- 
+		<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+
+		 --><!--Không bung file ra ổ cứng khi chạy--><!-- 
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>-->
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <COMReference Include="Microsoft.Office.Interop.Outlook">
+	    <WrapperTool>tlbimp</WrapperTool>
+	    <VersionMinor>6</VersionMinor>
+	    <VersionMajor>9</VersionMajor>
+	    <Guid>00062fff-0000-0000-c000-000000000046</Guid>
+	    <Lcid>0</Lcid>
+	    <Isolated>false</Isolated>
+	    <EmbedInteropTypes>true</EmbedInteropTypes>
+	    <Private>True</Private>
+	  </COMReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="RincovitchIcon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\RincovitchInstaller\Rincovitch.bundle\Contents\Resources\RincovitchIcon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="LiveChartsCore.SkiaSharpView.WPF" Version="2.0.0-rc6.1" />
+		<PackageReference Include="Material.Icons" Version="2.4.1" />
+		<PackageReference Include="Material.Icons.WPF" Version="2.4.1" />
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.83.1" />
+		<PackageReference Include="Microsoft.Identity.Client.Broker" Version="4.83.1" />
+		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+		<PackageReference Include="Supabase" Version="1.1.1" />
+		<PackageReference Include="Unnoficial.Microsoft.Expression.Drawing" Version="1.0.0" />
+		<PackageReference Include="Microsoft.Playwright" Version="1.58.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Update="Microsoft.Office.Interop.Outlook">
+			<EmbedInteropTypes>true</EmbedInteropTypes>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="Properties\Resources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Resources.resx</DependentUpon>
+		</Compile>
+		<Compile Update="Properties\Settings.Designer.cs">
+			<DesignTimeSharedInput>True</DesignTimeSharedInput>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>Settings.settings</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\Resources.resx">
+			<Generator>PublicResXFileCodeGenerator</Generator>
+			<LastGenOutput>Resources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Properties\Settings.settings">
+			<Generator>SettingsSingleFileGenerator</Generator>
+			<LastGenOutput>Settings.Designer.cs</LastGenOutput>
+		</None>
+	</ItemGroup>
+	<Target Name="CopyBuildOutput" AfterTargets="Build">
+		<!-- Xóa sạch output cũ -->
+		<RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))\RincovitchInstallerApp\bundle\" />
+
+		<ItemGroup>
+			<!-- Lấy toàn bộ output -->
+			<AllOutputFiles Include="$(TargetDir)**\*.*" />
+
+			<!-- Loại bỏ win-x86 -->
+			<AllOutputFiles Remove="$(TargetDir)runtimes\win-x86\**\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(AllOutputFiles)" DestinationFolder="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))\RincovitchInstallerApp\bundle\" SkipUnchangedFiles="false" />
+	</Target>
+	<Target Name="CopyRebuildOutput" AfterTargets="Rebuild">
+		<!-- Xóa sạch output cũ -->
+		<RemoveDir Directories="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))\RincovitchInstallerApp\bundle\" />
+
+		<ItemGroup>
+			<!-- Lấy toàn bộ output -->
+			<AllOutputFiles Include="$(TargetDir)**\*.*" />
+
+			<!-- Loại bỏ win-x86 -->
+			<AllOutputFiles Remove="$(TargetDir)runtimes\win-x86\**\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(AllOutputFiles)" DestinationFolder="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))\RincovitchInstallerApp\bundle\" SkipUnchangedFiles="false" />
+	</Target>
+</Project>

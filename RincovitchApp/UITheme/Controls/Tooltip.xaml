@@ -1,0 +1,120 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:theme="clr-namespace:RincovitchApp.UITheme">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchApp;component/UITheme/LightTheme.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+  <Style
+    TargetType="ToolTip">
+    <Setter
+      Property="Padding"
+      Value="5" />
+    <Setter
+      Property="Placement"
+      Value="Bottom" />
+    <Setter
+      Property="OverridesDefaultStyle"
+      Value="True" />
+    <Setter
+      Property="HasDropShadow"
+      Value="False" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToolTip">
+          <Border
+            Background="{DynamicResource PrimaryBackgroundBrush}"
+            CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+            BorderBrush="{DynamicResource PrimaryBorderBrush}"
+            BorderThickness="1"
+            Padding="{TemplateBinding Padding}"
+            SnapsToDevicePixels="True">
+            <StackPanel
+              Orientation="Horizontal">
+              <!-- Nội dung chính -->
+              <ContentPresenter />
+            </StackPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style
+    x:Key="ToolTipTask"
+    TargetType="ToolTip">
+    <Setter
+      Property="Padding"
+      Value="5" />
+    <Setter
+      Property="Placement"
+      Value="Bottom" />
+    <Setter
+      Property="OverridesDefaultStyle"
+      Value="True" />
+    <Setter
+      Property="HasDropShadow"
+      Value="False" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToolTip">
+          <Border
+            Background="{DynamicResource PrimaryBackgroundBrush}"
+            CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+            BorderBrush="{DynamicResource PrimaryBorderBrush}"
+            BorderThickness="1"
+            Padding="{TemplateBinding Padding}"
+            SnapsToDevicePixels="True">
+            <StackPanel
+              Orientation="Horizontal">
+              <TextBlock
+                Foreground="{DynamicResource PrimaryForegroundBrush}"
+                VerticalAlignment="Center"
+                Text="{Binding Name}" />
+            </StackPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <Style
+    x:Key="ToolTipContent"
+    TargetType="ToolTip">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource PrimaryForegroundBrush}" />
+    <Setter
+      Property="Padding"
+      Value="5" />
+    <Setter
+      Property="Placement"
+      Value="Bottom" />
+    <Setter
+      Property="OverridesDefaultStyle"
+      Value="True" />
+    <Setter
+      Property="HasDropShadow"
+      Value="False" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ToolTip">
+          <Border
+            Background="{DynamicResource PrimaryBackgroundBrush}"
+            CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+            BorderBrush="{DynamicResource PrimaryBorderBrush}"
+            BorderThickness="1"
+            Padding="{TemplateBinding Padding}"
+            SnapsToDevicePixels="True">
+            <ContentPresenter />
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

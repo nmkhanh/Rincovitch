@@ -1,0 +1,106 @@
+﻿<Window
+  x:Class="MultiTool.R_DWGView"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:MultiTool.CreateRebarDetail"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  Title="R_"
+  Icon="C:\ProgramData\Autodesk\ApplicationPlugins\Rincovitch.bundle\Contents\Resources\RincovitchIcon.png"
+  Height="600"
+  Width="600"
+  Name="window">
+  <i:Interaction.Triggers>
+    <i:EventTrigger
+      EventName="Loaded">
+      <i:InvokeCommandAction
+        Command="{Binding ElementName=window,Path=DataContext.LoadedCommand}" />
+    </i:EventTrigger>
+  </i:Interaction.Triggers>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition
+        Height="Auto" />
+      <RowDefinition
+        Height="Auto" />
+      <RowDefinition
+        Height="*" />
+      <RowDefinition
+        Height="Auto" />
+      <RowDefinition
+        Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid>
+      <TextBlock
+        Margin="10"
+        VerticalAlignment="Center"
+        Text="ViewTemplate : " />
+      <ComboBox
+        HorizontalContentAlignment="Center"
+        VerticalContentAlignment="Center"
+        DisplayMemberPath="Name"
+        Grid.Row="0"
+        Name="Template"
+        Margin="100 10 10 10"
+        Height="30"
+        VerticalAlignment="Top" />
+    </Grid>
+    <CheckBox
+      Name="BySelected"
+      IsChecked="False"
+      Content="By select"
+      Margin="10 0 10 0"
+      Grid.Row="1"/>
+    <ListBox
+      IsEnabled="{Binding ElementName=BySelected, Path=IsChecked}"
+      Grid.Row="2"
+      Name="DWGList"
+      Margin="10">
+      <ListBox.ItemTemplate>
+        <DataTemplate>
+          <CheckBox
+            Padding="10 0 0 0"
+            Content="{Binding Name}"
+            IsChecked="{Binding IsSelected,Mode=TwoWay}" />
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+    <DataGrid
+      Grid.Row="3"
+      Name="DataGrid"
+      Margin="10"
+      AutoGenerateColumns="False"
+      CanUserAddRows="True"
+      CanUserDeleteRows="False"
+      Height="150">
+      <DataGrid.Columns>
+        <DataGridTextColumn
+          Header="Layer (Contains)"
+          Binding="{Binding Name}"
+          Width="*" />
+        <DataGridTemplateColumn
+          Header="Color"
+          Width="200">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button
+                Background="{Binding Color, Mode=TwoWay}"
+                Content="Pick Color"
+                Click="PickColor_Click"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+      </DataGrid.Columns>
+    </DataGrid>
+    <Button
+      Grid.Row="10"
+      Content="RUN"
+      HorizontalAlignment="Right"
+      VerticalAlignment="Bottom"
+      Width="80"
+      Height="30"
+      Margin="10"
+      Click="Run"/>
+  </Grid>
+</Window>

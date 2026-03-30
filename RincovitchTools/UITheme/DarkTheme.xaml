@@ -1,0 +1,51 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+ <!-- Dark Theme Colors (soft, silver-dominant) -->
+ <!-- Background Colors -->
+ <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="#0B0C0E" />
+ <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="#111315" />
+ <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#16181A" />
+
+ <!-- Foreground Colors (soft off-white / silver) -->
+ <SolidColorBrush x:Key="PrimaryForegroundBrush" Color="#EEF0F1" />
+ <SolidColorBrush x:Key="SecondaryForegroundBrush" Color="#C9CDD0" />
+ <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#8B8F95" />
+
+ <!-- Border Colors (soft silver tones) -->
+ <SolidColorBrush x:Key="PrimaryBorderBrush" Color="#B6B9BC" />
+ <SolidColorBrush x:Key="HoverBorderBrush" Color="#C6C9CC" />
+ <SolidColorBrush x:Key="DisabledBorderBrush" Color="#0B0B0C" />
+
+ <!-- Accent Colors (kept available but not used for control defaults) -->
+ <SolidColorBrush x:Key="AccentBrush" Color="#FF6B00" />
+ <SolidColorBrush x:Key="AccentHoverBrush" Color="#E55D00" />
+ <SolidColorBrush x:Key="AccentPressedBrush" Color="#CC5200" />
+ <SolidColorBrush x:Key="AccentForegroundBrush" Color="#FFFFFF" />
+
+ <!-- Accent Black variants (kept) -->
+ <SolidColorBrush x:Key="AccentBlackBrush" Color="#000000" />
+ <SolidColorBrush x:Key="AccentBlackHoverBrush" Color="#222222" />
+ <SolidColorBrush x:Key="AccentBlackPressedBrush" Color="#111111" />
+ <SolidColorBrush x:Key="AccentBlackForegroundBrush" Color="#FFFFFF" />
+  <!-- Support Control Colors (silver-dominant throughout) -->
+  <SolidColorBrush
+    x:Key="SupportControlBackgroundBrush"
+    Color="#2B2E30" />
+  <!-- Control Colors (soft silver-dominant) -->
+ <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#111315" /> <!-- slightly lighter than page -->
+ <SolidColorBrush x:Key="ControlHoverBackgroundBrush" Color="#16181A" />
+ <SolidColorBrush x:Key="ControlSelectedBackgroundBrush" Color="#232628" />
+ <SolidColorBrush x:Key="ControlSelectedHoverBackgroundBrush" Color="#2B2E30" />
+ <SolidColorBrush x:Key="ControlDisabledBackgroundBrush" Color="#0A0B0C" />
+
+ <SolidColorBrush x:Key="ControlForegroundBrush" Color="#EEF0F1" />
+ <SolidColorBrush x:Key="ControlSelectedForegroundBrush" Color="#EEF0F1" />
+ <SolidColorBrush x:Key="ControlDisabledForegroundBrush" Color="#8B8F95" />
+
+ <SolidColorBrush x:Key="ControlBorderBrush" Color="#B6B9BC" />
+ <SolidColorBrush x:Key="ControlHoverBorderBrush" Color="#C6C9CC" />
+ <!-- Selected border: soft silver bright enough to show on dark -->
+ <SolidColorBrush x:Key="ControlSelectedBorderBrush" Color="#E6E8EA" />
+ <SolidColorBrush x:Key="ControlSelectedHoverBorderBrush" Color="#F2F3F4" />
+ <SolidColorBrush x:Key="ControlDisabledBorderBrush" Color="#0B0B0C" />
+</ResourceDictionary>

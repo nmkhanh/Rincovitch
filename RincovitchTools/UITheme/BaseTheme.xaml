@@ -1,0 +1,77 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ResourceDictionary.MergedDictionaries>
+    <!-- Fonts -->
+    <!--<ResourceDictionary Source="Fonts.xaml"/>-->
+    <!-- Converter -->
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Converter.xaml" />
+    <!-- Controls -->
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ProgressBar.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/TextBlock.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ToggleButton.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/RadioButton.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/TextBox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/TreeView.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/TreeViewItem.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ListBox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ListBoxItem.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/Combobox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ComboboxItem.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/Tooltip.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/DataGrid.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/DataGridItem.xaml" />
+    <!--
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/Checkbox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/Combobox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ComboboxItem.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/DataGrid.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/DataGridItem.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/Expander.xaml" />-->
+    <!--<ResourceDictionary Source="Controls/Grid.xaml"/>-->
+    <!--<ResourceDictionary Source="Controls/GridSplitter.xaml"/>-->
+    <!--<ResourceDictionary Source="Controls/TextBlock.xaml"/>-->
+    <!--
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/TextBox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ListBox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ListBoxItem.xaml" />
+    
+    
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/Tooltip.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/TreeView.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/TreeViewItem.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/RadioButton.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/ScrollViewer.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/RincovitchTools;component/UITheme/Controls/Grid.xaml" />-->
+  </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

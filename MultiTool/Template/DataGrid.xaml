@@ -1,0 +1,308 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:icon="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF">
+  <Style
+    TargetType="DataGridRow"
+    x:Key="DataGridRowNew">
+    <Setter
+      Property="MinHeight"
+      Value="30" />
+    <Setter
+      Property="VerticalAlignment"
+      Value="Center" />
+    <Setter
+      Property="VerticalContentAlignment"
+      Value="Center" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="Foreground"
+      Value="Black" />
+    <Setter
+      Property="BorderBrush"
+      Value="Silver" />
+    <Setter
+      Property="BorderThickness"
+      Value="0,0,0,0" />
+    <Setter
+      Property="SnapsToDevicePixels"
+      Value="True" />
+    <Setter
+      Property="Validation.ErrorTemplate"
+      Value="{x:Null}" />
+    <Style.Triggers>
+      <Trigger
+        Property="IsMouseOver"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="Silver" />
+      </Trigger>
+      <Trigger
+        Property="IsSelected"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="OrangeRed" />
+      </Trigger>
+      <Trigger
+        Property="IsEnabled"
+        Value="False">
+        <Setter
+          Property="Foreground"
+          Value="Silver" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+  <Style
+    TargetType="DataGridRow"
+    x:Key="DataGridRowTransparent">
+    <Setter
+      Property="MinHeight"
+      Value="30" />
+    <Setter
+      Property="VerticalAlignment"
+      Value="Center" />
+    <Setter
+      Property="VerticalContentAlignment"
+      Value="Center" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="Foreground"
+      Value="Black" />
+    <Setter
+      Property="BorderBrush"
+      Value="Silver" />
+    <Setter
+      Property="BorderThickness"
+      Value="0,0,0,0" />
+    <Setter
+      Property="SnapsToDevicePixels"
+      Value="True" />
+    <Setter
+      Property="Validation.ErrorTemplate"
+      Value="{x:Null}" />
+    <Style.Triggers>
+      <Trigger
+        Property="IsMouseOver"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="Silver" />
+      </Trigger>
+      <Trigger
+        Property="IsSelected"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="Transparent" />
+      </Trigger>
+      <Trigger
+        Property="IsEnabled"
+        Value="False">
+        <Setter
+          Property="Foreground"
+          Value="Silver" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+  <Style
+		TargetType="DataGrid">
+		<Setter
+			Property="BorderBrush"
+			Value="Transparent" />
+		<Setter
+			Property="Background"
+			Value="Transparent" />
+		<Setter
+			Property="Foreground"
+			Value="Black" />
+		<Setter
+			Property="AutoGenerateColumns"
+			Value="False" />
+		<Setter
+			Property="CanUserAddRows"
+			Value="False" />
+		<Setter
+			Property="CanUserDeleteRows"
+			Value="False" />
+		<Setter
+			Property="CanUserReorderColumns"
+			Value="False" />
+		<Setter
+			Property="CanUserResizeColumns"
+			Value="True" />
+		<Setter
+			Property="CanUserSortColumns"
+			Value="True" />
+		<Setter
+			Property="SelectionMode"
+			Value="Extended" />
+		<Setter
+			Property="SelectionUnit"
+			Value="FullRow" />
+		<Setter
+			Property="GridLinesVisibility"
+			Value="None" />
+		<Setter
+			Property="HeadersVisibility"
+			Value="Column" />
+    <Setter
+      Property="MinRowHeight"
+      Value="30" />
+    <Setter
+			Property="ScrollViewer.CanContentScroll"
+			Value="True" />
+		<Setter
+			Property="ScrollViewer.VerticalScrollBarVisibility"
+			Value="Auto" />
+		<Setter
+			Property="ScrollViewer.HorizontalScrollBarVisibility"
+			Value="Disabled" />
+		<Setter
+			Property="SnapsToDevicePixels"
+			Value="True" />
+		<Setter
+			Property="EnableRowVirtualization"
+			Value="True" />
+		<Setter
+			Property="EnableColumnVirtualization"
+			Value="True" />
+		<Setter
+			Property="IsReadOnly"
+			Value="True" />
+		<Setter
+			Property="CellStyle">
+			<Setter.Value>
+				<Style
+					TargetType="DataGridCell">
+					<Setter
+						Property="Padding"
+						Value="10 0 10 0" />
+					<Setter
+						Property="BorderThickness"
+						Value="0,0,1,1" />
+					<Setter
+						Property="BorderBrush"
+						Value="Silver" />
+					<Setter
+						Property="VerticalAlignment"
+            Value="Stretch" />
+					<Setter
+						Property="VerticalContentAlignment"
+						Value="Center" />
+          <Setter
+            Property="HorizontalAlignment"
+            Value="Stretch" />
+          <Setter
+						Property="HorizontalContentAlignment"
+						Value="Left" />
+					<Setter
+						Property="Background"
+						Value="Transparent" />
+					<Setter
+						Property="Foreground"
+            Value="Black" />
+					<Setter
+						Property="Focusable"
+						Value="False" />
+				</Style>
+			</Setter.Value>
+		</Setter>
+    <Setter
+      Property="ColumnHeaderStyle">
+      <Setter.Value>
+        <Style
+          TargetType="DataGridColumnHeader">
+          <Setter
+            Property="Height"
+            Value="Auto" />
+          <Setter
+            Property="MinHeight"
+            Value="30" />
+          <Setter
+            Property="BorderThickness"
+            Value="0,0,0,0" />
+          <!--<Setter
+						Property="BorderBrush"
+						Value="Silver" />-->
+          <!--<Setter
+						Property="Background"
+						Value="Transparent" />-->
+          <Setter
+            Property="Foreground"
+            Value="Black" />
+          <Setter
+            Property="HorizontalContentAlignment"
+            Value="Stretch" />
+          <Setter
+            Property="VerticalContentAlignment"
+            Value="Center" />
+          <Setter
+            Property="HorizontalAlignment"
+            Value="Stretch" />
+          <Setter
+            Property="VerticalAlignment"
+            Value="Stretch" />
+          <Style.Triggers>
+            <Trigger
+              Property="SortDirection"
+              Value="Ascending">
+              <Setter
+                Property="ContentTemplate">
+                <Setter.Value>
+                  <DataTemplate>
+                    <StackPanel
+                      Orientation="Horizontal">
+                      <TextBlock
+                        Text="{Binding}"
+                        VerticalAlignment="Center" />
+                      <icon:MaterialIcon
+                        Kind="ArrowDown"
+                        Width="20"
+                        Height="20" />
+                    </StackPanel>
+                  </DataTemplate>
+                </Setter.Value>
+              </Setter>
+            </Trigger>
+            <Trigger
+              Property="SortDirection"
+              Value="Descending">
+              <Setter
+                Property="ContentTemplate">
+                <Setter.Value>
+                  <DataTemplate>
+                    <StackPanel
+                      Orientation="Horizontal">
+                      <TextBlock
+                        Text="{Binding}"
+                        VerticalAlignment="Center" />
+                      <icon:MaterialIcon
+                        Kind="ArrowUp"
+                        Width="20"
+                        Height="20" />
+                    </StackPanel>
+                  </DataTemplate>
+                </Setter.Value>
+              </Setter>
+            </Trigger>
+          </Style.Triggers>
+        </Style>
+      </Setter.Value>
+    </Setter>
+    <Setter
+			Property="RowStyle">
+			<Setter.Value>
+        <Style
+          TargetType="DataGridRow"
+          BasedOn="{StaticResource DataGridRowNew}" />
+      </Setter.Value>
+		</Setter>
+	</Style>
+  
+</ResourceDictionary>

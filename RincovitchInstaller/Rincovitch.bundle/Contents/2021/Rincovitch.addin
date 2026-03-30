@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>Rincovitch</Name>
+		<Assembly>RincovitchTools.dll</Assembly>
+		<FullClassName>RincovitchTools.RincovitchApp</FullClassName>
+		<AddInId>49A15C5E-4FD6-4A20-B217-BFAC57C5FCCD</AddInId>
+		<Text>Rincovitch</Text>
+		<VisibilityMode>AlwaysVisible</VisibilityMode>
+		<LanguageType>Unknown</LanguageType>
+		<VendorId>Rincovitch</VendorId>
+		<VendorDescription>https://rincovitch.com.au/</VendorDescription>
+	</AddIn>
+</RevitAddIns>
