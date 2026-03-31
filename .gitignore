@@ -97,6 +97,10 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+*.exe
+
+# Node bundle (installer)
+RincovitchInstallerApp/bundle/
 
 # Chutzpah Test files
 _Chutzpah*
