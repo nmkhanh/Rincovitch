@@ -43,9 +43,6 @@ namespace RincovitchApp.Models
 
     public void ReloadTask()
     {
-      TasksUserCollectionAdminSchedule.Refresh();
-
-
       TasksProjectCollection.Refresh();
       TasksProjectCollectionCount.Refresh();
       TasksProjectCollectionTimeline.Refresh();
@@ -79,6 +76,11 @@ namespace RincovitchApp.Models
 
       update_day();
       update_day_schedule();
+      if (UserCurrent != null && UserCurrent.RoleEnum == F_Role.RoleType.AdminApp)
+      {
+        update_day_schedule_admin();
+        TasksUserCollectionAdminSchedule.Refresh();
+      }
     }
 
     public void refresh()
@@ -106,6 +108,7 @@ namespace RincovitchApp.Models
 
 
       ProjectSchedules_AssignTo = new NMK_M_ProjectSchedule();
+      UsersSchedules_Admin = new NMK_M_ProjectSchedule();
 
       ProjectsCollection = new ListCollectionView(Projects.Items);
 
@@ -274,7 +277,7 @@ namespace RincovitchApp.Models
       TasksUserCollectionAdminSchedule = new ListCollectionView(TasksAdminSchedule.Items);
       TasksUserCollectionAdminSchedule.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription("User.Team"));
       TasksUserCollectionAdminSchedule.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription("User"));
-      TasksUserCollectionAdminSchedule.CustomSort = new F_SortTasksUserCollection();
+      TasksUserCollectionAdminSchedule.CustomSort = new F_SortTasksUserCollectionAdmin();
       TasksUserCollectionAdminSchedule.Filter = (obj) =>
       {
         if (obj is not NMK_M_Task task)
@@ -450,7 +453,7 @@ namespace RincovitchApp.Models
           if (user.RoleEnum != F_Role.RoleType.Admin)
             return false;
 
-        if(user.RoleEnum != F_Role.RoleType.Admin)
+        if (user.RoleEnum != F_Role.RoleType.Admin)
         {
           if (user.Team != UserCurrent.Team)
             return false;
@@ -568,7 +571,7 @@ namespace RincovitchApp.Models
     }
 
     [ObservableProperty]
-    ImageSource _taskbarOverlay = null;
+    ImageSource _TaskbarOverlay = null;
     #endregion
 
     #region Leave
@@ -872,6 +875,9 @@ namespace RincovitchApp.Models
 
     [ObservableProperty]
     NMK_M_ProjectSchedule _ProjectSchedules_AssignTo = new NMK_M_ProjectSchedule();
+
+    [ObservableProperty]
+    NMK_M_ProjectSchedule _UsersSchedules_Admin = new NMK_M_ProjectSchedule();
     #endregion
 
     #region Filter
@@ -900,25 +906,8 @@ namespace RincovitchApp.Models
         }
         else
         {
-          int lastDayOfMonth = DateTime.DaysInMonth(year, month);
-          List<DateTime> days = new List<DateTime>();
-
-          var xx = Enumerable
-          .Range(0, (lastDayOfMonth))
-          .Select(i => new DateTime(year, month, 1).AddDays(i))
-          .Where(d => d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday);
-
-          xx = xx.Where(x => CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(x, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday) == week)
-          .ToList();
-
-          foreach (var item in xx)
-          {
-            days.Add(item);
-          }
-
-          // Start của tuần cần lấy
-          MinDaySchedules = days.Min();
-          MaxDaySchedules = days.Max();
+          MinDaySchedules = F_Date.GetWeekdaysOfWeek(year, week).Start;
+          MaxDaySchedules = F_Date.GetWeekdaysOfWeek(year, week).End;
         }
       }
 
@@ -945,7 +934,9 @@ namespace RincovitchApp.Models
           var dateList = F_Date.BuildDateSchedules(start, end);
           foreach (var item in dateList)
           {
-            if (item.WeekSchedule == FilterWeekSchedule && item.MonthSchedule == FilterMonthSchedule && item.YearSchedule == FilterYearSchedule)
+            if ((item.WeekSchedule == FilterWeekSchedule || FilterWeekSchedule == 0) &&
+              (item.MonthSchedule == FilterMonthSchedule || FilterMonthSchedule == 0) &&
+              (item.YearSchedule == FilterYearSchedule || FilterYearSchedule == 0))
             {
               var task_child = task.Clone();
 
@@ -968,14 +959,15 @@ namespace RincovitchApp.Models
         {
           var task_assignby = tasks.Where(x => x.Date.Date == item.Key.date.Date && !x.IsAssignedTo && x.Project.Key == item.Key.project.Key && !string.IsNullOrEmpty(x.ParentId)).ToList();
           var parentIds = task_assignby.Select(x => x.ParentId).ToList();
-          if (item.Any(x => parentIds.Contains(x.Id)))
+          if (item.Any(x => parentIds.Contains(x.Id) && x.IsOnlyChecked))
           {
             foreach (var item_ in item)
             {
               if (task_assignby.Any(x => x.ParentId == item_.Id))
               {
-                var child = task_assignby.First(x => x.ParentId == item_.Id);
-                item_.TaskChild = child;
+                var child = task_assignby.Where(x => x.ParentId == item_.Id);
+                item_.TaskChild = new NMK_M_Task();
+                item_.TaskChild.Items = new ObservableCollection<NMK_M_Task>(child);
               }
             }
             Time = Time - task_assignby.Sum(x => x.Time);
@@ -1095,7 +1087,9 @@ namespace RincovitchApp.Models
           var dateList = F_Date.BuildDateSchedules(start, end);
           foreach (var item in dateList)
           {
-            if (item.WeekSchedule == FilterWeekSchedule && item.MonthSchedule == FilterMonthSchedule && item.YearSchedule == FilterYearSchedule)
+            if ((item.WeekSchedule == FilterWeekSchedule || FilterWeekSchedule == 0) &&
+              (item.MonthSchedule == FilterMonthSchedule || FilterMonthSchedule == 0) &&
+              (item.YearSchedule == FilterYearSchedule || FilterYearSchedule == 0))
             {
               var task_child = task.Clone();
 
@@ -1111,31 +1105,28 @@ namespace RincovitchApp.Models
           }
         }
       }
-      foreach (var item in tasks.GroupBy(x => new { project = x.Project, date = x.Date, IsAssignedTo = x.IsAssignedTo }))
+      foreach (var item in tasks.GroupBy(x => new { user = x.User, date = x.Date }))
       {
         var Time = item.Sum(x => x.Time);
-        if (item.Key.IsAssignedTo)
+        var task_assignby = tasks.Where(x => x.Date.Date == item.Key.date.Date && !string.IsNullOrEmpty(x.ParentId)).ToList();
+        var parentIds = task_assignby.Select(x => x.ParentId).ToList();
+        if (item.Any(x => parentIds.Contains(x.Id) && x.IsOnlyChecked))
         {
-          var task_assignby = tasks.Where(x => x.Date.Date == item.Key.date.Date && !x.IsAssignedTo && x.Project.Key == item.Key.project.Key && !string.IsNullOrEmpty(x.ParentId)).ToList();
-          var parentIds = task_assignby.Select(x => x.ParentId).ToList();
-          if (item.Any(x => parentIds.Contains(x.Id)))
+          foreach (var item_ in item)
           {
-            foreach (var item_ in item)
+            if (task_assignby.Any(x => x.ParentId == item_.Id))
             {
-              if (task_assignby.Any(x => x.ParentId == item_.Id))
-              {
-                var child = task_assignby.First(x => x.ParentId == item_.Id);
-                item_.TaskChild = child;
-              }
+              var child = task_assignby.Where(x => x.ParentId == item_.Id);
+              item_.TaskChild = new NMK_M_Task();
+              item_.TaskChild.Items = new ObservableCollection<NMK_M_Task>(child);
             }
-            Time = Time - task_assignby.Sum(x => x.Time);
           }
+          Time = Time - task_assignby.Sum(x => x.Time);
         }
-        TasksSchedule.Items.Add(new NMK_M_Task()
+        TasksAdminSchedule.Items.Add(new NMK_M_Task()
         {
           Index = 0,
-          IsAssignedTo = item.Key.IsAssignedTo,
-          Project = item.Key.project,
+          User = item.Key.user,
           Date = item.Key.date,
           Left = item.First().Left,
           WeekSchedule = item.First().WeekSchedule,
@@ -1145,72 +1136,29 @@ namespace RincovitchApp.Models
           TasksSchedule = new ObservableCollection<NMK_M_Task>(item.OrderBy(x => x.Name))
         });
       }
-      var project = new NMK_M_Project() { Name = "Other", Key = "OTHER" };
-      List<NMK_M_Task> tasks_other = new List<NMK_M_Task>();
-      foreach (var day in DaysSchedules.Items)
-      {
-        task_other_add(TasksSchedule.Items.Where(x => x.Date.Date == day.Name.Date && x.IsAssignedTo).ToList(), true, day.Name.Date);
-        task_other_add(TasksSchedule.Items.Where(x => x.Date.Date == day.Name.Date && !x.IsAssignedTo).ToList(), false, day.Name.Date);
-      }
-      tasks_other.ForEach(x => TasksSchedule.Items.Add(x));
-
-      void task_other_add(List<NMK_M_Task> group, bool IsAssignedTo, DateTime date)
-      {
-        if (!group.Any())
-        {
-          tasks_other.Add(new NMK_M_Task()
-          {
-            Index = 1,
-            IsAssignedTo = IsAssignedTo,
-            Project = project,
-            Date = date,
-            Left = (F_Date.CreateDayListNotWeek(MinDaySchedules, date.Date).Count() - 1) * Tasks.PixelsPerDay,
-            Time = 8,
-          });
-        }
-        else
-        {
-          var time = group.Sum(x => x.Time);
-          tasks_other.Add(new NMK_M_Task()
-          {
-            Index = 1,
-            IsAssignedTo = IsAssignedTo,
-            Project = project,
-            Date = date,
-            Left = group.First().Left,
-            Time = 8 - time > 0 ? 8 - time : 0,
-          });
-        }
-      }
-
-      ProjectSchedules_AssignTo.TotalTime.Clear();
-      ProjectSchedules_AssignTo.TotalTime.Add(TasksSchedule.Items.Where(x => x.Project.Key != "OTHER" && x.IsAssignedTo == IsAssignedToSchedule).Sum(x => x.Time));
-      ProjectSchedules_AssignTo.TotalTime.Add(TasksSchedule.Items.Where(x => x.Project.Key == "OTHER" && x.IsAssignedTo == IsAssignedToSchedule).Sum(x => x.Time));
-      ProjectSchedules_AssignTo.TotalTime.Add(TasksSchedule.Items.Where(x => x.IsAssignedTo == IsAssignedToSchedule).Sum(x => x.Time));
-      ProjectSchedules_AssignTo.TotalTime.Add(ProjectSchedules_AssignTo.TotalTime[0] / 40 * 100);
 
       var values = new List<NMK_M_ProjectSchedule>();
-      var data = TasksSchedule.Items.Where(x => x.IsAssignedTo == IsAssignedToSchedule).GroupBy(x => x.Project);
+      var data = TasksAdminSchedule.Items.OrderBy(x => x.User.Name).GroupBy(x => x.User);
       foreach (var item in data)
       {
         values.Add(new NMK_M_ProjectSchedule()
         {
           Time = item.Sum(x => x.Time),
-          Color = item.Key.ColorString
+          //Color = item.Key.ColorString
         });
       }
-      ProjectSchedules_AssignTo.XAxes = [
+      UsersSchedules_Admin.XAxes = [
         new Axis()
           {
             Labels = data.Select(x => x.Key.Key).ToArray(),
           }
       ];
 
-      ProjectSchedules_AssignTo.Series = new ISeries[]
+      UsersSchedules_Admin.Series = new ISeries[]
       {
             new ColumnSeries<NMK_M_ProjectSchedule>
             {
-                DataLabelsFormatter = ProjectSchedules_AssignTo.MyFormatter,
+                DataLabelsFormatter = UsersSchedules_Admin.MyFormatter,
                 Values = values,
                 DataLabelsPosition = LiveChartsCore.Measure.DataLabelsPosition.Top,
                 ShowDataLabels = true,

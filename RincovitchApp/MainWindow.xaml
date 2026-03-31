@@ -116,9 +116,9 @@
             </Border>
           </Grid>
           <Separator
-            Visibility="{Binding NMK_M.RoleVisible.VisibleAdmin}" />
+            Visibility="{Binding NMK_M.RoleVisible.VisibleMiddle}" />
           <Grid
-            Visibility="{Binding NMK_M.RoleVisible.VisibleAdmin}">
+            Visibility="{Binding NMK_M.RoleVisible.VisibleMiddle}">
             <RadioButton
               GroupName="Navigation"
               Content="Users"
@@ -1891,16 +1891,25 @@
             Width="*">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <ToggleButton
-                  Command="{Binding ElementName=window,Path=DataContext.UserEditCommand}"
-                  CommandParameter="{Binding}"
-                  Style="{StaticResource ToggleButtonTransparentAll}"
-                  HorizontalContentAlignment="Left"
-                  theme:UI.PaddingContent="0"
-                  Padding="0"
-                  Margin="10 0"
-                  VerticalAlignment="Center"
-                  Content="{Binding Name}" />
+                <Grid>
+                  <Border
+                    Margin="-5 0"
+                    HorizontalAlignment="Left"
+                    Background="{Binding ColorStatus}"
+                    Width="10"
+                    Height="10"
+                    CornerRadius="5" />
+                  <ToggleButton
+                    Command="{Binding ElementName=window,Path=DataContext.UserEditCommand}"
+                    CommandParameter="{Binding}"
+                    Style="{StaticResource ToggleButtonTransparentAll}"
+                    HorizontalContentAlignment="Left"
+                    theme:UI.PaddingContent="0"
+                    Padding="0"
+                    Margin="10 0"
+                    VerticalAlignment="Center"
+                    Content="{Binding Name}" />
+                </Grid>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
@@ -2630,6 +2639,8 @@
       <Grid
         Margin="0 10">
         <ToggleButton
+          BorderThickness="1"
+          BorderBrush="{StaticResource PrimaryBorderBrush}"
           VerticalAlignment="Top"
           Command="{Binding ElementName=window, Path=DataContext.ScheduleStatusChangeCommand}"
           Visibility="{Binding NMK_M.RoleVisible.VisibleMiddle}"
@@ -2641,6 +2652,15 @@
           Margin="10 0"
           theme:UI.ContentFalse="AssignedByMe"
           theme:UI.ContentTrue="AssignedToMe" />
+        <!--<CheckBox
+          Name="alltask"
+          Content="All Task"
+          VerticalAlignment="Top"
+          Visibility="{Binding NMK_M.RoleVisible.VisibleAdminApp}"
+          Height="30"
+          HorizontalAlignment="Left"
+          Width="100"
+          Margin="320 8 0 0" />-->
         <StackPanel
           HorizontalAlignment="Right"
           VerticalAlignment="Top"
@@ -2864,6 +2884,48 @@
                     </GroupStyle>
                   </ItemsControl.GroupStyle>
                 </ItemsControl>
+                <ItemsControl
+                  Visibility="{Binding ElementName=alltask, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+                  ItemsSource="{Binding NMK_M.TasksUserCollectionAdminSchedule, UpdateSourceTrigger=PropertyChanged}">
+                  <ItemsControl.GroupStyle>
+                    <GroupStyle>
+                      <GroupStyle.ContainerStyle>
+                        <Style
+                          TargetType="GroupItem">
+                          <Setter
+                            Property="Template">
+                            <Setter.Value>
+                              <ControlTemplate
+                                TargetType="GroupItem">
+                                <ItemsPresenter />
+                              </ControlTemplate>
+                            </Setter.Value>
+                          </Setter>
+                        </Style>
+                      </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                    <GroupStyle>
+                      <GroupStyle.ContainerStyle>
+                        <Style
+                          TargetType="GroupItem">
+                          <Setter
+                            Property="Template">
+                            <Setter.Value>
+                              <ControlTemplate
+                                TargetType="GroupItem">
+                                <Border
+                                  BorderBrush="{DynamicResource ControlBorderBrush}"
+                                  BorderThickness="0,0,0,1"
+                                  Height="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerUser, UpdateSourceTrigger=PropertyChanged}"
+                                  Padding="8 0" />
+                              </ControlTemplate>
+                            </Setter.Value>
+                          </Setter>
+                        </Style>
+                      </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                  </ItemsControl.GroupStyle>
+                </ItemsControl>
               </Grid>
             </ScrollViewer>
             <!--#endregion-->
@@ -3001,6 +3063,78 @@
                     </GroupStyle>
                   </ItemsControl.GroupStyle>
                 </ItemsControl>
+                <ItemsControl
+                  Visibility="{Binding ElementName=alltask, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+                  Name="ScheduleAdmin"
+                  ItemsSource="{Binding NMK_M.TasksUserCollectionAdminSchedule, UpdateSourceTrigger=PropertyChanged}">
+                  <ItemsControl.GroupStyle>
+                    <GroupStyle>
+                      <GroupStyle.ContainerStyle>
+                        <Style
+                          TargetType="{x:Type GroupItem}">
+                          <Setter
+                            Property="Template">
+                            <Setter.Value>
+                              <ControlTemplate
+                                TargetType="{x:Type GroupItem}">
+                                <Grid>
+                                  <Grid.ColumnDefinitions>
+                                    <ColumnDefinition
+                                      Width="100" />
+                                    <ColumnDefinition
+                                      Width="*" />
+                                  </Grid.ColumnDefinitions>
+                                  <Border
+                                    Background="{DynamicResource ControlBackgroundBrush}"
+                                    Padding="8 0"
+                                    BorderBrush="{DynamicResource ControlBorderBrush}"
+                                    BorderThickness="0,0,1,1">
+                                    <TextBlock
+                                      Text="{Binding Name}"
+                                      FontWeight="Bold"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Center">
+                                      <TextBlock.LayoutTransform>
+                                        <RotateTransform
+                                          Angle="00" />
+                                      </TextBlock.LayoutTransform></TextBlock>
+                                  </Border>
+                                  <ItemsPresenter
+                                    Grid.Column="1" />
+                                </Grid>
+                              </ControlTemplate>
+                            </Setter.Value>
+                          </Setter>
+                        </Style>
+                      </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                    <GroupStyle>
+                      <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                          <Border
+                            BorderBrush="{DynamicResource ControlBorderBrush}"
+                            BorderThickness="0,0,0,1"
+                            Height="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerUser, UpdateSourceTrigger=PropertyChanged}"
+                            Background="{Binding Name.Color}"
+                            Padding="8 0">
+                            <TextBlock
+                              VerticalAlignment="Center"
+                              Text="{Binding Name.Name}"
+                              FontWeight="Bold" />
+                          </Border>
+                        </DataTemplate>
+                      </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                  </ItemsControl.GroupStyle>
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate></DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
               </Grid>
             </ScrollViewer>
             <ScrollViewer
@@ -3013,6 +3147,7 @@
               <Grid
                 VerticalAlignment="Top">
                 <ItemsControl
+                  Visibility="{Binding ElementName=alltask, Path=IsChecked, Converter={StaticResource BoolConverterReverse}}"
                   Width="{Binding ElementName=DaySchedule, Path=ActualWidth}"
                   Height="{Binding ElementName=ProjectSchedule, Path=ActualHeight}"
                   ItemsSource="{Binding NMK_M.TasksProjectCollectionSchedule, UpdateSourceTrigger=PropertyChanged}">
@@ -3073,22 +3208,6 @@
                                                     </StackPanel>
                                                     <StackPanel
                                                       Margin="0 5"
-                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverterReverse}}"
-                                                      Orientation="Horizontal">
-                                                      <TextBlock
-                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                        FontWeight="Bold"
-                                                        Text="AssignedTo" />
-                                                      <TextBlock
-                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                        Text=" : " />
-                                                      <TextBlock
-                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                        Text="{Binding User.Email}" />
-                                                    </StackPanel>
-                                                    <StackPanel
-                                                      Margin="0 5"
-                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverter}}"
                                                       Orientation="Horizontal">
                                                       <TextBlock
                                                         Foreground="{DynamicResource SecondaryForegroundBrush}"
@@ -3101,41 +3220,235 @@
                                                         Foreground="{DynamicResource SecondaryForegroundBrush}"
                                                         Text="{Binding CreateBy}" />
                                                     </StackPanel
-                                                      >
-                                                    <StackPanel
-                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverter}}">
+>
+                                                    <StackPanel>
                                                       <StackPanel
                                                         Visibility="{Binding TaskChild, Converter={StaticResource ObjectNullConverter}}">
                                                         <TextBlock
                                                           Margin="0 0 0 5"
                                                           FontWeight="Bold"
                                                           Text="Support" />
-                                                        <StackPanel
-                                                          DataContext="{Binding TaskChild}"
-                                                          Orientation="Horizontal">
-                                                          <TextBlock
-                                                            Text="{Binding Name}" />
-                                                          <TextBlock
-                                                            Text=" : " />
-                                                          <TextBlock
-                                                            Foreground="{DynamicResource AccentBrush}"
-                                                            Text="{Binding Time, StringFormat='{}-{0}'}" />
-                                                        </StackPanel>
-                                                        <StackPanel
-                                                          DataContext="{Binding TaskChild}"
-                                                          Margin="0 5"
-                                                          Orientation="Horizontal">
-                                                          <TextBlock
-                                                            Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                            FontWeight="Bold"
-                                                            Text="AssignedTo" />
-                                                          <TextBlock
-                                                            Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                            Text=" : " />
-                                                          <TextBlock
-                                                            Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                            Text="{Binding User.Email}" />
-                                                        </StackPanel>
+                                                        <ListBox
+                                                          ItemsSource="{Binding TaskChild.Items}">
+                                                          <ListBox.ItemContainerStyle>
+                                                            <Style
+                                                              TargetType="ListBoxItem"
+                                                              BasedOn="{StaticResource BaseListBoxItem}">
+                                                              <Setter
+                                                                Property="Height"
+                                                                Value="Auto" />
+                                                            </Style>
+                                                          </ListBox.ItemContainerStyle>
+                                                          <ListBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                              <StackPanel>
+                                                                <StackPanel>
+                                                                  <StackPanel>
+                                                                    <StackPanel
+                                                                      Orientation="Horizontal">
+                                                                      <TextBlock
+                                                                        Text="{Binding Name}" />
+                                                                      <TextBlock
+                                                                        Text=" : " />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource AccentBrush}"
+                                                                        Text="{Binding Time, StringFormat='{}-{0}'}" />
+                                                                    </StackPanel>
+                                                                    <StackPanel
+                                                                      Margin="0 5"
+                                                                      Orientation="Horizontal">
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        FontWeight="Bold"
+                                                                        Text="AssignedTo" />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        Text=" : " />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        Text="{Binding User.Email}" />
+                                                                    </StackPanel>
+                                                                  </StackPanel>
+                                                                </StackPanel>
+                                                                <Separator />
+                                                              </StackPanel>
+                                                            </DataTemplate>
+                                                          </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                      </StackPanel>
+                                                    </StackPanel>
+                                                    <Separator />
+                                                  </StackPanel>
+                                                </DataTemplate>
+                                              </ListBox.ItemTemplate>
+                                            </ListBox>
+                                          </Label.ToolTip>
+                                        </Label>
+                                      </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                    <ItemsControl.ItemContainerStyle>
+                                      <Style
+                                        TargetType="ContentPresenter">
+                                        <Setter
+                                          Property="Canvas.Left"
+                                          Value="{Binding Left, UpdateSourceTrigger=PropertyChanged}" />
+                                      </Style>
+                                    </ItemsControl.ItemContainerStyle>
+                                  </ItemsControl>
+                                </Canvas>
+                              </ControlTemplate>
+                            </Setter.Value>
+                          </Setter>
+                        </Style>
+                      </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                  </ItemsControl.GroupStyle>
+                </ItemsControl>
+                <ItemsControl
+                  Visibility="{Binding ElementName=alltask, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+                  Width="{Binding ElementName=DaySchedule, Path=ActualWidth}"
+                  Height="{Binding ElementName=ScheduleAdmin, Path=ActualHeight}"
+                  ItemsSource="{Binding NMK_M.TasksUserCollectionAdminSchedule, UpdateSourceTrigger=PropertyChanged}">
+                  <ItemsControl.GroupStyle>
+                    <GroupStyle>
+                      <GroupStyle.ContainerStyle>
+                        <Style
+                          TargetType="GroupItem">
+                          <Setter
+                            Property="Template">
+                            <Setter.Value>
+                              <ControlTemplate
+                                TargetType="GroupItem">
+                                <ItemsPresenter />
+                              </ControlTemplate>
+                            </Setter.Value>
+                          </Setter>
+                        </Style>
+                      </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                    <GroupStyle>
+                      <GroupStyle.ContainerStyle>
+                        <Style
+                          TargetType="GroupItem">
+                          <Setter
+                            Property="Template">
+                            <Setter.Value>
+                              <ControlTemplate
+                                TargetType="GroupItem">
+                                <Canvas
+                                  Height="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerUser, UpdateSourceTrigger=PropertyChanged}"
+                                  Background="Transparent">
+                                  <ItemsControl
+                                    ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}">
+                                    <ItemsControl.ItemsPanel>
+                                      <ItemsPanelTemplate>
+                                        <Canvas />
+                                      </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                      <DataTemplate>
+                                        <Label
+                                          Cursor="Hand"
+                                          Height="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerUser, UpdateSourceTrigger=PropertyChanged}"
+                                          Width="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerDay, UpdateSourceTrigger=PropertyChanged}"
+                                          VerticalContentAlignment="Center"
+                                          HorizontalContentAlignment="Center"
+                                          ContentStringFormat="F2"
+                                          Content="{Binding Time}">
+                                          <Label.ToolTip>
+                                            <ListBox
+                                              ItemsSource="{Binding TasksSchedule}">
+                                              <ListBox.ItemContainerStyle>
+                                                <Style
+                                                  TargetType="ListBoxItem"
+                                                  BasedOn="{StaticResource BaseListBoxItem}">
+                                                  <Setter
+                                                    Property="Height"
+                                                    Value="Auto" />
+                                                </Style>
+                                              </ListBox.ItemContainerStyle>
+                                              <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                  <StackPanel>
+                                                    <StackPanel
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        Text="{Binding Name}" />
+                                                      <TextBlock
+                                                        Text=" : " />
+                                                      <TextBlock
+                                                        Foreground="{DynamicResource AccentBrush}"
+                                                        Text="{Binding Time}" />
+                                                    </StackPanel>
+                                                    <StackPanel
+                                                      Margin="0 5"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                        FontWeight="Bold"
+                                                        Text="AssignedBy" />
+                                                      <TextBlock
+                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                        Text=" : " />
+                                                      <TextBlock
+                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                        Text="{Binding CreateBy}" />
+                                                    </StackPanel
+                                      >
+                                                    <StackPanel>
+                                                      <StackPanel
+                                                        Visibility="{Binding TaskChild, Converter={StaticResource ObjectNullConverter}}">
+                                                        <TextBlock
+                                                          Margin="0 0 0 5"
+                                                          FontWeight="Bold"
+                                                          Text="Support" />
+                                                        <ListBox
+                                                          ItemsSource="{Binding TaskChild.Items}">
+                                                          <ListBox.ItemContainerStyle>
+                                                            <Style
+                                                              TargetType="ListBoxItem"
+                                                              BasedOn="{StaticResource BaseListBoxItem}">
+                                                              <Setter
+                                                                Property="Height"
+                                                                Value="Auto" />
+                                                            </Style>
+                                                          </ListBox.ItemContainerStyle>
+                                                          <ListBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                              <StackPanel>
+                                                                <StackPanel>
+                                                                  <StackPanel>
+                                                                    <StackPanel
+                                                                      Orientation="Horizontal">
+                                                                      <TextBlock
+                                                                        Text="{Binding Name}" />
+                                                                      <TextBlock
+                                                                        Text=" : " />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource AccentBrush}"
+                                                                        Text="{Binding Time, StringFormat='{}-{0}'}" />
+                                                                    </StackPanel>
+                                                                    <StackPanel
+                                                                      Margin="0 5"
+                                                                      Orientation="Horizontal">
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        FontWeight="Bold"
+                                                                        Text="AssignedTo" />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        Text=" : " />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        Text="{Binding User.Email}" />
+                                                                    </StackPanel>
+                                                                  </StackPanel>
+                                                                </StackPanel>
+                                                                <Separator />
+                                                              </StackPanel>
+                                                            </DataTemplate>
+                                                          </ListBox.ItemTemplate>
+                                                        </ListBox>
                                                       </StackPanel>
                                                     </StackPanel>
                                                     <Separator />
@@ -3211,8 +3524,8 @@
                 DataLabelsPosition="Top"
                 Values="{Binding NMK_M.ProjectSchedules_AssignTo.TotalTimes}" />
             </lvc:SeriesCollection>
-          </lvc:CartesianChart.Series>-->
-          <!--<lvc:CartesianChart.XAxes>
+          </lvc:CartesianChart.Series>
+          <lvc:CartesianChart.XAxes>
             <lvc:AxesCollection>
               <lvc:XamlAxis
                 Labels="{Binding NMK_M.ProjectSchedules_AssignTo.Projects}" />
@@ -3225,6 +3538,12 @@
             </lvc:AxesCollection>
           </lvc:CartesianChart.YAxes>-->
         </lvc:CartesianChart>
+        <!--<lvc:CartesianChart
+          Visibility="{Binding ElementName=alltask, Path=IsChecked, Converter={StaticResource BoolConverter}}"
+          Series="{Binding NMK_M.UsersSchedules_Admin.Series}"
+          XAxes="{Binding NMK_M.UsersSchedules_Admin.XAxes}"
+          YAxes="{Binding NMK_M.UsersSchedules_Admin.YAxes}"
+          TooltipPosition="Auto"></lvc:CartesianChart>-->
       </Grid>
     </Grid>
     <!--#endregion-->
@@ -4090,9 +4409,72 @@
               <Setter
                 Property="DetailsVisibility"
                 Value="{Binding ApprovalStatusAssign, Converter={StaticResource BoolConverter}}" />
-              <Setter
+              <!--<Setter
                 Property="IsEnabled"
-                Value="{Binding ApprovalStatusAssign}" />
+                Value="{Binding ApprovalStatusAssign}" />-->
+              <Setter
+                Property="ToolTip">
+                <Setter.Value>
+                  <ListBox
+                    Visibility="{Binding ApprovalStatusAssign, Converter={StaticResource BoolConverterReverse}}"
+                    Background="White"
+                    BorderThickness="0"
+                    ItemsSource="{Binding LeaveListCollectionView}">
+                    <ListBox.ItemContainerStyle>
+                      <Style
+                        TargetType="ListBoxItem"
+                        BasedOn="{StaticResource ListBoxItemTransparent}">
+                        <Setter
+                          Property="Width"
+                          Value="1000" />
+                      </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                      <DataTemplate>
+                        <StackPanel
+                          Margin="10 0 0 0"
+                          Height="40"
+                          Orientation="Horizontal">
+                          <TextBlock
+                            Margin="5 0 0 0"
+                            Foreground="{DynamicResource AccentBrush}"
+                            VerticalAlignment="Center"
+                            Text="(" />
+                          <TextBlock
+                            Foreground="{DynamicResource AccentBrush}"
+                            VerticalAlignment="Center"
+                            Text="{Binding Percent}" />
+                          <TextBlock
+                            Foreground="{DynamicResource AccentBrush}"
+                            VerticalAlignment="Center"
+                            Text="%)" />
+                          <TextBlock
+                            Margin="5 0"
+                            VerticalAlignment="Center"
+                            Text="-" />
+                          <TextBlock
+                            VerticalAlignment="Center"
+                            Text="{Binding LeaveStart,StringFormat='{}{0:[dddd] - dd/MM/yyyy HH:mm}'}" />
+                          <TextBlock
+                            Margin="5 0"
+                            VerticalAlignment="Center"
+                            Text="-" />
+                          <TextBlock
+                            VerticalAlignment="Center"
+                            Text="{Binding LeaveEnd,StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" />
+                          <TextBlock
+                            Margin="5 0"
+                            VerticalAlignment="Center"
+                            Text="-" />
+                          <TextBlock
+                            VerticalAlignment="Center"
+                            Text="{Binding UsersList}" />
+                        </StackPanel>
+                      </DataTemplate>
+                    </ListBox.ItemTemplate>
+                  </ListBox>
+                </Setter.Value>
+              </Setter>
             </Style>
           </DataGrid.RowStyle>
           <DataGrid.RowDetailsTemplate>

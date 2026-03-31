@@ -353,7 +353,11 @@ namespace RincovitchApp.Models
     {
       get; set;
     }
-
+    [Column("is_onlychecked")]
+    public bool IsOnlyChecked
+    {
+      get; set;
+    }
 
     public NMK_M_Task Clone()
     {
@@ -377,6 +381,7 @@ namespace RincovitchApp.Models
         CreateBy = this.CreateBy,
         DateComplete = this.DateComplete,
         ParentId = this.ParentId,
+        IsOnlyChecked = this.IsOnlyChecked,
         DateChecked = this.DateChecked,
         DateStarted = this.DateStarted,
         DateAccepted = this.DateAccepted,
@@ -1093,6 +1098,48 @@ namespace RincovitchApp.Models
         await supabase.InitializeAsync();
 
         var result = await supabase.From<NMK_Supabase_Task>().Get();
+
+        if (result.ResponseMessage.IsSuccessStatusCode)
+        {
+          return new NMK_M_Return<List<NMK_Supabase_Task>>
+          {
+            Success = true,
+            Data = result.Models,
+            Error = null
+          };
+        }
+        else
+        {
+          return new NMK_M_Return<List<NMK_Supabase_Task>>
+          {
+            Success = false,
+            Data = null,
+            Error = $"Get failed :  {(int)result.ResponseMessage.StatusCode}: {result.ResponseMessage.ReasonPhrase}"
+          };
+        }
+      }
+      catch (Exception ex)
+      {
+        return new NMK_M_Return<List<NMK_Supabase_Task>>
+        {
+          Success = false,
+          Data = null,
+          Error = ex.Message
+        };
+      }
+    }
+    public static async Task<NMK_M_Return<List<NMK_Supabase_Task>>> getstarted_TasksAsync()
+    {
+      try
+      {
+        var options = new Supabase.SupabaseOptions
+        {
+          AutoConnectRealtime = true
+        };
+        var supabase = new Supabase.Client(url, key, options);
+        await supabase.InitializeAsync();
+
+        var result = await supabase.From<NMK_Supabase_Task>().Where(x => x.Status > 3).Get();
 
         if (result.ResponseMessage.IsSuccessStatusCode)
         {

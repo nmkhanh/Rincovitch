@@ -468,6 +468,7 @@ namespace RincovitchApp
 
                 NMK_M.LeaveAssignTo.Items.Add(block);
                 update_user(NMK_M.LeaveAssignTo.Items);
+                NMK_M.TaskbarOverlay = F_TaskBar.UpdateTaskbarBadge(NMK_M.Notifys.Items.Where(x => !x.IsRead).Count() + NMK_M.LeaveAssignTo.Items.Where(x => x.Approval == 1).Count());
                 NMK_M.ReloadTask();
               });
             }
@@ -525,7 +526,7 @@ namespace RincovitchApp
           {
             var block = newNotify.Clone();
             NMK_M.Notifys.Items.Add(block);
-            NMK_M.TaskbarOverlay = F_TaskBar.UpdateTaskbarBadge(NMK_M.Notifys.Items.Where(x => !x.IsRead).Count());
+            NMK_M.TaskbarOverlay = F_TaskBar.UpdateTaskbarBadge(NMK_M.Notifys.Items.Where(x => !x.IsRead).Count() + NMK_M.LeaveAssignTo.Items.Where(x => x.Approval == 1).Count());
             NMK_M.ReloadTask();
           });
         });
@@ -548,7 +549,7 @@ namespace RincovitchApp
               notify.IsRead = newNotify.IsRead;
               notify.UpdateAt = newNotify.UpdateAt;
             }
-            NMK_M.TaskbarOverlay = F_TaskBar.UpdateTaskbarBadge(NMK_M.Notifys.Items.Where(x => !x.IsRead).Count());
+            NMK_M.TaskbarOverlay = F_TaskBar.UpdateTaskbarBadge(NMK_M.Notifys.Items.Where(x => !x.IsRead).Count() + NMK_M.LeaveAssignTo.Items.Where(x => x.Approval == 1).Count());
             NMK_M.ReloadTask();
           });
         });
@@ -586,15 +587,26 @@ namespace RincovitchApp
               ToastService.Show("New Task Assigned", $"A new task has been assigned to you.\n• Task: {newTask.Name}", newTask.Id);
               NMK_M.ReloadTask();
             }
-            if (newTask.Status == 0 && NMK_M.UserCurrent.Id == newTask.UserId)
+            if (newTask.Status == 0)
             {
-              var task = NMK_M.Tasks.Items.First(x => x.Id == newTask.Id);
-              task.Status = 0;
-              task.DateComplete = newTask.DateComplete;
-              blink = false;
+              if (NMK_M.Users.Items.Any(x => x.Id == newTask.UserId))
+              {
+                var block = newTask.Clone();
+                NMK_M.Users.Items.First(x => x.Id == block.UserId).ColorStatus = Brushes.LightGreen;
+                NMK_M.UsersCollection.Refresh();
+                NMK_M.UsersCollectionRole.Refresh();
+              }
 
-              ToastService.Show("Task Completed", $"A task has been marked as completed.\n• Task: {newTask.Name}", newTask.Id);
-              NMK_M.ReloadTask();
+              if (NMK_M.UserCurrent.Id == newTask.UserId)
+              {
+                var task = NMK_M.Tasks.Items.First(x => x.Id == newTask.Id);
+                task.Status = 0;
+                task.DateComplete = newTask.DateComplete;
+                blink = false;
+
+                ToastService.Show("Task Completed", $"A task has been marked as completed.\n• Task: {newTask.Name}", newTask.Id);
+                NMK_M.ReloadTask();
+              }
             }
             if (newTask.Status == 5 && NMK_M.UserCurrent.Id == newTask.UserId)
             {
@@ -616,23 +628,44 @@ namespace RincovitchApp
               ToastService.Show("Task Checked", $"A task has been marked as checked.\n• Task: {newTask.Name}", newTask.Id);
               NMK_M.ReloadTask();
             }
-            if (newTask.Status == 6 && NMK_M.UserCurrent.Email == newTask.CreateBy)
+            if (newTask.Status == 6)
             {
-              var task = NMK_M.Tasks.Items.First(x => x.Id == newTask.Id);
-              task.Status = 6;
-              task.DateStarted = newTask.DateStart;
+              if (NMK_M.Users.Items.Any(x => x.Id == newTask.UserId))
+              {
+                var block = newTask.Clone();
+                NMK_M.Users.Items.First(x => x.Id == block.UserId).ColorStatus = Brushes.OrangeRed;
+                NMK_M.UsersCollection.Refresh();
+                NMK_M.UsersCollectionRole.Refresh();
+              }
+              if (NMK_M.UserCurrent.Email == newTask.CreateBy)
+              {
+                var task = NMK_M.Tasks.Items.First(x => x.Id == newTask.Id);
+                task.Status = 6;
+                task.DateStarted = newTask.DateStart;
 
-              ToastService.Show("Task Started", $"A task has been marked as started.\n• Task: {newTask.Name}", newTask.Id);
-              NMK_M.ReloadTask();
+                ToastService.Show("Task Started", $"A task has been marked as started.\n• Task: {newTask.Name}", newTask.Id);
+                NMK_M.ReloadTask();
+              }
             }
-            if (newTask.Status == 7 && NMK_M.UserCurrent.Email == newTask.CreateBy)
+            if (newTask.Status == 7)
             {
-              var task = NMK_M.Tasks.Items.First(x => x.Id == newTask.Id);
-              task.Status = 7;
-              task.DateAccepted = newTask.DateAccepted;
+              if (NMK_M.Users.Items.Any(x => x.Id == newTask.UserId))
+              {
+                var block = newTask.Clone();
+                NMK_M.Users.Items.First(x => x.Id == block.UserId).ColorStatus = Brushes.OrangeRed;
+                NMK_M.UsersCollection.Refresh();
+                NMK_M.UsersCollectionRole.Refresh();
+              }
 
-              ToastService.Show("Task Accepted", $"A task has been marked as accepted.\n• Task: {newTask.Name}", newTask.Id);
-              NMK_M.ReloadTask();
+              if (NMK_M.UserCurrent.Email == newTask.CreateBy)
+              {
+                var task = NMK_M.Tasks.Items.First(x => x.Id == newTask.Id);
+                task.Status = 7;
+                task.DateAccepted = newTask.DateAccepted;
+
+                ToastService.Show("Task Accepted", $"A task has been marked as accepted.\n• Task: {newTask.Name}", newTask.Id);
+                NMK_M.ReloadTask();
+              }
             }
           });
         });
@@ -987,6 +1020,8 @@ namespace RincovitchApp
           await LoadTaskTemporary();
         }
         await LoadLeave();
+        if (NMK_M.UserCurrent.RoleEnum == F_Role.RoleType.AdminApp)
+          await LoadTaskAdminApp();
         NMK_M.ReloadTask();
       }
       catch (Exception ex)
@@ -1042,6 +1077,18 @@ namespace RincovitchApp
           NMK_M.Users.Items.Add(item.Clone());
         }
       }
+
+      var tasks = await NMK_Supabase.getstarted_TasksAsync();
+      var tasks_all = new List<NMK_M_Task>();
+      foreach (var item in tasks.Data)
+      {
+        var block = item.Clone();
+        tasks_all.Add(block);
+      }
+      foreach (var item in NMK_M.Users.Items)
+      {
+        item.ColorStatus = tasks_all.Any(x => x.UserId == item.Id) ? Brushes.OrangeRed : Brushes.LightGreen;
+      }
     }
     async Task LoadTask()
     {
@@ -1079,7 +1126,7 @@ namespace RincovitchApp
         var block = item.Clone();
         NMK_M.Notifys.Items.Add(block);
       }
-      NMK_M.TaskbarOverlay = F_TaskBar.UpdateTaskbarBadge(NMK_M.Notifys.Items.Where(x => !x.IsRead).Count());
+      NMK_M.TaskbarOverlay = F_TaskBar.UpdateTaskbarBadge(NMK_M.Notifys.Items.Where(x => !x.IsRead).Count() + NMK_M.LeaveAssignTo.Items.Where(x => x.Approval == 1).Count());
     }
     async Task LoadLeave()
     {
@@ -1132,6 +1179,7 @@ namespace RincovitchApp
       }
       update_user(NMK_M.LeaveAssignTo.Items);
       NMK_M.update_day_leave();
+      NMK_M.TaskbarOverlay = F_TaskBar.UpdateTaskbarBadge(NMK_M.Notifys.Items.Where(x => !x.IsRead).Count() + NMK_M.LeaveAssignTo.Items.Where(x => x.Approval == 1).Count());
     }
 
     async Task LoadTaskAdminApp()
@@ -1844,6 +1892,7 @@ namespace RincovitchApp
               };
               if (NMK_M.DialogNewTask.IsDuplicate)
                 item_supabase.ParentId = task.Id;
+              item_supabase.IsOnlyChecked = NMK_M.DialogNewTask.IsOnlyChecked;
 
               var result = await NMK_Supabase.insert_TasksAsync(item_supabase);
 
@@ -1855,6 +1904,7 @@ namespace RincovitchApp
                 item.ZIndex = item.IsInterrupted ? -1 : (item.Status == 0 ? -2 : 0);
 
                 item.IsAssignedTo = item.UserId == NMK_M.UserCurrent.Id;
+                item.IsOnlyChecked = NMK_M.DialogNewTask.IsOnlyChecked;
                 NMK_M.Tasks.Items.Add(item);
               }
               else
@@ -2302,6 +2352,7 @@ namespace RincovitchApp
           await NMK_Supabase.insert_notifysAsync(notify);
           await NMK_Supabase.update3_TasksAsync(item.Id, item);
           await NMK_Supabase.insertfile_AttachAsync(item.FileAttachs.ToList());
+          var path = Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. Project", $"[{item.Project.Key}] {item.Project.Name}", });
           item.FileAttachs.Clear();
 
           item.IsChecked = false;

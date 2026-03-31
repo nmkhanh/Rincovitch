@@ -4,6 +4,9 @@ namespace RincovitchApp
 {
   public static class MVVMSourceProject
   {
+    public static string path_ondrive = @"%USERPROFILE%\OneDrive - Rincovitch\Nhan Nguyen's files - Rincovitch";
+
+
     public static string schema_NMK = "426EE5A2-E3DF-4DFC-AEF3-451F76081CA6";
     public static string schema_customname = "workspaceProjectId";
 

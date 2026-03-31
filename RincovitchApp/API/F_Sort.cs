@@ -74,6 +74,19 @@ namespace RincovitchApp.API
     }
   }
 
+  public class F_SortTasksUserCollectionAdmin : IComparer
+  {
+    [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]
+    private static extern int StrCmpLogicalW(string x, string y);
+    public int Compare(object x, object y)
+    {
+      var taskX = x as NMK_M_Task;
+      var taskY = y as NMK_M_Task;
+      return StrCmpLogicalW($"{taskX.User.Team}-{taskX.User.Name}", 
+                            $"{taskX.User.Team}-{taskY.User.Name}");
+    }
+  }
+
   public class F_SortTasksUserCollection : IComparer
   {
     [DllImport("shlwapi.dll", CharSet = CharSet.Unicode)]

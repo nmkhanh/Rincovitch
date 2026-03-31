@@ -977,6 +977,20 @@ namespace RincovitchApp.Models.ModelChilds
       }
     }
 
+    bool _IsOnlyChecked = true;
+    public bool IsOnlyChecked
+    {
+      get
+      {
+        return _IsOnlyChecked;
+      }
+      set
+      {
+        _IsOnlyChecked = value;
+        OnPropertyChanged();
+      }
+    }
+
     string _CreateBy = string.Empty;
     public string CreateBy
     {
@@ -1023,6 +1037,7 @@ namespace RincovitchApp.Models.ModelChilds
         CreateBy = this.CreateBy,
         DateComplete = this.DateComplete,
         ParentId = this.ParentId,
+        IsOnlyChecked = this.IsOnlyChecked,
         DateChecked = this.DateChecked,
         DateStarted = this.DateStarted,
         DateAccepted = this.DateAccepted,
@@ -1074,6 +1089,7 @@ namespace RincovitchApp.Models.ModelChilds
       CreateBy = task.CreateBy;
       DateComplete = task.DateComplete;
       ParentId = task.ParentId;
+      IsOnlyChecked = task.IsOnlyChecked;
       DateChecked = task.DateChecked;
       DateStarted = task.DateStarted;
       DateAccepted = task.DateAccepted;

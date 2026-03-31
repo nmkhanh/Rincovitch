@@ -38,6 +38,17 @@ namespace RincovitchApp.Models.ModelChilds
       }
     }
 
+    Brush _ColorStatus;
+    public Brush ColorStatus
+    {
+      get { return _ColorStatus; }
+      set
+      {
+        _ColorStatus = value;
+        OnPropertyChanged();
+      }
+    }
+
     Brush _Color;
     public Brush Color
     {

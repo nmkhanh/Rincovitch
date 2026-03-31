@@ -161,13 +161,25 @@
                     Text="Task"
                     TextWrapping="Wrap"
                     VerticalAlignment="Center" />
-                  <CheckBox
-                    IsEnabled="{Binding IsDuplicateMust}"
-                    Visibility="{Binding IsNew, Converter={StaticResource BoolConverterReverse}}"
-                    Foreground="{DynamicResource AccentBrush}"
-                    Content="Duplicate"
+                  <StackPanel
                     HorizontalAlignment="Right"
-                    IsChecked="{Binding IsDuplicate, UpdateSourceTrigger=PropertyChanged}" />
+                    Orientation="Horizontal">
+                    <Grid
+                      Visibility="{Binding IsDuplicate, Converter={StaticResource BoolConverter}}">
+                      <CheckBox
+                        Visibility="{Binding IsNew, Converter={StaticResource BoolConverterReverse}}"
+                        Foreground="{DynamicResource AccentBrush}"
+                        Content="Only Checked"
+                        IsChecked="{Binding IsOnlyChecked, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
+                    <CheckBox
+                      Margin="5 0 0 0"
+                      IsEnabled="{Binding IsDuplicateMust}"
+                      Visibility="{Binding IsNew, Converter={StaticResource BoolConverterReverse}}"
+                      Foreground="{DynamicResource AccentBrush}"
+                      Content="Duplicate"
+                      IsChecked="{Binding IsDuplicate, UpdateSourceTrigger=PropertyChanged}" />
+                  </StackPanel>
                 </Grid>
                 <TextBox
                   CharacterCasing="Upper"

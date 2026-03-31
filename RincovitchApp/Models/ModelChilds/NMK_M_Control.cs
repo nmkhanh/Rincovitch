@@ -20,6 +20,17 @@ namespace RincovitchApp.Models.ModelChilds
       }
     }
 
+    private bool _IsOnlyChecked = true;
+    public bool IsOnlyChecked
+    {
+      get => _IsOnlyChecked;
+      set
+      {
+        _IsOnlyChecked = value;
+        OnPropertyChanged();
+      }
+    }
+
     NMK_M_Task _Tasks = new NMK_M_Task();
     public NMK_M_Task Tasks
     {
