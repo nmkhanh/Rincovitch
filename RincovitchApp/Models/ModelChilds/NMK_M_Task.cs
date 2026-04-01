@@ -42,6 +42,17 @@ namespace RincovitchApp.Models.ModelChilds
 
   public class NMK_M_Task : BaseViewModel
   {
+    string _Folder;
+    public string Folder
+    {
+      get { return _Folder; }
+      set
+      {
+        _Folder = value;
+        OnPropertyChanged();
+      }
+    }
+
     ObservableCollection<NMK_M_FileAttach> _FileAttachs = new ObservableCollection<NMK_M_FileAttach>();
     public ObservableCollection<NMK_M_FileAttach> FileAttachs
     {
@@ -1052,7 +1063,8 @@ namespace RincovitchApp.Models.ModelChilds
         User = this.User,
         Day = this.Day,
         Width = this.Width,
-        IsAssignedTo = this.IsAssignedTo
+        IsAssignedTo = this.IsAssignedTo,
+        Folder = this.Folder,
       };
     }
 
@@ -1098,6 +1110,7 @@ namespace RincovitchApp.Models.ModelChilds
       IsInterrupted = task.IsInterrupted;
       ZIndex = task.IsInterrupted ? -1 : 0;
       ListInterrupted = IsInterrupted ? task.ListInterrupted.Split(';').ToList() : new List<string>();
+      Folder = this.Folder;
     }
     public void Sort()
     {

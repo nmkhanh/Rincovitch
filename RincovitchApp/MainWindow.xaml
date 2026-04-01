@@ -780,7 +780,7 @@
           Margin="10 0"
           VerticalAlignment="Center"
           IsChecked="{Binding NMK_M.FilterToday}"
-          Content="Today"/>
+          Content="Today" />
         <ComboBox
           theme:UI.Hint="Project"
           MinWidth="150"
@@ -883,7 +883,7 @@
             <Grid.ColumnDefinitions>
               <ColumnDefinition
                 Width="300"
-                MinWidth="300"/>
+                MinWidth="300" />
               <ColumnDefinition
                 Width="Auto" />
               <ColumnDefinition
@@ -2053,23 +2053,42 @@
             </GroupStyle.ContainerStyle>
           </GroupStyle>
         </DataGrid.GroupStyle>
+        <DataGrid.RowStyle>
+          <Style
+            TargetType="DataGridRow"
+            BasedOn="{StaticResource DataGridRowDefault}">
+            <Setter
+              Property="IsEnabled"
+              Value="{Binding ElementName=window, Path=DataContext.NMK_M.IsAdmin}" />
+          </Style>
+        </DataGrid.RowStyle>
       </DataGrid>
-      <TextBox
-        Grid.Row="0"
-        Margin="10 10 140 10"
-        TextWrapping="Wrap"
-        AcceptsReturn="True"
-        Text="{Binding NMK_M.SearchUser, UpdateSourceTrigger=PropertyChanged}"
-        theme:UI.Hint="Search..." />
-      <ToggleButton
-        HorizontalAlignment="Right"
-        Grid.Row="0"
-        Margin="10 0"
-        Command="{Binding ElementName=window,Path=DataContext.UserAddCommand}"
-        Width="120"
-        Style="{StaticResource ToggleButtonActive}"
-        Content="Add User"
-        theme:UI.IconFalse="Plus" />
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition
+            Width="*" />
+          <ColumnDefinition
+            Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBox
+          Grid.Row="0"
+          Margin="10 10 10 10"
+          TextWrapping="Wrap"
+          AcceptsReturn="True"
+          Text="{Binding NMK_M.SearchUser, UpdateSourceTrigger=PropertyChanged}"
+          theme:UI.Hint="Search..." />
+        <ToggleButton
+          Visibility="{Binding NMK_M.RoleVisible.VisibleAdmin}"
+          HorizontalAlignment="Right"
+          Grid.Row="0"
+          Grid.Column="1"
+          Margin="0 0 10 0"
+          Command="{Binding ElementName=window,Path=DataContext.UserAddCommand}"
+          Width="120"
+          Style="{StaticResource ToggleButtonActive}"
+          Content="Add User"
+          theme:UI.IconFalse="Plus" />
+      </Grid>
       <Grid
         Grid.RowSpan="10">
         <ContentControl
@@ -3207,6 +3226,7 @@
                                                         Text="{Binding Time}" />
                                                     </StackPanel>
                                                     <StackPanel
+                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverter}}"
                                                       Margin="0 5"
                                                       Orientation="Horizontal">
                                                       <TextBlock
@@ -3219,65 +3239,79 @@
                                                       <TextBlock
                                                         Foreground="{DynamicResource SecondaryForegroundBrush}"
                                                         Text="{Binding CreateBy}" />
-                                                    </StackPanel
->
+                                                    </StackPanel>
+                                                    <StackPanel
+                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverterReverse}}"
+                                                      Margin="0 5"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                        FontWeight="Bold"
+                                                        Text="AssignedTo" />
+                                                      <TextBlock
+                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                        Text=" : " />
+                                                      <TextBlock
+                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                        Text="{Binding User.Email}" />
+                                                    </StackPanel>
                                                     <StackPanel>
-                                                      <StackPanel
-                                                        Visibility="{Binding TaskChild, Converter={StaticResource ObjectNullConverter}}">
-                                                        <TextBlock
-                                                          Margin="0 0 0 5"
-                                                          FontWeight="Bold"
-                                                          Text="Support" />
-                                                        <ListBox
-                                                          ItemsSource="{Binding TaskChild.Items}">
-                                                          <ListBox.ItemContainerStyle>
-                                                            <Style
-                                                              TargetType="ListBoxItem"
-                                                              BasedOn="{StaticResource BaseListBoxItem}">
-                                                              <Setter
-                                                                Property="Height"
-                                                                Value="Auto" />
-                                                            </Style>
-                                                          </ListBox.ItemContainerStyle>
-                                                          <ListBox.ItemTemplate>
-                                                            <DataTemplate>
+                                                    <StackPanel
+                                                      Visibility="{Binding TaskChild, Converter={StaticResource ObjectNullConverter}}">
+                                                      <TextBlock
+                                                        Margin="0 0 0 5"
+                                                        FontWeight="Bold"
+                                                        Text="Support" />
+                                                      <ListBox
+                                                        ItemsSource="{Binding TaskChild.Items}">
+                                                        <ListBox.ItemContainerStyle>
+                                                          <Style
+                                                            TargetType="ListBoxItem"
+                                                            BasedOn="{StaticResource BaseListBoxItem}">
+                                                            <Setter
+                                                              Property="Height"
+                                                              Value="Auto" />
+                                                          </Style>
+                                                        </ListBox.ItemContainerStyle>
+                                                        <ListBox.ItemTemplate>
+                                                          <DataTemplate>
+                                                            <StackPanel>
                                                               <StackPanel>
                                                                 <StackPanel>
-                                                                  <StackPanel>
-                                                                    <StackPanel
-                                                                      Orientation="Horizontal">
-                                                                      <TextBlock
-                                                                        Text="{Binding Name}" />
-                                                                      <TextBlock
-                                                                        Text=" : " />
-                                                                      <TextBlock
-                                                                        Foreground="{DynamicResource AccentBrush}"
-                                                                        Text="{Binding Time, StringFormat='{}-{0}'}" />
-                                                                    </StackPanel>
-                                                                    <StackPanel
-                                                                      Margin="0 5"
-                                                                      Orientation="Horizontal">
-                                                                      <TextBlock
-                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                                        FontWeight="Bold"
-                                                                        Text="AssignedTo" />
-                                                                      <TextBlock
-                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                                        Text=" : " />
-                                                                      <TextBlock
-                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                                        Text="{Binding User.Email}" />
-                                                                    </StackPanel>
+                                                                  <StackPanel
+                                                                    Orientation="Horizontal">
+                                                                    <TextBlock
+                                                                      Text="{Binding Name}" />
+                                                                    <TextBlock
+                                                                      Text=" : " />
+                                                                    <TextBlock
+                                                                      Foreground="{DynamicResource AccentBrush}"
+                                                                      Text="{Binding Time, StringFormat='{}-{0}'}" />
+                                                                  </StackPanel>
+                                                                  <StackPanel
+                                                                    Margin="0 5"
+                                                                    Orientation="Horizontal">
+                                                                    <TextBlock
+                                                                      Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                      FontWeight="Bold"
+                                                                      Text="AssignedTo" />
+                                                                    <TextBlock
+                                                                      Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                      Text=" : " />
+                                                                    <TextBlock
+                                                                      Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                      Text="{Binding User.Email}" />
                                                                   </StackPanel>
                                                                 </StackPanel>
-                                                                <Separator />
                                                               </StackPanel>
-                                                            </DataTemplate>
-                                                          </ListBox.ItemTemplate>
-                                                        </ListBox>
-                                                      </StackPanel>
+                                                              <Separator />
+                                                            </StackPanel>
+                                                          </DataTemplate>
+                                                        </ListBox.ItemTemplate>
+                                                      </ListBox>
                                                     </StackPanel>
-                                                    <Separator />
+                                                  </StackPanel>
+                                                  <Separator />
                                                   </StackPanel>
                                                 </DataTemplate>
                                               </ListBox.ItemTemplate>
@@ -4603,7 +4637,7 @@
                       Height="30"
                       Visibility="{Binding ApprovalStatusAssign, Converter={StaticResource BoolConverterReverse}}"
                       Kind="CheckCircleOutline"
-                      Foreground="Green"/>
+                      Foreground="Green" />
                     <Grid
                       Visibility="{Binding IsProgress, Converter={StaticResource BoolConverterReverse}}">
                       <ToggleButton

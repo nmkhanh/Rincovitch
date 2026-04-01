@@ -31,6 +31,28 @@ namespace RincovitchApp.Models.ModelChilds
       }
     }
 
+    private List<string> _Folders;
+    public List<string> Folders
+    {
+      get => _Folders;
+      set
+      {
+        _Folders = value;
+        OnPropertyChanged();
+      }
+    }
+
+    private string _Folder;
+    public string Folder
+    {
+      get => _Folder;
+      set
+      {
+        _Folder = value;
+        OnPropertyChanged();
+      }
+    }
+
     NMK_M_Task _Tasks = new NMK_M_Task();
     public NMK_M_Task Tasks
     {

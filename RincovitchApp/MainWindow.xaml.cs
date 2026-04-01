@@ -221,7 +221,7 @@ namespace RincovitchApp
 
         // ===== KẾT QUẢ =====
         //mail = "96FCEF00-994D-4BA9-ADAE-EA948702F606@admin.com.au";
-        mail = "nhan.nguyen@rincovitch.com.au";
+        //mail = "nhan.nguyen@rincovitch.com.au";
         if (!isLogin)
         {
           System.Windows.MessageBox.Show(

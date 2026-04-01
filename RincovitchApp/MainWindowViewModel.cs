@@ -1624,6 +1624,7 @@ namespace RincovitchApp
       NMK_M.DialogNewTask = new NMK_M_NewTask()
       {
         Show = true,
+        Folders = MVVMSourceProject.folders,
         Projects = NMK_M.Projects,
         Project = new NMK_M_Project(),
         Users = new NMK_M_User() { Items = new System.Collections.ObjectModel.ObservableCollection<NMK_M_User>(NMK_M.UsersCollectionRole.Cast<NMK_M_User>()) },
@@ -1649,6 +1650,7 @@ namespace RincovitchApp
               DateEnd = NMK_M.DialogNewTask.DateEnd.Date.AddHours(NMK_M.DialogNewTask.HourEnd).AddMinutes(NMK_M.DialogNewTask.MinutesEnd),
 
               Status = 1,
+              Folder = NMK_M.DialogNewTask.Folder,
             };
 
             NMK_M.DialogNewTask.IsProgress = true;
@@ -1670,6 +1672,7 @@ namespace RincovitchApp
               Status = item.Status,
               CreateBy = NMK_M.UserCurrent.Email,
               UpdateBy = NMK_M.UserCurrent.Email,
+              Folder = item.Folder,
             };
             var result = await NMK_Supabase.insert_TasksAsync(item_supabase);
 
@@ -1754,6 +1757,8 @@ namespace RincovitchApp
 
       NMK_M.DialogNewTask = new NMK_M_NewTask()
       {
+        Folders = MVVMSourceProject.folders,
+        Folder = task.Folder,
         Show = true,
         IsNew = false,
         Projects = NMK_M.Projects,
@@ -1893,11 +1898,13 @@ namespace RincovitchApp
               if (NMK_M.DialogNewTask.IsDuplicate)
                 item_supabase.ParentId = task.Id;
               item_supabase.IsOnlyChecked = NMK_M.DialogNewTask.IsOnlyChecked;
+              item_supabase.Folder = task.Folder;
 
               var result = await NMK_Supabase.insert_TasksAsync(item_supabase);
 
               if (result.Success)
               {
+                item.Folder = task.Folder;
                 item.IsChecked = true;
                 item.Width = item.Day * NMK_M.Tasks.PixelsPerDay;
 
@@ -2115,6 +2122,25 @@ namespace RincovitchApp
         await NMK_Supabase.insert_notifysAsync(notify);
         await NMK_Supabase.update45_TasksAsync(task.Id, task, date);
         await NMK_Supabase.insertfile_AttachAsync(task.FileAttachs.ToList());
+        if (NMK_M.UserCurrent.Team == "MODELLING")
+        {
+          var path = Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. ISSUE", $"[{task.Project.Key}] {task.Project.Name}", task.Folder, DateTime.Now.ToString("yy.MM.dd") });
+          try
+          {
+            if (!Directory.Exists(path))
+              Directory.CreateDirectory(path);
+            task.FileAttachs.ToList().ForEach(x =>
+            {
+              var fileName = Path.GetFileName(x.Name);
+              var destFile = Path.Combine(path, fileName);
+              File.Copy(x.Name, destFile, true);
+            });
+          }
+          catch (Exception)
+          {
+
+          }
+        }
         task.FileAttachs.Clear();
 
         NMK_M.ReloadTask();
@@ -2352,7 +2378,26 @@ namespace RincovitchApp
           await NMK_Supabase.insert_notifysAsync(notify);
           await NMK_Supabase.update3_TasksAsync(item.Id, item);
           await NMK_Supabase.insertfile_AttachAsync(item.FileAttachs.ToList());
-          var path = Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. Project", $"[{item.Project.Key}] {item.Project.Name}", });
+          if (NMK_M.UserCurrent.Team == "MODELLING")
+          {
+            //var path = Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. Project", $"[{item.Project.Key}] {item.Project.Name}", item.Folder, DateTime.Now.ToString("yy.MM.dd") });
+            var path = Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. Project", $"[{item.Project.Key}] {item.Project.Name}", "Markup", DateTime.Now.ToString("yy.MM.dd") });
+            try
+            {
+              if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+              item.FileAttachs.ToList().ForEach(x =>
+              {
+                var fileName = Path.GetFileName(x.Name);
+                var destFile = Path.Combine(path, fileName);
+                File.Copy(x.Name, destFile, true);
+              });
+            }
+            catch (Exception)
+            {
+
+            }
+          }
           item.FileAttachs.Clear();
 
           item.IsChecked = false;

@@ -358,6 +358,11 @@ namespace RincovitchApp.Models
     {
       get; set;
     }
+    [Column("folder")]
+    public string Folder
+    {
+      get; set;
+    }
 
     public NMK_M_Task Clone()
     {
@@ -391,7 +396,8 @@ namespace RincovitchApp.Models
         ZIndex = this.IsInterrupted ? -1 : (this.Status == 0 ? -2 : 0),
         ListInterrupted = IsInterrupted ? this.ListInterrupted.Split(',').ToList() : new List<string>(),
 
-        FileAttachs = !string.IsNullOrEmpty(this.FileAttach) ? JsonConvert.DeserializeObject<ObservableCollection<NMK_M_FileAttach>>(this.FileAttach) : new ObservableCollection<NMK_M_FileAttach>()
+        FileAttachs = !string.IsNullOrEmpty(this.FileAttach) ? JsonConvert.DeserializeObject<ObservableCollection<NMK_M_FileAttach>>(this.FileAttach) : new ObservableCollection<NMK_M_FileAttach>(),
+        Folder = this.Folder,
       };
     }
   }

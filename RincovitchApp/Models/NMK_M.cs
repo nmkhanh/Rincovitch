@@ -121,6 +121,14 @@ namespace RincovitchApp.Models
         if (obj is not NMK_M_User task)
           return false;
 
+        if(UserCurrent.RoleEnum != F_Role.RoleType.Admin && UserCurrent.RoleEnum != F_Role.RoleType.AdminApp)
+        {
+          if (task.Team != UserCurrent.Team)
+            return false;
+
+          if (task.RoleEnum == F_Role.RoleType.AdminApp)
+            return false;
+        }
 
         return task.Name.IndexOf(SearchUser, StringComparison.OrdinalIgnoreCase) >= 0 ||
         task.Team.IndexOf(SearchUser, StringComparison.OrdinalIgnoreCase) >= 0 ||
@@ -762,6 +770,9 @@ namespace RincovitchApp.Models
 
     [ObservableProperty]
     NMK_M_User _UserCurrent = new NMK_M_User();
+
+    [ObservableProperty]
+    bool _IsAdmin = false;
     partial void OnUserCurrentChanged(NMK_M_User value) => UpdateUserCurrent();
     private void UpdateUserCurrent()
     {
@@ -774,6 +785,7 @@ namespace RincovitchApp.Models
         IsAssignedTo = false;
 
         RoleVisible.VisibleMiddle = Visibility.Visible;
+        IsAdmin = true;
       }
       else if (UserCurrent.RoleEnum == F_Role.RoleType.AdminApp)
       {
@@ -787,6 +799,7 @@ namespace RincovitchApp.Models
         IsAssignedTo = false;
 
         RoleVisible.VisibleMiddle = Visibility.Visible;
+        IsAdmin = true;
       }
       else if (UserCurrent.RoleEnum == F_Role.RoleType.Leader)
       {
@@ -797,6 +810,7 @@ namespace RincovitchApp.Models
         IsAssignedTo = true;
 
         RoleVisible.VisibleMiddle = Visibility.Visible;
+        IsAdmin = false;
       }
       else if (UserCurrent.RoleEnum == F_Role.RoleType.User)
       {
@@ -807,6 +821,7 @@ namespace RincovitchApp.Models
         IsAssignedTo = true;
 
         RoleVisible.VisibleMiddle = Visibility.Collapsed;
+        IsAdmin = false;
       }
     }
 
@@ -935,7 +950,7 @@ namespace RincovitchApp.Models
           foreach (var item in dateList)
           {
             if ((item.WeekSchedule == FilterWeekSchedule || FilterWeekSchedule == 0) &&
-              (item.MonthSchedule == FilterMonthSchedule || FilterMonthSchedule == 0) &&
+              (item.MonthSchedule == FilterMonthSchedule || FilterMonthSchedule == 0 || FilterWeekSchedule != 0) &&
               (item.YearSchedule == FilterYearSchedule || FilterYearSchedule == 0))
             {
               var task_child = task.Clone();
