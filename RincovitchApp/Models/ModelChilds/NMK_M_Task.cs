@@ -209,6 +209,20 @@ namespace RincovitchApp.Models.ModelChilds
       }
     }
 
+    Brush _ColorSchedule = Brushes.Black;
+    public Brush ColorSchedule
+    {
+      get
+      {
+        return _ColorSchedule;
+      }
+      set
+      {
+        _ColorSchedule = value;
+        OnPropertyChanged();
+      }
+    }
+
     Brush _Color;
     public Brush Color
     {

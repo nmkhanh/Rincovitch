@@ -12,7 +12,7 @@
   xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
   xmlns:icon="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
   mc:Ignorable="d"
-  Topmost="True"
+  Topmost="False"
   Title="RincovitchApp"
   Height="800"
   Width="1200"
@@ -1441,8 +1441,98 @@
                                             Background="{Binding Project.Color}">
                                             <ToggleButton.ToolTip>
                                               <ToolTip
-                                                Content="{Binding Name}"
-                                                Foreground="{DynamicResource PrimaryForegroundBrush}" />
+                                                Foreground="{DynamicResource PrimaryForegroundBrush}">
+                                                <Grid
+                                                  MinWidth="300"
+                                                  Background="Transparent">
+                                                  <Grid.RowDefinitions>
+                                                    <RowDefinition
+                                                      Height="*" />
+                                                    <RowDefinition
+                                                      Height="Auto" />
+                                                    <RowDefinition
+                                                      Height="Auto" />
+                                                  </Grid.RowDefinitions>
+                                                  <Grid
+                                                    Margin="0 5">
+                                                    <Grid.ColumnDefinitions>
+                                                      <ColumnDefinition
+                                                        Width="Auto" />
+                                                      <ColumnDefinition
+                                                        Width="*" />
+                                                      <ColumnDefinition
+                                                        Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="{Binding State}" />
+                                                      <TextBlock
+                                                        Text=" : " />
+                                                    </StackPanel>
+                                                    <TextBlock
+                                                      Grid.Column="1"
+                                                      TextWrapping="Wrap"
+                                                      Text="{Binding OnlyName}" />
+                                                  </Grid>
+                                                  <StackPanel
+                                                    HorizontalAlignment="Left"
+                                                    Grid.Row="2">
+                                                    <StackPanel
+                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverterReverse}}"
+                                                      Margin="0 0 0 5"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="AssignedTo : " />
+                                                      <TextBlock
+                                                        TextWrapping="Wrap"
+                                                        Text="{Binding User.Email}" />
+                                                    </StackPanel>
+                                                    <StackPanel
+                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverter}}"
+                                                      Margin="0 0 0 5"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="AssignedBy : " />
+                                                      <TextBlock
+                                                        TextWrapping="Wrap"
+                                                        Text="{Binding CreateBy}" />
+                                                    </StackPanel>
+                                                  </StackPanel>
+                                                  <StackPanel
+                                                    Grid.Row="1"
+                                                    Orientation="Horizontal">
+                                                    <StackPanel
+                                                      Margin="0 0 0 5"
+                                                      VerticalAlignment="Bottom"
+                                                      Grid.Row="1"
+                                                      Grid.Column="0"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="Start : " />
+                                                      <TextBlock
+                                                        Text="{Binding DateStart , StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" />
+                                                    </StackPanel>
+                                                    <StackPanel
+                                                      Margin="30 0 10 5"
+                                                      VerticalAlignment="Bottom"
+                                                      HorizontalAlignment="Right"
+                                                      Grid.Row="1"
+                                                      Grid.Column="1"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="End : " />
+                                                      <TextBlock
+                                                        Text="{Binding DateEnd , StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" />
+                                                    </StackPanel>
+                                                  </StackPanel>
+                                                </Grid>
+                                              </ToolTip>
                                             </ToggleButton.ToolTip>
                                           </ToggleButton>
                                           <Border
@@ -1541,8 +1631,98 @@
                                             Background="{Binding Project.Color}">
                                             <ToggleButton.ToolTip>
                                               <ToolTip
-                                                Foreground="{DynamicResource PrimaryForegroundBrush}"
-                                                Content="{Binding User.Name}" />
+                                                Foreground="{DynamicResource PrimaryForegroundBrush}">
+                                                <Grid
+                                                  MinWidth="300"
+                                                  Background="Transparent">
+                                                  <Grid.RowDefinitions>
+                                                    <RowDefinition
+                                                      Height="*" />
+                                                    <RowDefinition
+                                                      Height="Auto" />
+                                                    <RowDefinition
+                                                      Height="Auto" />
+                                                  </Grid.RowDefinitions>
+                                                  <Grid
+                                                    Margin="0 5">
+                                                    <Grid.ColumnDefinitions>
+                                                      <ColumnDefinition
+                                                        Width="Auto" />
+                                                      <ColumnDefinition
+                                                        Width="*" />
+                                                      <ColumnDefinition
+                                                        Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="{Binding State}" />
+                                                      <TextBlock
+                                                        Text=" : " />
+                                                    </StackPanel>
+                                                    <TextBlock
+                                                      Grid.Column="1"
+                                                      TextWrapping="Wrap"
+                                                      Text="{Binding OnlyName}" />
+                                                  </Grid>
+                                                  <StackPanel
+                                                    HorizontalAlignment="Left"
+                                                    Grid.Row="2">
+                                                    <StackPanel
+                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverterReverse}}"
+                                                      Margin="0 0 0 5"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="AssignedTo : " />
+                                                      <TextBlock
+                                                        TextWrapping="Wrap"
+                                                        Text="{Binding User.Email}" />
+                                                    </StackPanel>
+                                                    <StackPanel
+                                                      Visibility="{Binding IsAssignedTo, Converter={StaticResource BoolConverter}}"
+                                                      Margin="0 0 0 5"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="AssignedBy : " />
+                                                      <TextBlock
+                                                        TextWrapping="Wrap"
+                                                        Text="{Binding CreateBy}" />
+                                                    </StackPanel>
+                                                  </StackPanel>
+                                                  <StackPanel
+                                                    Grid.Row="1"
+                                                    Orientation="Horizontal">
+                                                    <StackPanel
+                                                      Margin="0 0 0 5"
+                                                      VerticalAlignment="Bottom"
+                                                      Grid.Row="1"
+                                                      Grid.Column="0"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="Start : " />
+                                                      <TextBlock
+                                                        Text="{Binding DateStart , StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" />
+                                                    </StackPanel>
+                                                    <StackPanel
+                                                      Margin="30 0 10 5"
+                                                      VerticalAlignment="Bottom"
+                                                      HorizontalAlignment="Right"
+                                                      Grid.Row="1"
+                                                      Grid.Column="1"
+                                                      Orientation="Horizontal">
+                                                      <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="End : " />
+                                                      <TextBlock
+                                                        Text="{Binding DateEnd , StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" />
+                                                    </StackPanel>
+                                                  </StackPanel>
+                                                </Grid>
+                                              </ToolTip>
                                             </ToggleButton.ToolTip>
                                           </ToggleButton>
                                           <Border
@@ -2671,7 +2851,7 @@
           Margin="10 0"
           theme:UI.ContentFalse="AssignedByMe"
           theme:UI.ContentTrue="AssignedToMe" />
-        <!--<CheckBox
+        <CheckBox
           Name="alltask"
           Content="All Task"
           VerticalAlignment="Top"
@@ -2679,7 +2859,7 @@
           Height="30"
           HorizontalAlignment="Left"
           Width="100"
-          Margin="320 8 0 0" />-->
+          Margin="320 8 0 0" />
         <StackPanel
           HorizontalAlignment="Right"
           VerticalAlignment="Top"
@@ -3193,6 +3373,7 @@
                                     <ItemsControl.ItemTemplate>
                                       <DataTemplate>
                                         <Label
+                                          Foreground="{Binding ColorSchedule}"
                                           Cursor="Hand"
                                           Height="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerUser, UpdateSourceTrigger=PropertyChanged}"
                                           Width="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerDay, UpdateSourceTrigger=PropertyChanged}"
@@ -3382,6 +3563,7 @@
                                     <ItemsControl.ItemTemplate>
                                       <DataTemplate>
                                         <Label
+                                          Foreground="{Binding ColorSchedule}"
                                           Cursor="Hand"
                                           Height="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerUser, UpdateSourceTrigger=PropertyChanged}"
                                           Width="{Binding ElementName=window, Path=DataContext.NMK_M.Tasks.PixelsPerDay, UpdateSourceTrigger=PropertyChanged}"
@@ -3545,6 +3727,8 @@
           </lvc:PieChart.SeriesTemplate>
         </lvc:PieChart>-->
         <lvc:CartesianChart
+          Foreground="{StaticResource PrimaryForegroundBrush}"
+          Background="{StaticResource PrimaryBackgroundBrush}"
           Series="{Binding NMK_M.ProjectSchedules_AssignTo.Series}"
           XAxes="{Binding NMK_M.ProjectSchedules_AssignTo.XAxes}"
           YAxes="{Binding NMK_M.ProjectSchedules_AssignTo.YAxes}"
@@ -3572,12 +3756,13 @@
             </lvc:AxesCollection>
           </lvc:CartesianChart.YAxes>-->
         </lvc:CartesianChart>
-        <!--<lvc:CartesianChart
+        <lvc:CartesianChart
+          Background="{StaticResource PrimaryBackgroundBrush}"
           Visibility="{Binding ElementName=alltask, Path=IsChecked, Converter={StaticResource BoolConverter}}"
           Series="{Binding NMK_M.UsersSchedules_Admin.Series}"
           XAxes="{Binding NMK_M.UsersSchedules_Admin.XAxes}"
           YAxes="{Binding NMK_M.UsersSchedules_Admin.YAxes}"
-          TooltipPosition="Auto"></lvc:CartesianChart>-->
+          TooltipPosition="Auto"></lvc:CartesianChart>
       </Grid>
     </Grid>
     <!--#endregion-->

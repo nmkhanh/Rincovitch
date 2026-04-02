@@ -83,7 +83,7 @@ namespace RincovitchApp.API
       var taskX = x as NMK_M_Task;
       var taskY = y as NMK_M_Task;
       return StrCmpLogicalW($"{taskX.User.Team}-{taskX.User.Name}", 
-                            $"{taskX.User.Team}-{taskY.User.Name}");
+                            $"{taskY.User.Team}-{taskY.User.Name}");
     }
   }
 

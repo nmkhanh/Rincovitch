@@ -1899,11 +1899,13 @@ namespace RincovitchApp
                 item_supabase.ParentId = task.Id;
               item_supabase.IsOnlyChecked = NMK_M.DialogNewTask.IsOnlyChecked;
               item_supabase.Folder = task.Folder;
+              item_supabase.FileAttach = JsonConvert.SerializeObject(task.FileAttachs.Select(x => new NMK_M_FileAttach { Name = Path.GetFileName(x.Name), Id = x.Id }));
 
               var result = await NMK_Supabase.insert_TasksAsync(item_supabase);
 
               if (result.Success)
               {
+                item.FileAttachs = task.FileAttachs;
                 item.Folder = task.Folder;
                 item.IsChecked = true;
                 item.Width = item.Day * NMK_M.Tasks.PixelsPerDay;
@@ -2124,7 +2126,8 @@ namespace RincovitchApp
         await NMK_Supabase.insertfile_AttachAsync(task.FileAttachs.ToList());
         if (NMK_M.UserCurrent.Team == "MODELLING")
         {
-          var path = Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. ISSUE", $"[{task.Project.Key}] {task.Project.Name}", task.Folder, DateTime.Now.ToString("yy.MM.dd") });
+          var path = !string.IsNullOrEmpty(task.Folder) && !string.IsNullOrWhiteSpace(task.Folder) ? Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. ISSUE", $"[{task.Project.Key}] {task.Project.Name}", task.Folder, DateTime.Now.ToString("yy.MM.dd") }) : 
+            Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. ISSUE", $"[{task.Project.Key}] {task.Project.Name}", DateTime.Now.ToString("yy.MM.dd") });
           try
           {
             if (!Directory.Exists(path))

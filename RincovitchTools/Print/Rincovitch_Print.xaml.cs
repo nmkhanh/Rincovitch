@@ -26,9 +26,13 @@ namespace RincovitchTools.Print
       //System.Windows.Application.ResourceAssembly = typeof(Rincovitch_Print).Assembly;
       //MVVMWindows_Themes.ApplyTheme(System.Windows.Application.Current.Resources, "Light");
 
-      Trial();
+      
       InitializeComponent();
-      this.DataContext = ViewModel = new Rincovitch_PrintViewModel();
+      this.Loaded += async (s, e) =>
+      {
+        await Trial();
+        this.DataContext = ViewModel = new Rincovitch_PrintViewModel();
+      };
     }
 
     async Task Trial()

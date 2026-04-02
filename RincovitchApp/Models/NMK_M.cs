@@ -999,6 +999,7 @@ namespace RincovitchApp.Models
           MonthSchedule = item.First().MonthSchedule,
           YearSchedule = item.First().YearSchedule,
           Time = Time,
+          ColorSchedule = Time > 8 ? (Brush)new BrushConverter().ConvertFromString("#FF6B00") : Brushes.Black,
           TasksSchedule = new ObservableCollection<NMK_M_Task>(item.OrderBy(x => x.Name))
         });
       }
@@ -1103,7 +1104,7 @@ namespace RincovitchApp.Models
           foreach (var item in dateList)
           {
             if ((item.WeekSchedule == FilterWeekSchedule || FilterWeekSchedule == 0) &&
-              (item.MonthSchedule == FilterMonthSchedule || FilterMonthSchedule == 0) &&
+              (item.MonthSchedule == FilterMonthSchedule || FilterMonthSchedule == 0 || FilterWeekSchedule != 0) &&
               (item.YearSchedule == FilterYearSchedule || FilterYearSchedule == 0))
             {
               var task_child = task.Clone();
@@ -1148,12 +1149,13 @@ namespace RincovitchApp.Models
           MonthSchedule = item.First().MonthSchedule,
           YearSchedule = item.First().YearSchedule,
           Time = Time,
+          ColorSchedule = Time > 8 ? (Brush)new BrushConverter().ConvertFromString("#FF6B00") : Brushes.Black,
           TasksSchedule = new ObservableCollection<NMK_M_Task>(item.OrderBy(x => x.Name))
         });
       }
 
       var values = new List<NMK_M_ProjectSchedule>();
-      var data = TasksAdminSchedule.Items.OrderBy(x => x.User.Name).GroupBy(x => x.User);
+      var data = TasksAdminSchedule.Items.OrderBy(x => x.User.Team).ThenBy(x => x.User.Name).GroupBy(x => x.User);
       foreach (var item in data)
       {
         values.Add(new NMK_M_ProjectSchedule()

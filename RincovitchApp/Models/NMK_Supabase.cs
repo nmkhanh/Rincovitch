@@ -2173,7 +2173,7 @@ namespace RincovitchApp.Models
         var supabase = new Supabase.Client(url, key, options);
         await supabase.InitializeAsync();
 
-        var result = await supabase.From<NMK_Supabase_Notify>().Where(x => x.SendTo == sendto).Get();
+        var result = await supabase.From<NMK_Supabase_Notify>().Where(x => x.SendTo == sendto)/*.Limit(100)*/.Get();
 
         if (result.ResponseMessage.IsSuccessStatusCode)
         {
