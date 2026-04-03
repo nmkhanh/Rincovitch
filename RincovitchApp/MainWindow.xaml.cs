@@ -25,7 +25,7 @@ namespace RincovitchApp
 
     public MainWindow()
     {
-      MVVMWindows_Themes.ApplyTheme(this.Resources, "Dark");
+      //MVVMWindows_Themes.ApplyTheme(this.Resources, "Dark");
       InitializeComponent();
 
       // QUAN TRỌNG: Lưu tham chiếu vào App để ToastService có thể tìm thấy
@@ -220,8 +220,8 @@ namespace RincovitchApp
         }
 
         // ===== KẾT QUẢ =====
-        mail = "96FCEF00-994D-4BA9-ADAE-EA948702F606@admin.com.au";
-        //mail = "nhan.nguyen@rincovitch.com.au";
+        //mail = "96FCEF00-994D-4BA9-ADAE-EA948702F606@admin.com.au";
+        mail = "khiem.nguyen@rincovitch.com.au";
         if (!isLogin)
         {
           System.Windows.MessageBox.Show(

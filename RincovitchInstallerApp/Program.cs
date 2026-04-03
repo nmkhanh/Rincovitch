@@ -19,7 +19,7 @@ namespace MyUniversalInstaller
       // ==========================================================
       string projectName = "RincovitchApp";
       string companyName = "Rincovitch";
-      string version = "1.0.6";
+      string version = "1.0.7";
       string outputName = "RincovitchAppSetup";
       string sourceDir = @"..\..\..\bundle";
       //string sourceDir = @"bundle";

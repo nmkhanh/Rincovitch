@@ -76,7 +76,7 @@ namespace RincovitchApp.Models
 
       update_day();
       update_day_schedule();
-      if (UserCurrent != null && UserCurrent.RoleEnum == F_Role.RoleType.AdminApp)
+      if (UserCurrent != null && (UserCurrent.RoleEnum == F_Role.RoleType.AdminApp || UserCurrent.RoleEnum == F_Role.RoleType.Admin))
       {
         update_day_schedule_admin();
         TasksUserCollectionAdminSchedule.Refresh();

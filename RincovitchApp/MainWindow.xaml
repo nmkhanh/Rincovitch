@@ -380,7 +380,7 @@
                           ScrollViewer.CanContentScroll="True"
                           ItemContainerStyle="{DynamicResource ListBoxItemProjectTask}"
                           Grid.Row="1"
-                          ItemsSource="{Binding Items}">
+                          ItemsSource="{Binding Items, UpdateSourceTrigger=PropertyChanged}">
                           <ListBox.ItemTemplate>
                             <DataTemplate>
                               <Grid

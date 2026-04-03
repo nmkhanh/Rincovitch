@@ -682,12 +682,15 @@ namespace RincovitchApp
 
           System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
           {
-            if (NMK_M.UserCurrent.Id == task_change.UserId)
+            var task = NMK_M.Tasks.Items.Any(x => x.Id == task_change.Id);
+            if (task)
             {
-              var task = NMK_M.Tasks.Items.Any(x => x.Id == task_change.Id);
-              if (task)
-                NMK_M.Tasks.Items.Remove(NMK_M.Tasks.Items.First(x => x.Id == task_change.Id));
-              NMK_M.ReloadTask();
+              var task_remove = NMK_M.Tasks.Items.First(x => x.Id == task_change.Id);
+              if (NMK_M.UserCurrent.Id == task_remove.UserId)
+              {
+                NMK_M.Tasks.Items.Remove(task_remove);
+                NMK_M.ReloadTask();
+              }
             }
           });
         });
@@ -1020,7 +1023,7 @@ namespace RincovitchApp
           await LoadTaskTemporary();
         }
         await LoadLeave();
-        if (NMK_M.UserCurrent.RoleEnum == F_Role.RoleType.AdminApp)
+        if (NMK_M.UserCurrent.RoleEnum == F_Role.RoleType.AdminApp || NMK_M.UserCurrent.RoleEnum == F_Role.RoleType.Admin)
           await LoadTaskAdminApp();
         NMK_M.ReloadTask();
       }
@@ -2126,7 +2129,7 @@ namespace RincovitchApp
         await NMK_Supabase.insertfile_AttachAsync(task.FileAttachs.ToList());
         if (NMK_M.UserCurrent.Team == "MODELLING")
         {
-          var path = !string.IsNullOrEmpty(task.Folder) && !string.IsNullOrWhiteSpace(task.Folder) ? Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. ISSUE", $"[{task.Project.Key}] {task.Project.Name}", task.Folder, DateTime.Now.ToString("yy.MM.dd") }) : 
+          var path = !string.IsNullOrEmpty(task.Folder) && !string.IsNullOrWhiteSpace(task.Folder) ? Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. ISSUE", $"[{task.Project.Key}] {task.Project.Name}", task.Folder, DateTime.Now.ToString("yy.MM.dd") }) :
             Path.Combine(new[] { MVVMSourceProject.path_ondrive, "00. ISSUE", $"[{task.Project.Key}] {task.Project.Name}", DateTime.Now.ToString("yy.MM.dd") });
           try
           {

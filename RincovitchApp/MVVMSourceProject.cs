@@ -1,10 +1,11 @@
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace RincovitchApp
 {
   public static class MVVMSourceProject
   {
-    public static string path_ondrive = @"%USERPROFILE%\OneDrive - Rincovitch\Nhan Nguyen's files - Rincovitch";
+    public static string path_ondrive = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"OneDrive - Rincovitch","Nhan Nguyen's files - Rincovitch");
     public static List<string> folders = new List<string>()
     {
       "_COLUMN",
