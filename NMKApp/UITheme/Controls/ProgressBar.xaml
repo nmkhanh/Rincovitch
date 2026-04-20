@@ -1,0 +1,290 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+	xmlns:theme="clr-namespace:NMKApp.UITheme">
+	<ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/LightTheme.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Converter.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+
+	<!-- #region ProgressBarNormal -->
+	<Style
+		x:Key="ProgressBarNormal"
+		TargetType="ProgressBar">
+		<Setter
+			Property="BorderBrush"
+			Value="{DynamicResource ControlBorderBrush}" />
+		<Setter
+			Property="Background"
+			Value="{DynamicResource ControlBackgroundBrush}" />
+		<Setter
+			Property="Foreground"
+			Value="{DynamicResource AccentBrush}" />
+		<Setter
+			Property="theme:UI.BDCorner"
+			Value="10" />
+		<Setter
+			Property="Template">
+			<Setter.Value>
+				<ControlTemplate
+					TargetType="ProgressBar">
+					<Grid
+						Height="{TemplateBinding Height}"
+						Width="{TemplateBinding Width}"
+						MinHeight="{TemplateBinding MinHeight}"
+						MinWidth="{TemplateBinding MinWidth}">
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup
+								x:Name="CommonStates">
+								<VisualState
+									x:Name="Determinate" />
+								<VisualState
+									x:Name="Indeterminate">
+									<Storyboard>
+										<ObjectAnimationUsingKeyFrames
+											Duration="00:00:00"
+											Storyboard.TargetName="Animation_"
+											Storyboard.TargetProperty="Background">
+											<DiscreteObjectKeyFrame
+												KeyTime="00:00:00">
+												<DiscreteObjectKeyFrame.Value>
+													<SolidColorBrush>Transparent</SolidColorBrush>
+												</DiscreteObjectKeyFrame.Value>
+											</DiscreteObjectKeyFrame>
+										</ObjectAnimationUsingKeyFrames>
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Border
+							x:Name="PART_Track"
+							CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							Background="{TemplateBinding Background}"/>
+						<Border
+							Margin="-1"
+							Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsIndeterminate, Converter={StaticResource BoolConverterReverse}}"
+							x:Name="PART_Indicator"
+							CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							HorizontalAlignment="Left"
+							BorderBrush="{TemplateBinding Foreground}"
+							Background="{TemplateBinding Foreground}" />
+						<Border
+							HorizontalAlignment="Left"
+							Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsIndeterminate, Converter={StaticResource BoolConverter}}"
+							x:Name="Animation_"
+							CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							BorderBrush="{TemplateBinding Foreground}"
+							Background="{TemplateBinding Foreground}">
+							<Grid
+								x:Name="Animation">
+								<Rectangle
+									x:Name="PART_GlowRect"
+									Width="100"
+									HorizontalAlignment="Left"
+									Fill="{DynamicResource AccentHoverBrush}"
+									Margin="-100,0,0,0" />
+							</Grid>
+						</Border>
+						
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+	<!-- #endregion ProgressBarNormal -->
+
+	<!-- #region ProgressBarNormalRound -->
+	<Style
+		TargetType="ProgressBar"
+		x:Key="ProgressBarNormalRound">
+		<Setter
+			Property="Template">
+			<Setter.Value>
+				<ControlTemplate
+					TargetType="ProgressBar">
+					<Grid>
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup
+								x:Name="CommonStates">
+								<VisualState
+									x:Name="Determinate" />
+								<VisualState
+									x:Name="Indeterminate">
+									<Storyboard>
+										<DoubleAnimation
+											Storyboard.TargetName="a"
+											Storyboard.TargetProperty="StartAngle"
+											From="0"
+											To="360"
+											Duration="0:0:1"
+											RepeatBehavior="Forever" />
+										<DoubleAnimation
+											Storyboard.TargetName="a"
+											Storyboard.TargetProperty="EndAngle"
+											From="90"
+											To="450"
+											Duration="0:0:1"
+											RepeatBehavior="Forever" />
+									</Storyboard>
+								</VisualState>
+							</VisualStateGroup>
+						</VisualStateManager.VisualStateGroups>
+						<Ellipse
+							Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.IsPixel), Converter={StaticResource BoolConverterReverse}}"
+							Fill="{TemplateBinding Background}"
+							Width="{TemplateBinding Width}"
+							Height="{TemplateBinding Height}" />
+						<Ellipse
+							Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.IsPixel), Converter={StaticResource BoolConverter}}"
+							StrokeThickness="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.Thickness) }"
+							Stroke="{TemplateBinding Background}"
+							Width="{TemplateBinding Width}"
+							Height="{TemplateBinding Height}" />
+						<ed:Arc
+							ArcThicknessUnit="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.Type) }"
+							x:Name="a"
+							Stretch="None"
+							ArcThickness="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.Thickness) }"
+							Fill="{TemplateBinding Foreground}"
+							Width="{TemplateBinding Width}"
+							Height="{TemplateBinding Height}">
+							<ed:Arc.EndAngle>
+								<MultiBinding
+									Converter="{StaticResource EndAngleConverter}"
+									UpdateSourceTrigger="PropertyChanged">
+									<Binding
+										Path="Value"
+										RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+									<Binding
+										Path="Maximum"
+										RelativeSource="{RelativeSource Mode=TemplatedParent}" />
+								</MultiBinding>
+							</ed:Arc.EndAngle>
+						</ed:Arc>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<!--<Setter Property="Background">
+      <Setter.Value>
+          <LinearGradientBrush EndPoint="0,1" StartPoint="0,0" Opacity="0.7">
+              <GradientStop Color="{DynamicResource RincovitchApp_Primary_Color}" Offset="0" />
+              <GradientStop Color="{DynamicResource RincovitchApp_Primary_Color}" Offset="1" />
+          </LinearGradientBrush>
+      </Setter.Value>
+  </Setter>
+  <Setter Property="Foreground">
+      <Setter.Value>
+          <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0" >
+              <GradientStop Color="{DynamicResource RincovitchApp_Primary_dark_Color}"  Offset="0"/>
+              <GradientStop Color="{DynamicResource RincovitchApp_Primary_dark_Color}"  Offset="1" />
+          </LinearGradientBrush>
+      </Setter.Value>
+  </Setter>-->
+	</Style>
+	<!-- #endregion ProgressBarNormalRound -->
+
+	<!-- #region ProgressBarSpinner -->
+	<Style
+		x:Key="ProgressBarSpinner"
+		TargetType="ProgressBar"
+		BasedOn="{StaticResource ProgressBarNormalRound}">
+		<Setter
+			Property="theme:UI.Thickness"
+			Value="5" />
+		<Setter
+			Property="theme:UI.IsPixel"
+			Value="True" />
+		<Setter
+			Property="theme:UI.Type"
+			Value="Pixel" />
+		<Setter
+			Property="Height"
+			Value="50" />
+		<Setter
+			Property="Width"
+			Value="50" />
+		<Setter
+			Property="Background"
+			Value="{DynamicResource ControlBackgroundBrush}" />
+		<Setter
+			Property="Foreground"
+			Value="{DynamicResource AccentBrush}" />
+		<Setter
+			Property="VerticalAlignment"
+			Value="Center" />
+		<Setter
+			Property="HorizontalAlignment"
+			Value="Center" />
+    <Setter
+      Property="IsIndeterminate"
+      Value="True" />
+  </Style>
+	<!-- #endregion ProgressBarSpinner -->
+  
+  <!-- #region BackgroundProgressBarSpinner -->
+  <Style
+    x:Key="BackgroundProgressBarSpinner"
+    TargetType="ProgressBar">
+    <Setter
+      Property="Background"
+      Value="{DynamicResource PrimaryBackgroundBrush}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ProgressBar">
+          <Grid
+            Background="{TemplateBinding Background}">
+            <ProgressBar
+              Background="{DynamicResource ControlBackgroundBrush}"
+              Style="{StaticResource ProgressBarSpinner}" />
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- #endregion ProgressBarSpinner -->
+  <!-- #region ProgressBarUpload -->
+	<Style
+		x:Key="ProgressBarUpload"
+		TargetType="ProgressBar"
+		BasedOn="{StaticResource ProgressBarNormalRound}">
+		<Setter
+			Property="theme:UI.Thickness"
+			Value="2" />
+		<Setter
+			Property="theme:UI.IsPixel"
+			Value="False" />
+		<Setter
+			Property="theme:UI.Type"
+			Value="Percent" />
+		<Setter
+			Property="Height"
+			Value="50" />
+		<Setter
+			Property="Width"
+			Value="50" />
+		<Setter
+			Property="Background"
+			Value="{DynamicResource ControlBackgroundBrush}" />
+		<Setter
+			Property="Foreground"
+			Value="{DynamicResource AccentBrush}" />
+		<Setter
+			Property="VerticalAlignment"
+			Value="Center" />
+		<Setter
+			Property="HorizontalAlignment"
+			Value="Center" />
+	</Style>
+	<!-- #endregion ProgressBarUpload -->
+
+</ResourceDictionary>

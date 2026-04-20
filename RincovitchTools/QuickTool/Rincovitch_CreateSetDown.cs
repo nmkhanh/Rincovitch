@@ -29,7 +29,7 @@ public class CreateFloorFromInplaceGroup : IExternalCommand
 
     if (floorType == null)
     {
-      TaskDialog.Show("Error", $"FloorType not found: {floorTypeName}");
+      Autodesk.Revit.UI.TaskDialog.Show("Error", $"FloorType not found: {floorTypeName}");
       return Result.Failed;
     }
 
@@ -53,7 +53,11 @@ public class CreateFloorFromInplaceGroup : IExternalCommand
         Element e = doc.GetElement(id);
 
         // chỉ Generic Model (inplace)
+#if D2026
+        if (e.Category == null || e.Category.Id.Value != (int)BuiltInCategory.OST_GenericModel)
+#else
         if (e.Category == null || e.Category.Id.IntegerValue != (int)BuiltInCategory.OST_GenericModel)
+#endif
           continue;
 
         Options opt = new Options()

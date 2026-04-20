@@ -1,0 +1,149 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:icon="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+  xmlns:theme="clr-namespace:NMKApp.UITheme"
+  xmlns:command="clr-namespace:NMKApp.UITheme">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/LightTheme.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Converter.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Controls/ProgressBar.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Controls/ToggleButton.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+  <Style
+    x:Key="TreeViewItemFolder"
+    TargetType="TreeViewItem">
+    <Setter
+      Property="Height"
+      Value="Auto" />
+    <Setter
+      Property="Visibility"
+      Value="{Binding IsFolder, Converter={StaticResource BoolConverter}}" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Setter
+      Property="VerticalContentAlignment"
+      Value="Center" />
+    <Setter
+      Property="Focusable"
+      Value="False" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="TreeViewItem">
+          <Grid
+            VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+              <RowDefinition
+                Height="Auto" />
+              <RowDefinition
+                Height="*" />
+            </Grid.RowDefinitions>
+            <Border
+              Grid.Column="1"
+              x:Name="Bd"
+              Height="30"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(theme:UI.BDCorner)}"
+              Padding="{TemplateBinding Padding}"
+              VerticalAlignment="Center">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition
+                    Width="Auto" />
+                  <ColumnDefinition
+                    Width="*" />
+                  <ColumnDefinition
+                    Width="Auto" />
+                  <ColumnDefinition
+                    Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ToggleButton
+                  Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.ExpandedCommand)}"
+                  Style="{StaticResource ToggleButtonIconRoundTransparentAll}"
+                  IsChecked="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsExpanded, UpdateSourceTrigger=PropertyChanged}"
+                  theme:UI.IconFalse="Folder"
+                  theme:UI.IconTrue="FolderOpen"/>
+                <ToggleButton
+                  Padding="0"
+                  Style="{StaticResource ToggleButtonTransparentAll}"
+                  Command="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.ClickCommand)}"
+                  VerticalAlignment="Center"
+                  Grid.Column="1"
+                  Content="{Binding name}" />
+                <ProgressBar
+                  theme:UI.Thickness="2"
+                  Width="20"
+                  Height="20"
+                  Grid.Column="2"
+                  VerticalAlignment="Center"
+                  Visibility="{Binding IsProgress_Load, Converter={StaticResource BoolConverter}}"
+                  Style="{StaticResource ProgressBarSpinner}" />
+                <ToggleButton
+                  command:AttachedBehavior.NewFolderCommand="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.NewFolderCommand)}"
+                  command:AttachedBehavior.DownloadCommand="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.DownloadCommand)}"
+                  command:AttachedBehavior.MoveCommand="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.MoveCommand)}"
+                  command:AttachedBehavior.ShareCommand="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.ShareCommand)}"
+                  command:AttachedBehavior.RenameCommand="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.RenameCommand)}"
+                  command:AttachedBehavior.DeleteCommand="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(command:AttachedBehavior.DeleteCommand)}"
+                  Name="control"
+                  Visibility="Collapsed"
+                  Grid.Column="3"
+                  Style="{StaticResource ToggleButtonIconRoundPopupFolder}" />
+              </Grid>
+            </Border>
+            <!-- ItemsPresenter -->
+            <ItemsPresenter
+              x:Name="ItemsHost"
+              Grid.Row="1"
+              Margin="20,0,0,0"
+              Visibility="Collapsed" />
+          </Grid>
+          <ControlTemplate.Triggers>
+            <!-- Khi expanded thì hiện nội dung -->
+            <Trigger
+              Property="IsExpanded"
+              Value="True">
+              <Setter
+                TargetName="ItemsHost"
+                Property="Visibility"
+                Value="Visible" />
+            </Trigger>
+            <!-- Hover hoặc Selected -->
+            <Trigger
+              Property="IsSelected"
+              Value="True">
+              <Setter
+                TargetName="Bd"
+                Property="Background"
+                Value="{DynamicResource ControlSelectedBackgroundBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                TargetName="control"
+                Property="Visibility"
+                Value="Visible" />
+              <Setter
+                TargetName="Bd"
+                Property="Background"
+                Value="{DynamicResource ControlHoverBackgroundBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</ResourceDictionary>

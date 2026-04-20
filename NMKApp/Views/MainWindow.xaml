@@ -1,0 +1,225 @@
+<Window
+  x:Class="NMKApp.Views.MainWindow"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:local="clr-namespace:NMKApp.Views"
+  xmlns:theme="clr-namespace:NMKApp.UITheme"
+  xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+  xmlns:icon="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+  xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+  mc:Ignorable="d"
+  Title="NMKApp"
+  Height="800"
+  Width="1200"
+  MinHeight="800"
+  MinWidth="1200"
+  Name="window"
+  Background="{DynamicResource PrimaryBackgroundBrush}"
+  Foreground="{DynamicResource PrimaryForegroundBrush}">
+
+  <Window.TaskbarItemInfo>
+    <shell:TaskbarItemInfo
+      Overlay="{Binding TaskbarOverlay}"
+      Description="Bạn có thông báo mới" />
+  </Window.TaskbarItemInfo>
+
+  <i:Interaction.Triggers>
+    <i:EventTrigger EventName="Loaded">
+      <i:InvokeCommandAction
+        Command="{Binding LoadCommand}" />
+    </i:EventTrigger>
+  </i:Interaction.Triggers>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="60" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
+
+    <!--#region Navigation Sidebar -->
+    <Border
+      BorderBrush="{DynamicResource PrimaryBorderBrush}"
+      BorderThickness="0 0 1 0">
+      <Grid>
+        <StackPanel>
+          <!-- Dashboard -->
+          <Grid Visibility="{Binding RoleVisible.VisibleUser}">
+            <RadioButton
+              GroupName="Navigation"
+              Content="Dashboard"
+              Name="NavDashboard"
+              IsChecked="{Binding IsDashboard, UpdateSourceTrigger=PropertyChanged}"
+              Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+              theme:UI.Icon="HomeOutline" />
+          </Grid>
+
+          <!-- Timeline -->
+          <RadioButton
+            Visibility="{Binding RoleVisible.VisibleUser}"
+            GroupName="Navigation"
+            Content="TimeLine"
+            Name="NavTimeline"
+            Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+            theme:UI.Icon="ChartTimeline" />
+
+          <Separator Visibility="{Binding RoleVisible.VisibleLeader}" />
+
+          <!-- Email/Request -->
+          <Grid Visibility="{Binding RoleVisible.VisibleLeader}">
+            <RadioButton
+              GroupName="Navigation"
+              Content="Request"
+              Name="NavEmail"
+              Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+              theme:UI.Icon="EmailOutline" />
+          </Grid>
+
+          <Separator Visibility="{Binding RoleVisible.VisibleMiddle}" />
+
+          <!-- Users -->
+          <Grid Visibility="{Binding RoleVisible.VisibleMiddle}">
+            <RadioButton
+              GroupName="Navigation"
+              Content="Users"
+              Name="NavUsers"
+              Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+              theme:UI.Icon="UserOutline" />
+          </Grid>
+
+          <!-- Projects -->
+          <Grid Visibility="{Binding RoleVisible.VisibleAdmin}">
+            <RadioButton
+              GroupName="Navigation"
+              Content="Projects"
+              Name="NavProjects"
+              Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+              theme:UI.Icon="Computer" />
+          </Grid>
+
+          <Separator Visibility="{Binding RoleVisible.VisibleLeader}" />
+
+          <!-- Temporary -->
+          <Grid Visibility="{Binding RoleVisible.VisibleLeader}">
+            <RadioButton
+              GroupName="Navigation"
+              Content="Temporary"
+              Name="NavTemporary"
+              Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+              theme:UI.Icon="SitemapOutline" />
+          </Grid>
+        </StackPanel>
+
+        <StackPanel VerticalAlignment="Bottom">
+          <!-- Notify -->
+          <Grid Visibility="{Binding RoleVisible.VisibleUser}">
+            <RadioButton
+              GroupName="Navigation"
+              Content="Notify"
+              Name="NavNotify"
+              Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+              theme:UI.Icon="BellOutline" />
+          </Grid>
+
+          <Separator />
+
+          <!-- Leave -->
+          <Grid Visibility="{Binding RoleVisible.VisibleUser}">
+            <RadioButton
+              GroupName="Navigation"
+              Content="Leave"
+              Name="NavLeave"
+              Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+              theme:UI.Icon="CalendarMonthOutline" />
+          </Grid>
+
+          <!-- Schedule -->
+          <RadioButton
+            Visibility="{Binding RoleVisible.VisibleUser}"
+            GroupName="Navigation"
+            Content="Schedule"
+            Name="NavSchedule"
+            Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+            theme:UI.Icon="Table" />
+
+          <Separator />
+
+          <!-- Refresh -->
+          <ToggleButton
+            Command="{Binding RefreshCommand}"
+            Visibility="{Binding RoleVisible.VisibleUser}"
+            Content="Refresh"
+            Style="{StaticResource ToggleButtonVertical}"
+            theme:UI.IconFalse="Sync"
+            theme:UI.IconTrue="Sync" />
+
+          <!-- Settings -->
+          <RadioButton
+            IsChecked="True"
+            Visibility="{Binding RoleVisible.VisibleUser}"
+            GroupName="Navigation"
+            Content="Settings"
+            Name="NavSettings"
+            Style="{StaticResource RadioButtonIconContentVerticalStyle}"
+            theme:UI.Icon="SettingsOutline" />
+        </StackPanel>
+      </Grid>
+    </Border>
+    <!--#endregion-->
+
+    <!--#region Page Content Area -->
+    <Grid Grid.Column="1">
+      <!-- Dashboard Page -->
+      <local:DashboardPage
+        DataContext="{Binding DashboardVM}"
+        Visibility="{Binding ElementName=NavDashboard, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Timeline Page -->
+      <local:TimelinePage
+        DataContext="{Binding TimelineVM}"
+        Visibility="{Binding ElementName=NavTimeline, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Email Page -->
+      <local:EmailPage
+        DataContext="{Binding EmailVM}"
+        Visibility="{Binding ElementName=NavEmail, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Users Page -->
+      <local:UserPage
+        DataContext="{Binding UserVM}"
+        Visibility="{Binding ElementName=NavUsers, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Projects Page -->
+      <local:ProjectPage
+        DataContext="{Binding ProjectVM}"
+        Visibility="{Binding ElementName=NavProjects, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Temporary Page -->
+      <local:TemporaryPage
+        DataContext="{Binding TemporaryVM}"
+        Visibility="{Binding ElementName=NavTemporary, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Notify Page -->
+      <local:NotifyPage
+        DataContext="{Binding NotifyVM}"
+        Visibility="{Binding ElementName=NavNotify, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Leave Page -->
+      <local:LeavePage
+        DataContext="{Binding LeaveVM}"
+        Visibility="{Binding ElementName=NavLeave, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Schedule Page -->
+      <local:SchedulePage
+        DataContext="{Binding ScheduleVM}"
+        Visibility="{Binding ElementName=NavSchedule, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+
+      <!-- Settings Page -->
+      <local:SettingsPage
+        DataContext="{Binding SettingsVM}"
+        Visibility="{Binding ElementName=NavSettings, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
+    </Grid>
+    <!--#endregion-->
+  </Grid>
+</Window>

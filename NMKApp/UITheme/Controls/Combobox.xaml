@@ -1,0 +1,522 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:icon="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF"
+  xmlns:theme="clr-namespace:NMKApp.UITheme">
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/LightTheme.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Controls/ToggleButton.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Controls/ListBox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Controls/ListboxItem.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Controls/TextBox.xaml" />
+    <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Converter.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+  <!-- BaseUpper ComboBox style -->
+  <Style
+    TargetType="ComboBox"
+    x:Key="BaseUpperComboBox">
+    <Setter
+      Property="Cursor"
+      Value="Hand" />
+    <Setter
+      Property="Height"
+      Value="30" />
+    <Setter
+      Property="Padding"
+      Value="8,0" />
+    <Setter
+      Property="BorderBrush"
+      Value="{DynamicResource ControlBorderBrush}" />
+    <Setter
+      Property="Background"
+      Value="{DynamicResource ControlBackgroundBrush}" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ComboBox">
+          <Grid>
+            <Border
+              x:Name="Bd"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition
+                    Width="*" />
+                  <ColumnDefinition
+                    Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ContentPresenter
+                  Visibility="{TemplateBinding IsEditable, Converter={StaticResource BoolConverterReverse}}"
+                  Grid.Column="0"
+                  Margin="{TemplateBinding Padding}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Left"
+                  Content="{TemplateBinding SelectionBoxItem}"
+                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
+                <TextBox
+                  CharacterCasing="Upper"
+                  Padding="{TemplateBinding Padding}"
+                  IsUndoEnabled="False"
+                  VerticalAlignment="Center"
+                  x:Name="PART_EditableTextBox"
+                  Grid.Column="0"
+                  Visibility="{TemplateBinding IsEditable, Converter={StaticResource BoolConverter}}"
+                  Style="{DynamicResource TextBoxTransparent}"
+                  theme:UI.Hint="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.Hint)}"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Foreground="{TemplateBinding Foreground}"
+                  VerticalContentAlignment="Center" />
+                <Grid
+                  Grid.Column="1"
+                  Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsReadOnly, Converter={StaticResource BoolConverterReverse}}">
+                  <ToggleButton
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Right"
+                    theme:UI.PaddingContent="0"
+                    Padding="0"
+                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsEditable, Converter={StaticResource BoolConverter}}"
+                    Grid.Column="1"
+                    Width="{TemplateBinding Height}"
+                    IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                    Focusable="False"
+                    theme:UI.IconFalse="ChevronDown"
+                    Style="{StaticResource ToggleButtonTransparentAll}" />
+                </Grid>
+                <ToggleButton
+                  theme:UI.PaddingContent="0"
+                  Padding="0"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Right"
+                  Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsEditable, Converter={StaticResource BoolConverterReverse}}"
+                  Grid.ColumnSpan="2"
+                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                  Focusable="False"
+                  theme:UI.IconFalse="ChevronDown"
+                  Style="{DynamicResource ToggleButtonTransparentAll}" />
+                <ToggleButton
+                  theme:UI.PaddingContent="0"
+                  Padding="0"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Right"
+                  Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsReadOnly, Converter={StaticResource BoolConverter}}"
+                  Grid.ColumnSpan="2"
+                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                  Focusable="False"
+                  theme:UI.IconFalse="ChevronDown"
+                  Style="{DynamicResource ToggleButtonTransparentAll}" />
+              </Grid>
+            </Border>
+            <Popup
+              x:Name="PART_Popup"
+              Placement="Bottom"
+              IsOpen="{TemplateBinding IsDropDownOpen}"
+              AllowsTransparency="True"
+              Focusable="False"
+              PopupAnimation="Slide">
+              <Border
+                MinWidth="{TemplateBinding ActualWidth}"
+                CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                Margin="0,1,0,0">
+                <ScrollViewer
+                  CanContentScroll="True">
+                  <StackPanel
+                    IsItemsHost="True" />
+                </ScrollViewer>
+              </Border>
+            </Popup>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource ControlHoverBorderBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsKeyboardFocusWithin"
+              Value="True">
+              <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource ControlHoverBorderBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsEnabled"
+              Value="False">
+              <Setter
+                Property="Foreground"
+                Value="{DynamicResource ControlDisabledForegroundBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- Base ComboBox style -->
+  <Style
+    TargetType="ComboBox"
+    x:Key="BaseComboBox">
+    <Setter
+      Property="Cursor"
+      Value="Hand" />
+    <Setter
+      Property="Height"
+      Value="30" />
+    <Setter
+      Property="Padding"
+      Value="8,0" />
+    <Setter
+      Property="BorderBrush"
+      Value="{DynamicResource ControlBorderBrush}" />
+    <Setter
+      Property="Background"
+      Value="{DynamicResource ControlBackgroundBrush}" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ComboBox">
+          <Grid>
+            <Border
+              x:Name="Bd"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition
+                    Width="*" />
+                  <ColumnDefinition
+                    Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ContentPresenter
+                  Visibility="{TemplateBinding IsEditable, Converter={StaticResource BoolConverterReverse}}"
+                  Grid.Column="0"
+                  Margin="{TemplateBinding Padding}"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Left"
+                  Content="{TemplateBinding SelectionBoxItem}"
+                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" />
+                <TextBox
+                  Focusable="{TemplateBinding IsReadOnly, Converter={StaticResource BoolReverseConverter}}"
+                  Padding="{TemplateBinding Padding}"
+                  IsUndoEnabled="False"
+                  VerticalAlignment="Center"
+                  x:Name="PART_EditableTextBox"
+                  Grid.Column="0"
+                  Visibility="{TemplateBinding IsEditable, Converter={StaticResource BoolConverter}}"
+                  Style="{DynamicResource TextBoxTransparent}"
+                  theme:UI.Hint="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.Hint)}"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  Foreground="{TemplateBinding Foreground}"
+                  VerticalContentAlignment="Center" />
+                <Grid
+                  Grid.Column="1"
+                  Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsReadOnly, Converter={StaticResource BoolConverterReverse}}">
+                  <ToggleButton
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Right"
+                    theme:UI.PaddingContent="0"
+                    Padding="0"
+                    Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsEditable, Converter={StaticResource BoolConverter}}"
+                    Grid.Column="1"
+                    Width="{TemplateBinding Height}"
+                    IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                    Focusable="False"
+                    theme:UI.IconFalse="ChevronDown"
+                    Style="{StaticResource ToggleButtonTransparentAll}" />
+                </Grid>
+                <ToggleButton
+                  theme:UI.PaddingContent="0"
+                  Padding="0"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Right"
+                  Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsEditable, Converter={StaticResource BoolConverterReverse}}"
+                  Grid.ColumnSpan="2"
+                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                  Focusable="False"
+                  theme:UI.IconFalse="ChevronDown"
+                  Style="{DynamicResource ToggleButtonTransparentAll}" />
+                <ToggleButton
+                  theme:UI.PaddingContent="0"
+                  Padding="0"
+                  HorizontalAlignment="Stretch"
+                  HorizontalContentAlignment="Right"
+                  Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsReadOnly, Converter={StaticResource BoolConverter}}"
+                  Grid.ColumnSpan="2"
+                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                  Focusable="False"
+                  theme:UI.IconFalse="ChevronDown"
+                  Style="{DynamicResource ToggleButtonTransparentAll}" />
+              </Grid>
+            </Border>
+            <Popup
+              x:Name="PART_Popup"
+              Placement="Bottom"
+              IsOpen="{TemplateBinding IsDropDownOpen}"
+              AllowsTransparency="True"
+              Focusable="False"
+              PopupAnimation="Slide">
+              <Border
+                MinWidth="{TemplateBinding ActualWidth}"
+                CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                Margin="0,1,0,0">
+                <ScrollViewer
+                  CanContentScroll="True">
+                  <StackPanel
+                    IsItemsHost="True" />
+                </ScrollViewer>
+              </Border>
+            </Popup>
+          </Grid>
+          <ControlTemplate.Triggers>
+            <Trigger
+              Property="IsMouseOver"
+              Value="True">
+              <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource ControlHoverBorderBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsKeyboardFocusWithin"
+              Value="True">
+              <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource ControlHoverBorderBrush}" />
+            </Trigger>
+            <Trigger
+              Property="IsEnabled"
+              Value="False">
+              <Setter
+                Property="Foreground"
+                Value="{DynamicResource ControlDisabledForegroundBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- Default ComboBox references base style -->
+  <Style
+    TargetType="ComboBox"
+    BasedOn="{StaticResource BaseComboBox}" />
+  <!-- Transparent variant -->
+  <Style
+    x:Key="ComboBoxTransparent"
+    TargetType="ComboBox"
+    BasedOn="{StaticResource BaseComboBox}">
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="BorderBrush"
+      Value="{DynamicResource ControlBorderBrush}" />
+  </Style>
+  <!-- List variant (wrap items) -->
+  <Style
+    x:Key="ComboBoxList"
+    TargetType="ComboBox"
+    BasedOn="{StaticResource BaseComboBox}">
+    <Setter
+      Property="IsEditable"
+      Value="True" />
+    <Setter
+      Property="MinHeight"
+      Value="30" />
+    <Setter
+      Property="Height"
+      Value="Auto" />
+    <Setter
+      Property="Template">
+      <Setter.Value>
+        <ControlTemplate
+          TargetType="ComboBox">
+          <Grid>
+            <Border
+              x:Name="Bd"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}">
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition
+                    Width="*" />
+                  <ColumnDefinition
+                    Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ListBox
+                  Grid.Column="0"
+                  Margin="{TemplateBinding Padding}"
+                  ItemsSource="{TemplateBinding ItemsSource}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                  <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel
+                        Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </ListBox.ItemsPanel>
+                </ListBox>
+                <ToggleButton
+                  theme:UI.PaddingContent="0"
+                  Padding="0"
+                  Visibility="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsEditable, Converter={StaticResource BoolConverter}}"
+                  Grid.Column="1"
+                  Width="{TemplateBinding Height}"
+                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                  Focusable="False"
+                  theme:UI.IconFalse="ChevronDown"
+                  Style="{StaticResource ToggleButtonTransparent}" />
+              </Grid>
+            </Border>
+            <Popup
+              x:Name="PART_Popup"
+              Placement="Bottom"
+              IsOpen="{TemplateBinding IsDropDownOpen}"
+              AllowsTransparency="True"
+              Focusable="False"
+              PopupAnimation="Slide">
+              <Border
+                CornerRadius="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(theme:UI.BDCorner)}"
+                Background="{DynamicResource ControlBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                Margin="0,1,0,0">
+                <ScrollViewer
+                  CanContentScroll="True">
+                  <StackPanel
+                    IsItemsHost="True" />
+                </ScrollViewer>
+              </Border>
+            </Popup>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- Upload options variant -->
+  <Style
+    x:Key="ComboBoxUploadOptions"
+    TargetType="ComboBox"
+    BasedOn="{StaticResource ComboBoxList}">
+    <Setter
+      Property="BorderBrush"
+      Value="{DynamicResource ControlBorderBrush}" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+  </Style>
+  <!-- TransparentAll variant -->
+  <Style
+    x:Key="ComboBoxTransparentAll"
+    TargetType="ComboBox"
+    BasedOn="{StaticResource ComboBoxTransparent}">
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+  </Style>
+  <Style
+    x:Key="ComboBoxTransparentAnyAll"
+    TargetType="ComboBox"
+    BasedOn="{StaticResource BaseComboBox}">
+    <Setter
+      Property="BorderBrush"
+      Value="Transparent" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Style.Triggers>
+      <Trigger
+        Property="IsMouseOver"
+        Value="True">
+        <Setter
+          Property="BorderBrush"
+          Value="Transparent" />
+      </Trigger>
+      <Trigger
+        Property="IsKeyboardFocusWithin"
+        Value="True">
+        <Setter
+          Property="BorderBrush"
+          Value="Transparent" />
+      </Trigger>
+      <Trigger
+        Property="IsEnabled"
+        Value="False">
+        <Setter
+          Property="BorderBrush"
+          Value="Transparent" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+  <Style
+    x:Key="ComboBoxTransparentAnyAllUpper"
+    TargetType="ComboBox"
+    BasedOn="{StaticResource BaseUpperComboBox}">
+    <Setter
+      Property="BorderBrush"
+      Value="Transparent" />
+    <Setter
+      Property="Background"
+      Value="Transparent" />
+    <Setter
+      Property="Foreground"
+      Value="{DynamicResource ControlForegroundBrush}" />
+    <Style.Triggers>
+      <Trigger
+        Property="IsMouseOver"
+        Value="True">
+        <Setter
+          Property="BorderBrush"
+          Value="Transparent" />
+      </Trigger>
+      <Trigger
+        Property="IsKeyboardFocusWithin"
+        Value="True">
+        <Setter
+          Property="BorderBrush"
+          Value="Transparent" />
+      </Trigger>
+      <Trigger
+        Property="IsEnabled"
+        Value="False">
+        <Setter
+          Property="BorderBrush"
+          Value="Transparent" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+</ResourceDictionary>

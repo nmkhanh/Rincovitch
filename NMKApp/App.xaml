@@ -1,0 +1,19 @@
+<Application
+  x:Class="NMKApp.App"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="clr-namespace:NMKApp"
+  ShutdownMode="OnExplicitShutdown">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary
+          Source="pack://application:,,,/NMKApp;component/UITheme/BaseTheme.xaml" />
+        <ResourceDictionary
+          Source="pack://application:,,,/NMKApp;component/UITheme/Converter.xaml" />
+        <ResourceDictionary
+          Source="pack://application:,,,/NMKApp;component/UITheme/LightTheme.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

@@ -28,11 +28,13 @@ namespace RincovitchTools.Print
 
       
       InitializeComponent();
-      this.Loaded += async (s, e) =>
-      {
-        await Trial();
-        this.DataContext = ViewModel = new Rincovitch_PrintViewModel();
-      };
+      this.DataContext = ViewModel = new Rincovitch_PrintViewModel();
+      this.Show();
+      //this.Loaded += async (s, e) =>
+      //{
+      //  await Trial();
+      //  this.DataContext = ViewModel = new Rincovitch_PrintViewModel();
+      //};
     }
 
     async Task Trial()

@@ -1092,7 +1092,7 @@ namespace RincovitchApp.Models
       List<NMK_M_Task> tasks = new List<NMK_M_Task>();
       foreach (var task in TasksAdmin.Items)
       {
-        if (task.Status == 0)
+        if (0 == 0)
         {
           var start = task.DateStart;
           var end = task.DateChecked;
@@ -1142,6 +1142,7 @@ namespace RincovitchApp.Models
         TasksAdminSchedule.Items.Add(new NMK_M_Task()
         {
           Index = 0,
+          State = item.First().State,
           User = item.Key.user,
           Date = item.Key.date,
           Left = item.First().Left,

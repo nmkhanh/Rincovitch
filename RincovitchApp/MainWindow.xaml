@@ -3231,6 +3231,7 @@
               <Grid
                 VerticalAlignment="Top">
                 <ItemsControl
+                  Visibility="{Binding ElementName=alltask, Path=IsChecked, Converter={StaticResource BoolConverterReverse}}"
                   Name="ProjectSchedule"
                   ItemsSource="{Binding NMK_M.TasksProjectCollectionSchedule, UpdateSourceTrigger=PropertyChanged}">
                   <ItemsControl.GroupStyle>
@@ -3589,6 +3590,11 @@
                                                     <StackPanel
                                                       Orientation="Horizontal">
                                                       <TextBlock
+                                                        FontWeight="Bold"
+                                                        Text="{Binding State}" />
+                                                      <TextBlock
+                                                        Text=" : " />
+                                                      <TextBlock
                                                         Text="{Binding Name}" />
                                                       <TextBlock
                                                         Text=" : " />
@@ -3636,6 +3642,11 @@
                                                                   <StackPanel>
                                                                     <StackPanel
                                                                       Orientation="Horizontal">
+                                                                      <TextBlock
+                                                                        FontWeight="Bold"
+                                                                        Text="{Binding State}" />
+                                                                      <TextBlock
+                                                                        Text=" : " />
                                                                       <TextBlock
                                                                         Text="{Binding Name}" />
                                                                       <TextBlock

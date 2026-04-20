@@ -1,0 +1,89 @@
+﻿<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:converter="clr-namespace:NMKApp.UITheme.Converters">
+  <converter:ConverterObjectNullToVisibility
+    x:Key="ObjectNullConverter"
+    TrueValue="Visible"
+    FalseValue="Collapsed" />
+  <converter:ConverterObjectNullToVisibility
+    x:Key="ObjectNullConverterReverse"
+    TrueValue="Collapsed"
+    FalseValue="Visible" />
+  <converter:ConverterBoolReverse
+    x:Key="BoolReverseConverter" />
+  <converter:ConverterCountToVisibility
+    x:Key="CountConverter"
+    TrueValue="Visible"
+    FalseValue="Collapsed" />
+  <converter:ConverterNullToVisibility
+    x:Key="NullConverter"
+    TrueValue="Visible"
+    FalseValue="Collapsed" />
+  <converter:ConverterBoolToVisibility
+    x:Key="BoolConverterHidden"
+    TrueValue="Visible"
+    FalseValue="Hidden" />
+  <converter:ConverterBoolToVisibility
+    x:Key="BoolConverterHiddenReverse"
+    TrueValue="Hidden"
+    FalseValue="Visible" />
+  <converter:ConverterBoolToVisibility
+    x:Key="BoolConverter"
+    TrueValue="Visible"
+    FalseValue="Collapsed" />
+  <converter:ConverterBoolToVisibility
+    x:Key="BoolConverterReverse"
+    TrueValue="Collapsed"
+    FalseValue="Visible" />
+  <converter:ConverterHasValueToVisibility
+    x:Key="HasValueConverter"
+    TrueValue="Visible"
+    FalseValue="Collapsed" />
+  <converter:ConverterHasValueToVisibility
+    x:Key="HasValueConverterReverse"
+    TrueValue="Collapsed"
+    FalseValue="Visible" />
+  <converter:ConverterEndAngleToValue
+    x:Key="EndAngleConverter" />
+  <converter:ConverterBoolToDouble
+    x:Key="BoolToDoubleConverter"
+    TrueValue="20"
+    FalseValue="0" />
+  <converter:ConverterMultiBoolToBool
+    x:Key="MultiBoolToBoolConverter"
+    TrueValue="True"
+    FalseValue="False" />
+  <converter:ConverterMultiBoolToDouble
+    x:Key="MultiBoolOrToDoubleConverter"
+    State="Or"
+    Value="20" />
+  <converter:ConverterMultiBoolToDouble
+    x:Key="MultiBoolAndToDoubleConverter"
+    State="And"
+    Value="20" />
+  <converter:ConverterMultiBoolToVisibility
+    x:Key="ConverterMultiBoolToVisibilityAnd"
+    State="And"
+    TrueValue="Visible"
+    FalseValue="Collapsed" />
+  <converter:ConverterMultiBoolToVisibility
+    x:Key="ConverterMultiBoolToVisibilityAndReverse"
+    State="And"
+    TrueValue="Collapsed"
+    FalseValue="Visible" />
+  <converter:ConverterMultiBoolToVisibility
+    x:Key="ConverterMultiBoolToVisibilityOr"
+    State="Or"
+    TrueValue="Visible"
+    FalseValue="Collapsed" />
+  <converter:ConverterMultiBoolToVisibility
+    x:Key="ConverterMultiBoolToVisibilityOrReverse"
+    State="Or"
+    TrueValue="Collapsed"
+    FalseValue="Visible" />
+  <converter:ConverterVisibilityReverse
+    x:Key="VisibilityReverse"
+    TrueValue="Visible"
+    FalseValue="Collapsed" />
+</ResourceDictionary>

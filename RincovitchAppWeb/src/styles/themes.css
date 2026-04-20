@@ -1,0 +1,17 @@
+:root[data-theme="light"] {
+  --text: #1c2430;
+  --muted: #5e6c80;
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --surface-2: #edf1f8;
+  --border: #dbe2ef;
+}
+
+:root[data-theme="dark"] {
+  --text: #e7ecf7;
+  --muted: #94a2b9;
+  --bg: #121723;
+  --surface: #1a2130;
+  --surface-2: #20283a;
+  --border: #2b354b;
+}
