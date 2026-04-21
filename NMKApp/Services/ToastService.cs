@@ -34,6 +34,12 @@ public class ToastService : IToastService
       .Show();
   }
 
+  public void ShowTaskComplete(string taskId, string taskName)
+    => Show("Task Complete", taskName, taskId);
+
+  public void ShowNewNotification(string taskId, string message)
+    => Show("New Notification", message, taskId);
+
   private static void CreateShortcutIfNeeded()
   {
     string shortcutPath = Path.Combine(

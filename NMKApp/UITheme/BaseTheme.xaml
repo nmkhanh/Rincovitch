@@ -9,6 +9,8 @@
       Source="pack://application:,,,/NMKApp;component/UITheme/Converter.xaml" />
     <!-- Controls -->
     <ResourceDictionary
+      Source="pack://application:,,,/NMKApp;component/UITheme/Controls/Button.xaml" />
+    <ResourceDictionary
       Source="pack://application:,,,/NMKApp;component/UITheme/Controls/CheckBox.xaml" />
     <ResourceDictionary
       Source="pack://application:,,,/NMKApp;component/UITheme/Controls/ProgressBar.xaml" />

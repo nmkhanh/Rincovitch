@@ -14,7 +14,7 @@ public partial class TemporaryViewModel : ObservableObject
   private readonly ISupabaseService _supabaseService;
   private MainWindowViewModel? _parent;
 
-  public ListCollectionView? TasksTemporaryCollection { get; set; }
+  [ObservableProperty] private ListCollectionView? _tasksTemporaryCollection;
 
   public TemporaryViewModel(ISupabaseService supabaseService)
   {

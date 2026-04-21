@@ -15,8 +15,8 @@ public partial class TimelineViewModel : ObservableObject
 {
   private MainWindowViewModel? _parent;
 
-  public ListCollectionView? TasksUserCollection { get; set; }
-  public ListCollectionView? DaysWeekCollection { get; set; }
+  [ObservableProperty] private ListCollectionView? _tasksUserCollection;
+  [ObservableProperty] private ListCollectionView? _daysWeekCollection;
 
   [ObservableProperty] private DateTime _minDay;
   [ObservableProperty] private DateTime _maxDay;

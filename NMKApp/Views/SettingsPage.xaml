@@ -1,3 +1,4 @@
+<!-- SettingsPage.xaml — Version management and app configuration (DataContext: SettingsViewModel) -->
 <UserControl
   x:Class="NMKApp.Views.SettingsPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,12 +8,111 @@
   mc:Ignorable="d"
   d:DesignHeight="600"
   d:DesignWidth="800">
-  <Grid>
-    <!-- TODO: Migrate Settings section from RincovitchApp MainWindow.xaml -->
-    <TextBlock
-      Text="Settings — Version management and app configuration"
-      VerticalAlignment="Center"
-      HorizontalAlignment="Center"
-      Opacity="0.5" />
-  </Grid>
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="24 20" MaxWidth="560">
+
+      <!-- Section: Version Info -->
+      <TextBlock Text="Version Management" FontSize="16" FontWeight="SemiBold"
+                 Margin="0 0 0 12"/>
+
+      <Border Background="{DynamicResource SecondaryBackgroundBrush}"
+              BorderBrush="{DynamicResource PrimaryBorderBrush}"
+              BorderThickness="1" CornerRadius="6"
+              Padding="16" Margin="0 0 0 16">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+
+          <!-- Current version -->
+          <StackPanel Grid.Column="0">
+            <TextBlock Text="Current Version" FontSize="12" Opacity="0.5"/>
+            <TextBlock FontSize="22" FontWeight="Bold"
+                       Text="{Binding DataContext.VersionCurrent.Version, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <TextBlock FontSize="11" Opacity="0.5"
+                       Text="{Binding DataContext.VersionCurrent.CreateAt, RelativeSource={RelativeSource AncestorType=Window}, StringFormat=dd/MM/yyyy HH:mm}"/>
+          </StackPanel>
+
+          <!-- Latest version -->
+          <StackPanel Grid.Column="1">
+            <TextBlock Text="Latest Released" FontSize="12" Opacity="0.5"/>
+            <TextBlock FontSize="22" FontWeight="Bold"
+                       Text="{Binding DataContext.VersionLast.Version, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <TextBlock FontSize="11" Opacity="0.5"
+                       Text="{Binding DataContext.VersionLast.CreateAt, RelativeSource={RelativeSource AncestorType=Window}, StringFormat=dd/MM/yyyy HH:mm}"/>
+          </StackPanel>
+        </Grid>
+      </Border>
+
+      <!-- Update available banner -->
+      <Border CornerRadius="6" Padding="12 10" Margin="0 0 0 16"
+              Background="#1565c0">
+        <Border.Style>
+          <Style TargetType="Border">
+            <Style.Triggers>
+              <DataTrigger Binding="{Binding DataContext.IsVersionUpdate, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
+                <Setter Property="Visibility" Value="Collapsed"/>
+              </DataTrigger>
+            </Style.Triggers>
+          </Style>
+        </Border.Style>
+        <TextBlock Text="⚠️ A new version is available. Use the update button below to apply."
+                   FontSize="12" Foreground="White"/>
+      </Border>
+
+      <!-- Version action buttons -->
+      <WrapPanel Margin="0 0 0 24">
+        <Button Content="Select Version File"
+                Command="{Binding FileVersionSelectCommand}"
+                Style="{StaticResource ButtonSecondaryStyle}"
+                Margin="0 0 8 0"/>
+        <Button Content="Upload Version"
+                Command="{Binding FileVersionUploadCommand}"
+                Style="{StaticResource ButtonPrimaryStyle}"
+                Margin="0 0 8 0"
+                Visibility="{Binding DataContext.RoleVisible.VisibleAdmin, RelativeSource={RelativeSource AncestorType=Window}}"/>
+        <Button Content="Update Now"
+                Command="{Binding FileVersionUpdateCommand}"
+                Style="{StaticResource ButtonSuccessStyle}"/>
+      </WrapPanel>
+
+      <Separator Margin="0 0 0 20"/>
+
+      <!-- Section: Account -->
+      <TextBlock Text="Signed-in Account" FontSize="16" FontWeight="SemiBold"
+                 Margin="0 0 0 12"/>
+
+      <Border Background="{DynamicResource SecondaryBackgroundBrush}"
+              BorderBrush="{DynamicResource PrimaryBorderBrush}"
+              BorderThickness="1" CornerRadius="6"
+              Padding="16" Margin="0 0 0 16">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="48"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Border Width="40" Height="40" CornerRadius="20"
+                  Background="{Binding DataContext.CurrentUser.Color, RelativeSource={RelativeSource AncestorType=Window}}">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
+                       FontSize="18" FontWeight="Bold" Foreground="White"
+                       Text="{Binding DataContext.CurrentUser.Name[0], RelativeSource={RelativeSource AncestorType=Window}}"/>
+          </Border>
+          <StackPanel Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock FontSize="14" FontWeight="SemiBold"
+                       Text="{Binding DataContext.CurrentUser.Name, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <TextBlock FontSize="12" Opacity="0.6"
+                       Text="{Binding DataContext.CurrentUser.Email, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            <TextBlock FontSize="11" Opacity="0.5">
+              <Run Text="Role: "/>
+              <Run Text="{Binding DataContext.CurrentUser.Role, RelativeSource={RelativeSource AncestorType=Window}}"/>
+              <Run Text="  ·  Team: "/>
+              <Run Text="{Binding DataContext.CurrentUser.Team, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </TextBlock>
+          </StackPanel>
+        </Grid>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
 </UserControl>

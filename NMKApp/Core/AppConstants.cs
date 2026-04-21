@@ -6,13 +6,13 @@ namespace NMKApp.Core;
 public static class AppConstants
 {
   // Supabase
-  public const string SupabaseUrl = ""; // TODO: Move to appsettings or environment variable
-  public const string SupabaseKey = ""; // TODO: Move to appsettings or environment variable
+  public const string SupabaseUrl = "https://ondwkhoelyfpzugwyqnd.supabase.co";
+  public const string SupabaseKey = "sb_publishable_lkCPpfLoeGVUIgIm0nFJkQ_ltk_pUeY";
 
-  // Microsoft Graph / MSAL
-  public const string MsalClientId = ""; // TODO: Configure
-  public const string MsalTenantId = ""; // TODO: Configure
-  public static readonly string[] MsalScopes = ["Mail.Send", "Mail.ReadWrite", "User.Read"];
+  // Microsoft Graph / MSAL (Azure AD App Registration)
+  public const string MsalClientId = "30a2d671-3ac4-4b85-b799-fdef947dae3c";
+  public const string MsalTenantId = "common";
+  public static readonly string[] MsalScopes = ["User.Read", "Mail.Send"];
 
   // Toast
   public const string ToastAppId = "NMKApp.TaskManager.WPF";

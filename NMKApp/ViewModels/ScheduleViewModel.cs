@@ -15,8 +15,8 @@ public partial class ScheduleViewModel : ObservableObject
 {
   private MainWindowViewModel? _parent;
 
-  public ListCollectionView? DaysWeekCollectionSchedules { get; set; }
-  public ListCollectionView? TasksUserCollectionAdminSchedule { get; set; }
+  [ObservableProperty] private ListCollectionView? _daysWeekCollectionSchedules;
+  [ObservableProperty] private ListCollectionView? _tasksUserCollectionAdminSchedule;
 
   public ObservableCollection<DayModel> DaysSchedules { get; set; } = [];
 

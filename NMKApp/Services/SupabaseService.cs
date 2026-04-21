@@ -17,7 +17,11 @@ public class SupabaseService : ISupabaseService
 
   public async Task InitializeAsync()
   {
-    var options = new SupabaseOptions { AutoRefreshToken = true };
+    var options = new SupabaseOptions
+    {
+      AutoRefreshToken = true,
+      AutoConnectRealtime = true   // establishes WebSocket before any Channel() call
+    };
     _client = new Client(AppConstants.SupabaseUrl, AppConstants.SupabaseKey, options);
     await _client.InitializeAsync();
   }

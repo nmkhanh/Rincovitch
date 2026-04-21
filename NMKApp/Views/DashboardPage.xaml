@@ -7,15 +7,267 @@
   xmlns:theme="clr-namespace:NMKApp.UITheme"
   xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
   mc:Ignorable="d"
-  d:DesignHeight="600"
-  d:DesignWidth="800">
+  d:DesignHeight="700"
+  d:DesignWidth="1000">
+
   <Grid>
-    <!-- TODO: Migrate Dashboard section from RincovitchApp MainWindow.xaml -->
-    <!-- Task list grouped by project, with action buttons -->
-    <TextBlock
-      Text="Dashboard — Task overview grouped by project"
-      VerticalAlignment="Center"
-      HorizontalAlignment="Center"
-      Opacity="0.5" />
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!--#region Toolbar -->
+    <Border Grid.Row="0" Background="{DynamicResource SecondaryBackgroundBrush}"
+            BorderThickness="0 0 0 1" BorderBrush="{DynamicResource PrimaryBorderBrush}"
+            Padding="12 6">
+      <WrapPanel>
+        <!-- New Task -->
+        <Button Content="New Task"
+                Command="{Binding TaskNewCommand}"
+                Style="{StaticResource ButtonPrimaryStyle}"
+                Margin="0 0 6 0"/>
+
+        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="4 0"/>
+
+        <!-- Status filters -->
+        <ItemsControl ItemsSource="{Binding DataContext.FiltersStatus, RelativeSource={RelativeSource AncestorType=Window}}"
+                      VerticalAlignment="Center">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <CheckBox Content="{Binding Name}"
+                        IsChecked="{Binding IsChecked}"
+                        Margin="0 0 8 0"
+                        VerticalAlignment="Center"
+                        FontSize="12"/>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="4 0"/>
+
+        <!-- Assigned To / By Me toggle -->
+        <ToggleButton Content="Assigned To Me"
+                      IsChecked="{Binding DataContext.IsAssignedTo, RelativeSource={RelativeSource AncestorType=Window}}"
+                      Style="{StaticResource BaseToggleButton}"
+                      Margin="0 0 6 0"/>
+
+        <!-- Month / Year filter -->
+        <ComboBox Width="80" Height="28"
+                  SelectedItem="{Binding DataContext.FilterMonth, RelativeSource={RelativeSource AncestorType=Window}}"
+                  Margin="0 0 4 0">
+          <ComboBoxItem Content="All" Tag="0"/>
+          <ComboBoxItem Content="Jan" Tag="1"/>
+          <ComboBoxItem Content="Feb" Tag="2"/>
+          <ComboBoxItem Content="Mar" Tag="3"/>
+          <ComboBoxItem Content="Apr" Tag="4"/>
+          <ComboBoxItem Content="May" Tag="5"/>
+          <ComboBoxItem Content="Jun" Tag="6"/>
+          <ComboBoxItem Content="Jul" Tag="7"/>
+          <ComboBoxItem Content="Aug" Tag="8"/>
+          <ComboBoxItem Content="Sep" Tag="9"/>
+          <ComboBoxItem Content="Oct" Tag="10"/>
+          <ComboBoxItem Content="Nov" Tag="11"/>
+          <ComboBoxItem Content="Dec" Tag="12"/>
+        </ComboBox>
+
+        <CheckBox Content="Today"
+                  IsChecked="{Binding DataContext.FilterToday, RelativeSource={RelativeSource AncestorType=Window}}"
+                  VerticalAlignment="Center" Margin="6 0 0 0"/>
+      </WrapPanel>
+    </Border>
+    <!--#endregion-->
+
+    <!--#region Task List -->
+    <ListView Grid.Row="1"
+              ItemsSource="{Binding TasksProjectCollection}"
+              SelectionChanged="ListView_SelectionChanged"
+              BorderThickness="0"
+              Background="Transparent"
+              VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+      <ListView.GroupStyle>
+        <GroupStyle>
+          <GroupStyle.HeaderTemplate>
+            <DataTemplate>
+              <Border Background="{DynamicResource SecondaryBackgroundBrush}"
+                      BorderThickness="0 0 0 1"
+                      BorderBrush="{DynamicResource PrimaryBorderBrush}"
+                      Padding="12 6">
+                <TextBlock Text="{Binding Name.Name}"
+                           FontWeight="SemiBold"
+                           FontSize="13"/>
+              </Border>
+            </DataTemplate>
+          </GroupStyle.HeaderTemplate>
+        </GroupStyle>
+      </ListView.GroupStyle>
+
+      <ListView.ItemContainerStyle>
+        <Style TargetType="ListViewItem">
+          <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+          <Setter Property="Padding" Value="0"/>
+          <Setter Property="BorderThickness" Value="0 0 0 1"/>
+          <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBorderBrush}"/>
+        </Style>
+      </ListView.ItemContainerStyle>
+
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <Grid Margin="12 8" ToolTip="{Binding Name}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="32"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Status indicator -->
+            <Border Grid.Column="0" Width="24" Height="24"
+                    CornerRadius="12"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+              <Border.Style>
+                <Style TargetType="Border">
+                  <Setter Property="Background" Value="#2196F3"/>
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding Status}" Value="0">
+                      <Setter Property="Background" Value="#4CAF50"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Status}" Value="1">
+                      <Setter Property="Background" Value="#FF9800"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Status}" Value="2">
+                      <Setter Property="Background" Value="#9C27B0"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Status}" Value="3">
+                      <Setter Property="Background" Value="#2196F3"/>
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Border.Style>
+              <TextBlock Text="{Binding State}"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         FontSize="11" Foreground="White"/>
+            </Border>
+
+            <!-- Task name + user -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8 0">
+              <TextBlock Text="{Binding OnlyName}"
+                         FontSize="13" FontWeight="Medium"
+                         TextTrimming="CharacterEllipsis"/>
+              <TextBlock Text="{Binding User.Name}"
+                         FontSize="11" Opacity="0.5"/>
+            </StackPanel>
+
+            <!-- Dates -->
+            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+              <TextBlock FontSize="11" Opacity="0.5">
+                <Run Text="Start: "/>
+                <Run Text="{Binding DateStart, StringFormat=dd/MM/yy}"/>
+              </TextBlock>
+              <TextBlock FontSize="11" Opacity="0.5">
+                <Run Text="Due:  "/>
+                <Run Text="{Binding DateEnd, StringFormat=dd/MM/yy}"/>
+              </TextBlock>
+            </StackPanel>
+
+            <!-- Project key -->
+            <TextBlock Grid.Column="3"
+                       Text="{Binding Project.Key}"
+                       VerticalAlignment="Center"
+                       FontSize="12" Opacity="0.5"
+                       Margin="8 0"/>
+
+            <!-- Action buttons -->
+            <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+              <Button Content="Start"
+                      Command="{Binding DataContext.TaskStartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      CommandParameter="{Binding}"
+                      Width="52" Height="24" FontSize="11"
+                      Margin="2 0">
+                <Button.Style>
+                  <Style TargetType="Button" BasedOn="{StaticResource ButtonSecondaryStyle}">
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding Status}" Value="1">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Status}" Value="0">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Status}" Value="2">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </Button.Style>
+              </Button>
+              <Button Content="Done"
+                      Command="{Binding DataContext.TaskCompleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      CommandParameter="{Binding}"
+                      Width="52" Height="24" FontSize="11"
+                      Margin="2 0">
+                <Button.Style>
+                  <Style TargetType="Button" BasedOn="{StaticResource ButtonSuccessStyle}">
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding Status}" Value="0">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Status}" Value="2">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding IsAssignedTo}" Value="False">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </Button.Style>
+              </Button>
+              <Button Content="Check"
+                      Command="{Binding DataContext.TaskCheckedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      CommandParameter="{Binding}"
+                      Width="52" Height="24" FontSize="11"
+                      Margin="2 0">
+                <Button.Style>
+                  <Style TargetType="Button" BasedOn="{StaticResource ButtonSecondaryStyle}">
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding Status}" Value="2">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Status}" Value="3">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding IsAssignedTo}" Value="True">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </Button.Style>
+              </Button>
+              <Button Content="Edit"
+                      Command="{Binding DataContext.TaskEditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      CommandParameter="{Binding}"
+                      Width="40" Height="24" FontSize="11"
+                      Style="{StaticResource ButtonSecondaryStyle}"
+                      Margin="2 0"/>
+              <Button Content="✕"
+                      Command="{Binding DataContext.TaskDeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      CommandParameter="{Binding}"
+                      Width="28" Height="24" FontSize="11"
+                      Style="{StaticResource ButtonDangerStyle}"
+                      Margin="2 0"/>
+            </StackPanel>
+          </Grid>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <!--#endregion-->
   </Grid>
 </UserControl>

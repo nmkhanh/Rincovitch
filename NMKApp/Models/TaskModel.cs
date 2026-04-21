@@ -24,6 +24,7 @@ public partial class TaskModel : ObservableObject
   [ObservableProperty] private double _width;
   [ObservableProperty] private bool _isAssignedTo;
   [ObservableProperty] private bool _isProgress;
+  [ObservableProperty] private bool _isChecked;
   [ObservableProperty] private bool _isVisible = true;
   [ObservableProperty] private bool _statusVisible = true;
   [ObservableProperty] private bool _stateAccepted;

@@ -44,14 +44,14 @@ public partial class MainWindowViewModel : ObservableObject
   public LeaveCollection LeaveAssignTo { get; } = new();
 
   // ─── Collection Views ───────────────────────────────────────────
-  public ListCollectionView? UsersCollection { get; set; }
-  public ListCollectionView? UsersCollectionRole { get; set; }
-  public ListCollectionView? ProjectsCollection { get; set; }
-  public ListCollectionView? NotifysCollection { get; set; }
-  public ListCollectionView? NotifysCollectionCount { get; set; }
-  public ListCollectionView? LeavesCollection { get; set; }
-  public ListCollectionView? LeavesAssignToCollection { get; set; }
-  public ListCollectionView? LeavesAssignToCollectionCount { get; set; }
+  [ObservableProperty] private ListCollectionView? _usersCollection;
+  [ObservableProperty] private ListCollectionView? _usersCollectionRole;
+  [ObservableProperty] private ListCollectionView? _projectsCollection;
+  [ObservableProperty] private ListCollectionView? _notifysCollection;
+  [ObservableProperty] private ListCollectionView? _notifysCollectionCount;
+  [ObservableProperty] private ListCollectionView? _leavesCollection;
+  [ObservableProperty] private ListCollectionView? _leavesAssignToCollection;
+  [ObservableProperty] private ListCollectionView? _leavesAssignToCollectionCount;
 
   // ─── Child ViewModels ───────────────────────────────────────────
   [ObservableProperty] private DashboardViewModel? _dashboardVM;
@@ -90,7 +90,17 @@ public partial class MainWindowViewModel : ObservableObject
     IRealtimeService realtimeService,
     IBackupService backupService,
     INavigationService navigationService,
-    IToastService toastService)
+    IToastService toastService,
+    DashboardViewModel dashboardVM,
+    TimelineViewModel timelineVM,
+    EmailViewModel emailVM,
+    UserViewModel userVM,
+    ProjectViewModel projectVM,
+    TemporaryViewModel temporaryVM,
+    NotifyViewModel notifyVM,
+    LeaveViewModel leaveVM,
+    ScheduleViewModel scheduleVM,
+    SettingsViewModel settingsVM)
   {
     _authService = authService;
     _supabaseService = supabaseService;
@@ -98,6 +108,18 @@ public partial class MainWindowViewModel : ObservableObject
     _backupService = backupService;
     _navigationService = navigationService;
     _toastService = toastService;
+
+    // Assign child VMs immediately so bindings are not null from the start
+    DashboardVM = dashboardVM;
+    TimelineVM = timelineVM;
+    EmailVM = emailVM;
+    UserVM = userVM;
+    ProjectVM = projectVM;
+    TemporaryVM = temporaryVM;
+    NotifyVM = notifyVM;
+    LeaveVM = leaveVM;
+    ScheduleVM = scheduleVM;
+    SettingsVM = settingsVM;
   }
 
   /// <summary>
@@ -107,19 +129,50 @@ public partial class MainWindowViewModel : ObservableObject
   [RelayCommand]
   private async Task LoadAsync()
   {
-    var auth = await _authService.AuthenticateAsync();
-    if (!auth.IsLoggedIn)
+    try
     {
-      MessageBox.Show(
-        "Please sign in to Outlook / Microsoft account before using this application.",
-        "Not signed in", MessageBoxButton.OK, MessageBoxImage.Warning);
-      Application.Current.Shutdown();
-      return;
-    }
+      var auth = await _authService.AuthenticateAsync();
+      if (!auth.IsLoggedIn)
+      {
+        var dlg = new Views.Dialogs.LoginEmailDialog();
+        if (dlg.ShowDialog() == true && !string.IsNullOrWhiteSpace(dlg.Email))
+          auth = (dlg.Email, string.Empty, true);
+        else
+        {
+          MessageBox.Show(
+            "Cannot sign in. Please ensure you are signed in to a Microsoft/Outlook account on this machine.",
+            "Sign-in required", MessageBoxButton.OK, MessageBoxImage.Warning);
+          Application.Current.Shutdown();
+          return;
+        }
+      }
 
-    await LoadDataAsync(auth.Email, auth.Avatar);
-    InitializeCollectionViews();
-    await SubscribeRealtimeAsync();
+      await _supabaseService.InitializeAsync();
+      await LoadDataAsync(auth.Email, auth.Avatar);
+      InitializeCollectionViews();
+      InitializeChildViewModels();
+      await SubscribeRealtimeAsync();
+    }
+    catch (Exception ex)
+    {
+      System.Diagnostics.Debug.WriteLine($"[Load] FATAL: {ex}");
+      MessageBox.Show($"Error loading app:\n\n{ex.Message}\n\nCheck your Supabase connection and credentials.",
+        "Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+  }
+
+  private void InitializeChildViewModels()
+  {
+    DashboardVM?.Initialize(this);
+    TimelineVM?.Initialize(this);
+    EmailVM?.Initialize(this);
+    UserVM?.Initialize(this);
+    ProjectVM?.Initialize(this);
+    TemporaryVM?.Initialize(this);
+    NotifyVM?.Initialize(this);
+    LeaveVM?.Initialize(this);
+    ScheduleVM?.Initialize(this);
+    SettingsVM?.Initialize(this);
   }
 
   private async Task LoadDataAsync(string email, string avatar)
@@ -171,6 +224,23 @@ public partial class MainWindowViewModel : ObservableObject
       VersionLast = versionsResult.Data.OrderByDescending(v => v.CreateAt).First();
       VersionCurrent = VersionLast;
     }
+
+    // Load leaves
+    var leavesResult = await _supabaseService.GetLeavesAsync();
+    if (leavesResult.Success)
+    {
+      foreach (var leave in leavesResult.Data!)
+      {
+        leave.User = Users.Items.FirstOrDefault(u => u.Email.Equals(leave.CreateBy, StringComparison.OrdinalIgnoreCase));
+        leave.UserCreateBy = leave.User;
+        leave.UserCC = Users.Items.FirstOrDefault(u => u.Email.Equals(leave.CC, StringComparison.OrdinalIgnoreCase));
+
+        if (CurrentUser != null && leave.CreateBy.Equals(CurrentUser.Email, StringComparison.OrdinalIgnoreCase))
+          Leaves.Items.Add(leave);
+        if (CurrentUser != null && leave.SendTo.Equals(CurrentUser.Email, StringComparison.OrdinalIgnoreCase))
+          LeaveAssignTo.Items.Add(leave);
+      }
+    }
   }
 
   private void InitializeCollectionViews()
@@ -187,13 +257,21 @@ public partial class MainWindowViewModel : ObservableObject
 
   private async Task SubscribeRealtimeAsync()
   {
-    await _realtimeService.SubscribeAsync(
-      onTaskUpdated: task => Application.Current.Dispatcher.BeginInvoke(() => OnTaskUpdated(task)),
-      onNotifyInserted: notify => Application.Current.Dispatcher.BeginInvoke(() => OnNotifyInserted(notify)),
-      onNotifyUpdated: notify => Application.Current.Dispatcher.BeginInvoke(() => OnNotifyUpdated(notify)),
-      onLeaveUpdated: leave => Application.Current.Dispatcher.BeginInvoke(() => OnLeaveUpdated(leave)),
-      onVersionInserted: version => Application.Current.Dispatcher.BeginInvoke(() => OnVersionInserted(version))
-    );
+    try
+    {
+      await _realtimeService.SubscribeAsync(
+        onTaskUpdated: task => Application.Current.Dispatcher.BeginInvoke(() => OnTaskUpdated(task)),
+        onNotifyInserted: notify => Application.Current.Dispatcher.BeginInvoke(() => OnNotifyInserted(notify)),
+        onNotifyUpdated: notify => Application.Current.Dispatcher.BeginInvoke(() => OnNotifyUpdated(notify)),
+        onLeaveUpdated: leave => Application.Current.Dispatcher.BeginInvoke(() => OnLeaveUpdated(leave)),
+        onVersionInserted: version => Application.Current.Dispatcher.BeginInvoke(() => OnVersionInserted(version))
+      );
+    }
+    catch (Exception ex)
+    {
+      // Realtime failure is non-fatal — app works without live updates
+      System.Diagnostics.Debug.WriteLine($"[Realtime] Subscribe failed: {ex.Message}");
+    }
   }
 
   [RelayCommand]
@@ -205,10 +283,13 @@ public partial class MainWindowViewModel : ObservableObject
       Projects.Items.Clear();
       Tasks.Items.Clear();
       Notifys.Items.Clear();
+      Leaves.Items.Clear();
+      LeaveAssignTo.Items.Clear();
 
       var auth = await _authService.AuthenticateAsync();
       await LoadDataAsync(auth.Email, auth.Avatar);
       RefreshAllViews();
+      InitializeChildViewModels();
     }
     catch (Exception ex)
     {

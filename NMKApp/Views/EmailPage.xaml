@@ -1,3 +1,4 @@
+<!-- EmailPage.xaml — Send task notification emails (DataContext: EmailViewModel) -->
 <UserControl
   x:Class="NMKApp.Views.EmailPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,11 +9,108 @@
   d:DesignHeight="600"
   d:DesignWidth="800">
   <Grid>
-    <!-- TODO: Migrate Email/Request section from RincovitchApp MainWindow.xaml -->
-    <TextBlock
-      Text="Email — Request management"
-      VerticalAlignment="Center"
-      HorizontalAlignment="Center"
-      Opacity="0.5" />
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <!--#region Toolbar -->
+    <Border Grid.Row="0"
+            Background="{DynamicResource SecondaryBackgroundBrush}"
+            BorderThickness="0 0 0 1" BorderBrush="{DynamicResource PrimaryBorderBrush}"
+            Padding="12 6">
+      <WrapPanel>
+        <Button Content="Select All"
+                Command="{Binding SelectAllCommand}"
+                CommandParameter="{x:Static s:Boolean.TrueString}"
+                xmlns:s="clr-namespace:System;assembly=mscorlib"
+                Style="{StaticResource ButtonSecondaryStyle}"
+                Margin="0 0 6 0"/>
+        <Button Content="Deselect All"
+                Command="{Binding SelectAllCommand}"
+                CommandParameter="{x:Static s:Boolean.FalseString}"
+                xmlns:s="clr-namespace:System;assembly=mscorlib"
+                Style="{StaticResource ButtonSecondaryStyle}"
+                Margin="0 0 6 0"/>
+        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="4 0"/>
+        <Button Content="📧 Send Selected"
+                Command="{Binding SendCommand}"
+                Style="{StaticResource ButtonPrimaryStyle}"/>
+      </WrapPanel>
+    </Border>
+    <!--#endregion-->
+
+    <!--#region Task Email List -->
+    <ListView Grid.Row="1"
+              ItemsSource="{Binding TasksEmailCollection}"
+              BorderThickness="0"
+              Background="Transparent"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+      <ListView.ItemContainerStyle>
+        <Style TargetType="ListViewItem">
+          <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+          <Setter Property="Padding" Value="0"/>
+          <Setter Property="BorderThickness" Value="0 0 0 1"/>
+          <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBorderBrush}"/>
+        </Style>
+      </ListView.ItemContainerStyle>
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <Grid Margin="12 8">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="36"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="160"/>
+              <ColumnDefinition Width="120"/>
+              <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Checkbox -->
+            <CheckBox Grid.Column="0" IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                      VerticalAlignment="Center"/>
+
+            <!-- Task Name + Description -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="4 0">
+              <TextBlock Text="{Binding OnlyName}" FontSize="13" FontWeight="Medium"
+                         TextTrimming="CharacterEllipsis"/>
+              <TextBlock Text="{Binding Project.Name}" FontSize="11" Opacity="0.5"/>
+            </StackPanel>
+
+            <!-- Assigned To user -->
+            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+              <TextBlock Text="{Binding User.Name}" FontSize="12"/>
+              <TextBlock Text="{Binding User.Email}" FontSize="10" Opacity="0.5"
+                         TextTrimming="CharacterEllipsis"/>
+            </StackPanel>
+
+            <!-- Start Date -->
+            <TextBlock Grid.Column="3" VerticalAlignment="Center" FontSize="11" Opacity="0.5">
+              <Run Text="Start: "/>
+              <Run Text="{Binding DateStart, StringFormat=dd/MM/yy}"/>
+            </TextBlock>
+
+            <!-- End Date -->
+            <TextBlock Grid.Column="4" VerticalAlignment="Center" FontSize="11" Opacity="0.5">
+              <Run Text="Due: "/>
+              <Run Text="{Binding DateEnd, StringFormat=dd/MM/yy}"/>
+            </TextBlock>
+          </Grid>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <!--#endregion-->
+
+    <!--#region Status Bar -->
+    <Border Grid.Row="2"
+            Background="{DynamicResource SecondaryBackgroundBrush}"
+            BorderThickness="0 1 0 0" BorderBrush="{DynamicResource PrimaryBorderBrush}"
+            Padding="12 6">
+      <TextBlock FontSize="12" Opacity="0.6">
+        <Run Text="Pending requests (assigned tasks not yet accepted): "/>
+        <Run Text="{Binding TasksEmailCollectionCount.Count, Mode=OneWay}" FontWeight="SemiBold"/>
+      </TextBlock>
+    </Border>
+    <!--#endregion-->
   </Grid>
 </UserControl>

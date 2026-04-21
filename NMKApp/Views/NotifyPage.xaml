@@ -1,3 +1,4 @@
+<!-- NotifyPage.xaml — Notifications list (DataContext: NotifyViewModel) -->
 <UserControl
   x:Class="NMKApp.Views.NotifyPage"
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,11 +9,141 @@
   d:DesignHeight="600"
   d:DesignWidth="800">
   <Grid>
-    <!-- TODO: Migrate Notify section from RincovitchApp MainWindow.xaml -->
-    <TextBlock
-      Text="Notifications"
-      VerticalAlignment="Center"
-      HorizontalAlignment="Center"
-      Opacity="0.5" />
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!--#region Toolbar -->
+    <Border Grid.Row="0"
+            Background="{DynamicResource SecondaryBackgroundBrush}"
+            BorderThickness="0 0 0 1" BorderBrush="{DynamicResource PrimaryBorderBrush}"
+            Padding="12 6">
+      <DockPanel>
+        <Button Content="Mark All Read"
+                Command="{Binding ReadAllCommand}"
+                Style="{StaticResource ButtonSecondaryStyle}"
+                Margin="0 0 12 0"/>
+        <TextBlock VerticalAlignment="Center" FontSize="12" Opacity="0.7">
+          <Run Text="Unread: "/>
+          <Run Text="{Binding UnreadCount}" FontWeight="SemiBold"/>
+        </TextBlock>
+      </DockPanel>
+    </Border>
+    <!--#endregion-->
+
+    <!--#region Notification List -->
+    <ListView Grid.Row="1"
+              ItemsSource="{Binding DataContext.NotifysCollection, RelativeSource={RelativeSource AncestorType=Window}}"
+              BorderThickness="0"
+              Background="Transparent"
+              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+      <ListView.ItemContainerStyle>
+        <Style TargetType="ListViewItem">
+          <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+          <Setter Property="Padding" Value="0"/>
+          <Setter Property="BorderThickness" Value="0 0 0 1"/>
+          <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBorderBrush}"/>
+        </Style>
+      </ListView.ItemContainerStyle>
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <Grid Margin="12 10">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="10"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="84"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Unread dot -->
+            <Ellipse Grid.Column="0" Width="7" Height="7"
+                     Fill="#2196F3" VerticalAlignment="Center">
+              <Ellipse.Style>
+                <Style TargetType="Ellipse">
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsRead}" Value="True">
+                      <Setter Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Ellipse.Style>
+            </Ellipse>
+
+            <!-- Title + meta -->
+            <StackPanel Grid.Column="1" Margin="8 0" VerticalAlignment="Center">
+              <TextBlock Text="{Binding Title}"
+                         FontWeight="{Binding FontWeight}"
+                         FontSize="13"
+                         TextTrimming="CharacterEllipsis"/>
+              <TextBlock FontSize="11" Opacity="0.5" Margin="0 2 0 0">
+                <Run Text="From: "/>
+                <Run Text="{Binding CreateBy}"/>
+                <Run Text="  ·  "/>
+                <Run Text="{Binding CreateAt, StringFormat=dd/MM/yyyy HH:mm}"/>
+              </TextBlock>
+            </StackPanel>
+
+            <!-- Type badge -->
+            <Border Grid.Column="2" CornerRadius="4" Padding="6 2" Margin="6 0"
+                    VerticalAlignment="Center">
+              <Border.Style>
+                <Style TargetType="Border">
+                  <Setter Property="Background" Value="#2196F3"/>
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding Type}" Value="1">
+                      <Setter Property="Background" Value="#4CAF50"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Type}" Value="2">
+                      <Setter Property="Background" Value="#FF9800"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Type}" Value="3">
+                      <Setter Property="Background" Value="#9C27B0"/>
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Border.Style>
+              <TextBlock FontSize="10" Foreground="White">
+                <TextBlock.Style>
+                  <Style TargetType="TextBlock">
+                    <Setter Property="Text" Value="Task"/>
+                    <Style.Triggers>
+                      <DataTrigger Binding="{Binding Type}" Value="1">
+                        <Setter Property="Text" Value="Done"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Type}" Value="2">
+                        <Setter Property="Text" Value="Leave"/>
+                      </DataTrigger>
+                      <DataTrigger Binding="{Binding Type}" Value="3">
+                        <Setter Property="Text" Value="Info"/>
+                      </DataTrigger>
+                    </Style.Triggers>
+                  </Style>
+                </TextBlock.Style>
+              </TextBlock>
+            </Border>
+
+            <!-- Mark Read button (hidden when already read) -->
+            <Button Grid.Column="3"
+                    Content="Mark Read"
+                    Command="{Binding DataContext.ReadCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    CommandParameter="{Binding}"
+                    Height="26" FontSize="11"
+                    VerticalAlignment="Center">
+              <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource ButtonSecondaryStyle}">
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsRead}" Value="True">
+                      <Setter Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </Button.Style>
+            </Button>
+          </Grid>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <!--#endregion-->
   </Grid>
 </UserControl>

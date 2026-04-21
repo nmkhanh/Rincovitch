@@ -15,8 +15,8 @@ public partial class EmailViewModel : ObservableObject
   private readonly IMailService _mailService;
   private MainWindowViewModel? _parent;
 
-  public ListCollectionView? TasksEmailCollection { get; set; }
-  public ListCollectionView? TasksEmailCollectionCount { get; set; }
+  [ObservableProperty] private ListCollectionView? _tasksEmailCollection;
+  [ObservableProperty] private ListCollectionView? _tasksEmailCollectionCount;
 
   public EmailViewModel(IMailService mailService)
   {
@@ -26,20 +26,43 @@ public partial class EmailViewModel : ObservableObject
   public void Initialize(MainWindowViewModel parent)
   {
     _parent = parent;
-    // TODO: Migrate email collection views from NMK_M
+    TasksEmailCollection = new ListCollectionView(parent.Tasks.Items);
+    TasksEmailCollection.Filter = obj =>
+      obj is TaskModel t && t.Status == 3 && !t.IsAssignedTo;
+    TasksEmailCollectionCount = new ListCollectionView(parent.Tasks.Items);
+    TasksEmailCollectionCount.Filter = obj =>
+      obj is TaskModel t && t.Status == 3 && !t.IsAssignedTo && !t.StateAccepted;
   }
 
   [RelayCommand]
   private void SelectAll(object? parameter)
   {
-    // TODO: Migrate EmailSelectAllCommandAsync
+    if (_parent == null) return;
+    bool selectAll = parameter is bool b && b;
+    foreach (var task in _parent.Tasks.Items)
+      if (task.Status == 3 && !task.IsAssignedTo)
+        task.IsChecked = selectAll;
   }
 
   [RelayCommand]
   private async Task SendAsync()
   {
-    // TODO: Migrate EmailSendCommandAsync
-    await Task.CompletedTask;
+    if (_parent?.CurrentUser == null) return;
+    var selected = _parent.Tasks.Items
+      .Where(t => t.IsChecked && t.Status == 3 && !t.IsAssignedTo)
+      .ToList();
+    if (selected.Count == 0) return;
+
+    foreach (var task in selected)
+    {
+      if (task.User?.Email == null) continue;
+      await _mailService.SendTaskMailTypedAsync(
+        task.User.Email, task.Name, task.User.Name,
+        string.Empty, task.DateStart, task.DateEnd,
+        _parent.CurrentUser.Name);
+      task.IsChecked = false;
+    }
+    RefreshViews();
   }
 
   public void RefreshViews()
