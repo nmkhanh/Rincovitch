@@ -21,7 +21,7 @@
 
   <Window.TaskbarItemInfo>
     <shell:TaskbarItemInfo
-      Overlay="{Binding TaskbarOverlay}"
+      Overlay="{Binding NmkM.TaskbarOverlay}"
       Description="Bạn có thông báo mới" />
   </Window.TaskbarItemInfo>
 
@@ -45,29 +45,29 @@
       <Grid>
         <StackPanel>
           <!-- Dashboard -->
-          <Grid Visibility="{Binding RoleVisible.VisibleUser}">
+          <Grid Visibility="{Binding NmkM.RoleVisible.VisibleUser}">
             <RadioButton
               GroupName="Navigation"
               Content="Dashboard"
               Name="NavDashboard"
-              IsChecked="{Binding IsDashboard, UpdateSourceTrigger=PropertyChanged}"
+              IsChecked="{Binding NmkM.IsDashboard, UpdateSourceTrigger=PropertyChanged}"
               Style="{StaticResource RadioButtonIconContentVerticalStyle}"
               theme:UI.Icon="HomeOutline" />
           </Grid>
 
           <!-- Timeline -->
           <RadioButton
-            Visibility="{Binding RoleVisible.VisibleUser}"
+            Visibility="{Binding NmkM.RoleVisible.VisibleUser}"
             GroupName="Navigation"
             Content="TimeLine"
             Name="NavTimeline"
             Style="{StaticResource RadioButtonIconContentVerticalStyle}"
             theme:UI.Icon="ChartTimeline" />
 
-          <Separator Visibility="{Binding RoleVisible.VisibleLeader}" />
+          <Separator Visibility="{Binding NmkM.RoleVisible.VisibleLeader}" />
 
           <!-- Email/Request -->
-          <Grid Visibility="{Binding RoleVisible.VisibleLeader}">
+          <Grid Visibility="{Binding NmkM.RoleVisible.VisibleLeader}">
             <RadioButton
               GroupName="Navigation"
               Content="Request"
@@ -76,10 +76,10 @@
               theme:UI.Icon="EmailOutline" />
           </Grid>
 
-          <Separator Visibility="{Binding RoleVisible.VisibleMiddle}" />
+          <Separator Visibility="{Binding NmkM.RoleVisible.VisibleMiddle}" />
 
           <!-- Users -->
-          <Grid Visibility="{Binding RoleVisible.VisibleMiddle}">
+          <Grid Visibility="{Binding NmkM.RoleVisible.VisibleMiddle}">
             <RadioButton
               GroupName="Navigation"
               Content="Users"
@@ -89,7 +89,7 @@
           </Grid>
 
           <!-- Projects -->
-          <Grid Visibility="{Binding RoleVisible.VisibleAdmin}">
+          <Grid Visibility="{Binding NmkM.RoleVisible.VisibleAdmin}">
             <RadioButton
               GroupName="Navigation"
               Content="Projects"
@@ -98,10 +98,10 @@
               theme:UI.Icon="Computer" />
           </Grid>
 
-          <Separator Visibility="{Binding RoleVisible.VisibleLeader}" />
+          <Separator Visibility="{Binding NmkM.RoleVisible.VisibleLeader}" />
 
           <!-- Temporary -->
-          <Grid Visibility="{Binding RoleVisible.VisibleLeader}">
+          <Grid Visibility="{Binding NmkM.RoleVisible.VisibleLeader}">
             <RadioButton
               GroupName="Navigation"
               Content="Temporary"
@@ -113,7 +113,7 @@
 
         <StackPanel VerticalAlignment="Bottom">
           <!-- Notify -->
-          <Grid Visibility="{Binding RoleVisible.VisibleUser}">
+          <Grid Visibility="{Binding NmkM.RoleVisible.VisibleUser}">
             <RadioButton
               GroupName="Navigation"
               Content="Notify"
@@ -125,7 +125,7 @@
           <Separator />
 
           <!-- Leave -->
-          <Grid Visibility="{Binding RoleVisible.VisibleUser}">
+          <Grid Visibility="{Binding NmkM.RoleVisible.VisibleUser}">
             <RadioButton
               GroupName="Navigation"
               Content="Leave"
@@ -136,7 +136,7 @@
 
           <!-- Schedule -->
           <RadioButton
-            Visibility="{Binding RoleVisible.VisibleUser}"
+            Visibility="{Binding NmkM.RoleVisible.VisibleUser}"
             GroupName="Navigation"
             Content="Schedule"
             Name="NavSchedule"
@@ -148,7 +148,7 @@
           <!-- Refresh -->
           <ToggleButton
             Command="{Binding RefreshCommand}"
-            Visibility="{Binding RoleVisible.VisibleUser}"
+            Visibility="{Binding NmkM.RoleVisible.VisibleUser}"
             Content="Refresh"
             Style="{StaticResource ToggleButtonVertical}"
             theme:UI.IconFalse="Sync"
@@ -157,7 +157,7 @@
           <!-- Settings -->
           <RadioButton
             IsChecked="True"
-            Visibility="{Binding RoleVisible.VisibleUser}"
+            Visibility="{Binding NmkM.RoleVisible.VisibleUser}"
             GroupName="Navigation"
             Content="Settings"
             Name="NavSettings"
@@ -172,52 +172,42 @@
     <Grid Grid.Column="1">
       <!-- Dashboard Page -->
       <local:DashboardPage
-        DataContext="{Binding DashboardVM}"
         Visibility="{Binding ElementName=NavDashboard, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Timeline Page -->
       <local:TimelinePage
-        DataContext="{Binding TimelineVM}"
         Visibility="{Binding ElementName=NavTimeline, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Email Page -->
       <local:EmailPage
-        DataContext="{Binding EmailVM}"
         Visibility="{Binding ElementName=NavEmail, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Users Page -->
       <local:UserPage
-        DataContext="{Binding UserVM}"
         Visibility="{Binding ElementName=NavUsers, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Projects Page -->
       <local:ProjectPage
-        DataContext="{Binding ProjectVM}"
         Visibility="{Binding ElementName=NavProjects, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Temporary Page -->
       <local:TemporaryPage
-        DataContext="{Binding TemporaryVM}"
         Visibility="{Binding ElementName=NavTemporary, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Notify Page -->
       <local:NotifyPage
-        DataContext="{Binding NotifyVM}"
         Visibility="{Binding ElementName=NavNotify, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Leave Page -->
       <local:LeavePage
-        DataContext="{Binding LeaveVM}"
         Visibility="{Binding ElementName=NavLeave, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Schedule Page -->
       <local:SchedulePage
-        DataContext="{Binding ScheduleVM}"
         Visibility="{Binding ElementName=NavSchedule, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
 
       <!-- Settings Page -->
       <local:SettingsPage
-        DataContext="{Binding SettingsVM}"
         Visibility="{Binding ElementName=NavSettings, Path=IsChecked, Converter={StaticResource BoolConverter}}" />
     </Grid>
     <!--#endregion-->

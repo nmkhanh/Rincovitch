@@ -35,7 +35,7 @@
                 Margin="0 0 6 0"/>
         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="4 0"/>
         <Button Content="📧 Send Selected"
-                Command="{Binding SendCommand}"
+                Command="{Binding EmailSendCommand}"
                 Style="{StaticResource ButtonPrimaryStyle}"/>
       </WrapPanel>
     </Border>
@@ -43,7 +43,7 @@
 
     <!--#region Task Email List -->
     <ListView Grid.Row="1"
-              ItemsSource="{Binding TasksEmailCollection}"
+              ItemsSource="{Binding NmkM.TasksEmailCollection}"
               BorderThickness="0"
               Background="Transparent"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -108,7 +108,7 @@
             Padding="12 6">
       <TextBlock FontSize="12" Opacity="0.6">
         <Run Text="Pending requests (assigned tasks not yet accepted): "/>
-        <Run Text="{Binding TasksEmailCollectionCount.Count, Mode=OneWay}" FontWeight="SemiBold"/>
+        <Run Text="{Binding NmkM.TasksEmailCollectionCount.Count, Mode=OneWay}" FontWeight="SemiBold"/>
       </TextBlock>
     </Border>
     <!--#endregion-->

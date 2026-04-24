@@ -22,7 +22,7 @@
             Padding="12 6">
       <WrapPanel>
         <Button Content="New Item"
-                Command="{Binding AddTaskCommand}"
+                Command="{Binding TemporaryAddTaskCommand}"
                 Style="{StaticResource ButtonPrimaryStyle}"
                 Margin="0 0 6 0"/>
         <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="4 0"/>
@@ -42,7 +42,7 @@
 
     <!--#region Temporary Task List -->
     <ListView Grid.Row="1"
-              ItemsSource="{Binding TasksTemporaryCollection}"
+              ItemsSource="{Binding NmkM.TasksTemporaryCollection}"
               BorderThickness="0"
               Background="Transparent"
               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -96,7 +96,7 @@
             <!-- Actions -->
             <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
               <Button Content="✕"
-                      Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      Command="{Binding DataContext.TemporaryDeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                       CommandParameter="{Binding}"
                       Width="28" Height="26" FontSize="11"
                       Style="{StaticResource ButtonDangerStyle}"
@@ -115,13 +115,13 @@
             Padding="12 6">
       <DockPanel>
         <Button Content="Save to Tasks"
-                Command="{Binding SaveCommand}"
+                Command="{Binding TemporarySaveCommand}"
                 DockPanel.Dock="Right"
                 Style="{StaticResource ButtonSuccessStyle}"
                 Margin="6 0 0 0"/>
         <TextBlock VerticalAlignment="Center" FontSize="12" Opacity="0.6">
           <Run Text="Items: "/>
-          <Run Text="{Binding TasksTemporaryCollection.Count, Mode=OneWay}" FontWeight="SemiBold"/>
+          <Run Text="{Binding NmkM.TasksTemporaryCollection.Count, Mode=OneWay}" FontWeight="SemiBold"/>
         </TextBlock>
       </DockPanel>
     </Border>

@@ -22,11 +22,11 @@
       <WrapPanel>
         <TextBlock Text="From" VerticalAlignment="Center" Margin="0 0 6 0" FontSize="12"/>
         <DatePicker Width="120" Height="28"
-                    SelectedDate="{Binding MinDay, Mode=TwoWay}"
+                    SelectedDate="{Binding NmkM.MinDay, Mode=TwoWay}"
                     Margin="0 0 8 0"/>
         <TextBlock Text="To" VerticalAlignment="Center" Margin="0 0 6 0" FontSize="12"/>
         <DatePicker Width="120" Height="28"
-                    SelectedDate="{Binding MaxDay, Mode=TwoWay}"
+                    SelectedDate="{Binding NmkM.MaxDay, Mode=TwoWay}"
                     Margin="0 0 8 0"/>
         <Button Content="Apply"
                 Command="{Binding FilterDayCommand}"
@@ -52,7 +52,7 @@
           </ItemsControl.ItemTemplate>
         </ItemsControl>
         <ToggleButton Content="Assigned To Me"
-                      IsChecked="{Binding DataContext.IsAssignedTo, RelativeSource={RelativeSource AncestorType=Window}}"
+                      IsChecked="{Binding NmkM.IsAssignedTo, RelativeSource={RelativeSource AncestorType=Window}}"
                       Style="{StaticResource BaseToggleButton}"
                       Margin="8 0 0 0"/>
       </WrapPanel>
@@ -69,7 +69,7 @@
 
       <!-- LEFT: Task list per user -->
       <ListView Grid.Column="0"
-                ItemsSource="{Binding TasksUserCollection}"
+                ItemsSource="{Binding NmkM.TasksUserCollection}"
                 BorderThickness="0"
                 Background="Transparent"
                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -147,7 +147,7 @@
         <ScrollViewer HorizontalScrollBarVisibility="Hidden"
                       VerticalScrollBarVisibility="Disabled"
                       Name="DayHeaderScroll">
-          <ItemsControl ItemsSource="{Binding Days}">
+            <ItemsControl ItemsSource="{Binding NmkM.Days}">
             <ItemsControl.ItemsPanel>
               <ItemsPanelTemplate>
                 <StackPanel Orientation="Horizontal"/>
@@ -176,7 +176,7 @@
         <ScrollViewer Grid.Row="1"
                       HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto">
-          <ItemsControl ItemsSource="{Binding TasksUserCollection}">
+          <ItemsControl ItemsSource="{Binding NmkM.TasksUserCollection}">
             <ItemsControl.GroupStyle>
               <GroupStyle>
                 <GroupStyle.HeaderTemplate>

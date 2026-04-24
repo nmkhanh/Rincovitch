@@ -52,13 +52,13 @@
 
         <!-- Assigned To / By Me toggle -->
         <ToggleButton Content="Assigned To Me"
-                      IsChecked="{Binding DataContext.IsAssignedTo, RelativeSource={RelativeSource AncestorType=Window}}"
+                      IsChecked="{Binding NmkM.IsAssignedTo, RelativeSource={RelativeSource AncestorType=Window}}"
                       Style="{StaticResource BaseToggleButton}"
                       Margin="0 0 6 0"/>
 
         <!-- Month / Year filter -->
         <ComboBox Width="80" Height="28"
-                  SelectedItem="{Binding DataContext.FilterMonth, RelativeSource={RelativeSource AncestorType=Window}}"
+                  SelectedItem="{Binding NmkM.FilterMonth, RelativeSource={RelativeSource AncestorType=Window}}"
                   Margin="0 0 4 0">
           <ComboBoxItem Content="All" Tag="0"/>
           <ComboBoxItem Content="Jan" Tag="1"/>
@@ -76,7 +76,7 @@
         </ComboBox>
 
         <CheckBox Content="Today"
-                  IsChecked="{Binding DataContext.FilterToday, RelativeSource={RelativeSource AncestorType=Window}}"
+                  IsChecked="{Binding NmkM.FilterToday, RelativeSource={RelativeSource AncestorType=Window}}"
                   VerticalAlignment="Center" Margin="6 0 0 0"/>
       </WrapPanel>
     </Border>
@@ -84,7 +84,7 @@
 
     <!--#region Task List -->
     <ListView Grid.Row="1"
-              ItemsSource="{Binding TasksProjectCollection}"
+              ItemsSource="{Binding NmkM.TasksProjectCollection}"
               SelectionChanged="ListView_SelectionChanged"
               BorderThickness="0"
               Background="Transparent"

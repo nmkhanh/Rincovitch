@@ -65,16 +65,6 @@ public partial class App : Application
 
     // ViewModels
     services.AddSingleton<MainWindowViewModel>();
-    services.AddTransient<DashboardViewModel>();
-    services.AddTransient<TimelineViewModel>();
-    services.AddTransient<EmailViewModel>();
-    services.AddTransient<UserViewModel>();
-    services.AddTransient<ProjectViewModel>();
-    services.AddTransient<TemporaryViewModel>();
-    services.AddTransient<NotifyViewModel>();
-    services.AddTransient<LeaveViewModel>();
-    services.AddTransient<ScheduleViewModel>();
-    services.AddTransient<SettingsViewModel>();
 
     // Views
     services.AddSingleton<MainWindow>();

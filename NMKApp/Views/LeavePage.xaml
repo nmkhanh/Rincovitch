@@ -21,7 +21,7 @@
             Padding="12 6">
       <WrapPanel>
         <Button Content="Apply Leave"
-                Command="{Binding ApplyCommand}"
+                Command="{Binding LeaveApplyCommand}"
                 Style="{StaticResource ButtonPrimaryStyle}"
                 Margin="0 0 6 0"/>
       </WrapPanel>
@@ -47,8 +47,8 @@
           <TextBlock Text="My Leave Requests" FontWeight="SemiBold" FontSize="13"/>
         </Border>
         <ListView Grid.Row="1"
-                  ItemsSource="{Binding DataContext.LeavesAssignToCollection, RelativeSource={RelativeSource AncestorType=Window}}"
-                  SelectedItem="{Binding SelectedLeave}"
+                  ItemsSource="{Binding NmkM.LeavesAssignToCollection}"
+                  SelectedItem="{Binding NmkM.SelectedLeave}"
                   BorderThickness="0" Background="Transparent"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
           <ListView.ItemContainerStyle>
@@ -122,7 +122,7 @@
 
       <!-- Incoming Leave requests to approve (Leader/Admin) -->
       <Grid Grid.Column="2"
-            Visibility="{Binding DataContext.RoleVisible.VisibleLeader, RelativeSource={RelativeSource AncestorType=Window}}">
+            Visibility="{Binding NmkM.RoleVisible.VisibleLeader}">
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
@@ -132,8 +132,8 @@
           <TextBlock Text="Requests to Approve" FontWeight="SemiBold" FontSize="13"/>
         </Border>
         <ListView Grid.Row="1"
-                  ItemsSource="{Binding DataContext.LeavesCollection, RelativeSource={RelativeSource AncestorType=Window}}"
-                  SelectedItem="{Binding SelectedLeave}"
+                  ItemsSource="{Binding NmkM.LeavesCollection}"
+                  SelectedItem="{Binding NmkM.SelectedLeave}"
                   BorderThickness="0" Background="Transparent"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled">
           <ListView.ItemContainerStyle>
@@ -181,13 +181,13 @@
                     </Style>
                   </StackPanel.Style>
                   <Button Content="✓ Approve"
-                          Command="{Binding DataContext.ApproveCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          Command="{Binding DataContext.LeaveApproveCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                           CommandParameter="{Binding}"
                           Height="26" FontSize="11"
                           Style="{StaticResource ButtonSuccessStyle}"
                           Margin="2 0"/>
                   <Button Content="✕ Reject"
-                          Command="{Binding DataContext.RejectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                          Command="{Binding DataContext.LeaveRejectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                           CommandParameter="{Binding}"
                           Height="26" FontSize="11"
                           Style="{StaticResource ButtonDangerStyle}"

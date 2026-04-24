@@ -13,8 +13,8 @@ public partial class DashboardPage : UserControl
 
   private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
   {
-    if (DataContext is DashboardViewModel vm && e.AddedItems.Count > 0)
-      vm.SelectedTask = e.AddedItems[0] as TaskModel;
+    if (DataContext is MainWindowViewModel vm && e.AddedItems.Count > 0)
+      vm.NmkM.SelectedTask = e.AddedItems[0] as TaskModel;
   }
 }
 
