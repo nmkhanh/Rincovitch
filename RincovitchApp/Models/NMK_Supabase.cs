@@ -407,42 +407,42 @@ namespace RincovitchApp.Models
   {
   }
 
-  [Table("NMK_Task_Backup")]
-  public class NMK_Supabase_Task_Backup : BaseModel
-  {
-    [PrimaryKey("id", false)]
-    [Column("id")]
-    public string Id
-    {
-      get; set;
-    }
-    [Column("created_at")]
-    public DateTime CreatedAt
-    {
-      get; set;
-    }
-    [Column("create_by")]
-    public string CreateBy
-    {
-      get; set;
-    }
-    [Column("data")]
-    public string Data
-    {
-      get; set;
-    }
+  //[Table("NMK_Task_Backup")]
+  //public class NMK_Supabase_Task_Backup : BaseModel
+  //{
+  //  [PrimaryKey("id", false)]
+  //  [Column("id")]
+  //  public string Id
+  //  {
+  //    get; set;
+  //  }
+  //  [Column("created_at")]
+  //  public DateTime CreatedAt
+  //  {
+  //    get; set;
+  //  }
+  //  [Column("create_by")]
+  //  public string CreateBy
+  //  {
+  //    get; set;
+  //  }
+  //  [Column("data")]
+  //  public string Data
+  //  {
+  //    get; set;
+  //  }
 
-    public NMK_M_Task_Backup Clone()
-    {
-      return new NMK_M_Task_Backup
-      {
-        Id = this.Id,
-        CreateAt = this.CreatedAt,
-        CreateBy = this.CreateBy,
-        Data = this.Data
-      };
-    }
-  }
+  //  public NMK_M_Task_Backup Clone()
+  //  {
+  //    return new NMK_M_Task_Backup
+  //    {
+  //      Id = this.Id,
+  //      CreateAt = this.CreatedAt,
+  //      CreateBy = this.CreateBy,
+  //      Data = this.Data
+  //    };
+  //  }
+  //}
 
   //[Table("NMK_Notify_TestCode")]
   [Table("NMK_Notify")]
@@ -590,8 +590,8 @@ namespace RincovitchApp.Models
 
   public class NMK_Supabase
   {
-    static string url = "https://ondwkhoelyfpzugwyqnd.supabase.co";
-    static string key = "sb_publishable_lkCPpfLoeGVUIgIm0nFJkQ_ltk_pUeY";
+    static string url = "https://slswxupqnjxnqpfkknqu.supabase.co";
+    static string key = "sb_publishable_-6l8WMlZCW3dMlUshBQzNw_9Lbd7JMC";
 
     private static Supabase.Client _client;
     public static Supabase.Client Client => _client;
@@ -1886,48 +1886,48 @@ namespace RincovitchApp.Models
 
 
 
-    public static async Task<NMK_M_Return<NMK_Supabase_Task_Backup>> insert_Task_BackupsAsync(NMK_Supabase_Task_Backup Task)
-    {
-      try
-      {
-        var options = new Supabase.SupabaseOptions
-        {
-          AutoConnectRealtime = true
-        };
-        var supabase = new Supabase.Client(url, key, options);
-        await supabase.InitializeAsync();
+    //public static async Task<NMK_M_Return<NMK_Supabase_Task_Backup>> insert_Task_BackupsAsync(NMK_Supabase_Task_Backup Task)
+    //{
+    //  try
+    //  {
+    //    var options = new Supabase.SupabaseOptions
+    //    {
+    //      AutoConnectRealtime = true
+    //    };
+    //    var supabase = new Supabase.Client(url, key, options);
+    //    await supabase.InitializeAsync();
 
-        var result = await supabase.From<NMK_Supabase_Task_Backup>().Insert(Task, new QueryOptions { Returning = ReturnType.Representation });
+    //    var result = await supabase.From<NMK_Supabase_Task_Backup>().Insert(Task, new QueryOptions { Returning = ReturnType.Representation });
 
-        if (result.ResponseMessage.IsSuccessStatusCode)
-        {
-          return new NMK_M_Return<NMK_Supabase_Task_Backup>
-          {
-            Success = true,
-            Data = result.Models[0],
-            Error = null
-          };
-        }
-        else
-        {
-          return new NMK_M_Return<NMK_Supabase_Task_Backup>
-          {
-            Success = false,
-            Data = null,
-            Error = $"Insert failed :  {(int)result.ResponseMessage.StatusCode}: {result.ResponseMessage.ReasonPhrase}"
-          };
-        }
-      }
-      catch (Exception ex)
-      {
-        return new NMK_M_Return<NMK_Supabase_Task_Backup>
-        {
-          Success = false,
-          Data = null,
-          Error = ex.Message
-        };
-      }
-    }
+    //    if (result.ResponseMessage.IsSuccessStatusCode)
+    //    {
+    //      return new NMK_M_Return<NMK_Supabase_Task_Backup>
+    //      {
+    //        Success = true,
+    //        Data = result.Models[0],
+    //        Error = null
+    //      };
+    //    }
+    //    else
+    //    {
+    //      return new NMK_M_Return<NMK_Supabase_Task_Backup>
+    //      {
+    //        Success = false,
+    //        Data = null,
+    //        Error = $"Insert failed :  {(int)result.ResponseMessage.StatusCode}: {result.ResponseMessage.ReasonPhrase}"
+    //      };
+    //    }
+    //  }
+    //  catch (Exception ex)
+    //  {
+    //    return new NMK_M_Return<NMK_Supabase_Task_Backup>
+    //    {
+    //      Success = false,
+    //      Data = null,
+    //      Error = ex.Message
+    //    };
+    //  }
+    //}
 
 
 
@@ -2027,7 +2027,7 @@ namespace RincovitchApp.Models
         var supabase = new Supabase.Client(url, key, options);
         await supabase.InitializeAsync();
 
-        var result = await supabase.Storage.From("RincovitchApp").Upload(path, Path.GetFileName(path));
+        var result = await supabase.Storage.From("Version").Upload(path, Path.GetFileName(path));
 
         return new NMK_M_Return<string>
         {
@@ -2060,7 +2060,7 @@ namespace RincovitchApp.Models
         await supabase.InitializeAsync();
 
         // Specify null for the TransformOptions parameter to resolve ambiguity
-        var file = await supabase.Storage.From("RincovitchApp").Download(path, transformOptions: null);
+        var file = await supabase.Storage.From("Version").Download(path, transformOptions: null);
         return new NMK_M_Return<byte[]>
         {
           Success = true,
@@ -2094,7 +2094,7 @@ namespace RincovitchApp.Models
 
         var tasks = files.Select(async file =>
         {
-          var result = await supabase.Storage.From("BackupFile").Upload(file.Name, file.Id);
+          var result = await supabase.Storage.From("Attach").Upload(file.Name, file.Id);
         });
 
         await Task.WhenAll(tasks);
@@ -2131,7 +2131,7 @@ namespace RincovitchApp.Models
         var tasks = files.Select(async file =>
         {
           var bytes = await supabase.Storage
-              .From("BackupFile")
+              .From("Attach")
               .Download(file.Id, transformOptions: null);
 
           var save = Path.Combine(path, Path.GetFileName(file.Name));

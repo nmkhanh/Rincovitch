@@ -1735,8 +1735,8 @@ namespace RincovitchApp
       if (task.Status == 0)
         return;
 
-      if (task.Status == 4 || task.Status == 5 || task.Status == 6)
-        return;
+      //if (task.Status == 4 || task.Status == 5 || task.Status == 6)
+      //  return;
 
       var items = new System.Collections.ObjectModel.ObservableCollection<NMK_M_Task>(NMK_M.Tasks.Items
           .Where(x => x.Id != task.Id)
@@ -2047,8 +2047,8 @@ namespace RincovitchApp
       if (task.Status == 0)
         return;
 
-      if (task.Status != 4)
-        return;
+      //if (task.Status != 4)
+      //  return;
       try
       {
         task.IsProgress = true;

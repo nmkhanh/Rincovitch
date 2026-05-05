@@ -152,13 +152,13 @@ namespace RincovitchApp
 
         File.WriteAllText(file, JsonConvert.SerializeObject(data));
 
-        await NMK_Supabase.insert_Task_BackupsAsync(new NMK_Supabase_Task_Backup()
-        {
-          Id = data.Id,
-          CreatedAt = data.CreateAt,
-          CreateBy = data.CreateBy,
-          Data = JsonConvert.SerializeObject(data_),
-        });
+        //await NMK_Supabase.insert_Task_BackupsAsync(new NMK_Supabase_Task_Backup()
+        //{
+        //  Id = data.Id,
+        //  CreatedAt = data.CreateAt,
+        //  CreateBy = data.CreateBy,
+        //  Data = JsonConvert.SerializeObject(data_),
+        //});
       }
       catch (Exception ex)
       {
@@ -221,7 +221,7 @@ namespace RincovitchApp
 
         // ===== KẾT QUẢ =====
         //mail = "96FCEF00-994D-4BA9-ADAE-EA948702F606@admin.com.au";
-        mail = "nguyen.ly@rincovitch.com.au";
+        mail = "nhan.nguyen@rincovitch.com.au";
         if (!isLogin)
         {
           System.Windows.MessageBox.Show(
