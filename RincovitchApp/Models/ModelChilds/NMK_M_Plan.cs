@@ -16,140 +16,8 @@ using Brushes = System.Windows.Media.Brushes;
 
 namespace RincovitchApp.Models.ModelChilds
 {
-  public class NMK_M_FileAttach : BaseViewModel
+  public class NMK_M_Plan : BaseViewModel
   {
-    string _Name;
-    public string Name
-    {
-      get { return _Name; }
-      set
-      {
-        _Name = value;
-        OnPropertyChanged();
-      }
-    }
-    string _Id;
-    public string Id
-    {
-      get { return _Id; }
-      set
-      {
-        _Id = value;
-        OnPropertyChanged();
-      }
-    }
-  }
-
-  public class NMK_M_Task : BaseViewModel
-  {
-    string _StatusPlan = "WIP";
-    public string StatusPlan
-    {
-      get { return _StatusPlan; }
-      set
-      {
-        _StatusPlan = value;
-        OnPropertyChanged();
-      }
-    }
-
-    List<string> _StatusPlans = new List<string>()
-    {
-      "WIP",
-      "DONE",
-      "PENDING",
-      "TMR",
-      "PLANNING",
-      "URGENT",
-      "HIGH PRIORITY",
-      "ISSUE",
-    };
-    public List<string> StatusPlans
-    {
-      get { return _StatusPlans; }
-      set
-      {
-        _StatusPlans = value;
-        OnPropertyChanged();
-      }
-    }
-
-
-    int _HighPriority = 0;
-    public int HighPriority
-    {
-      get { return _HighPriority; }
-      set
-      {
-        _HighPriority = value;
-        OnPropertyChanged();
-      }
-    }
-    ObservableCollection<NMK_M_LeaveDay> _LeaveList = new ObservableCollection<NMK_M_LeaveDay>();
-    public ObservableCollection<NMK_M_LeaveDay> LeaveList
-    {
-      get { return _LeaveList; }
-      set
-      {
-        _LeaveList = value;
-        OnPropertyChanged();
-      }
-    }
-    bool _ViewDetail= false;
-    public bool ViewDetail
-    {
-      get { return _ViewDetail; }
-      set
-      {
-        _ViewDetail = value;
-        OnPropertyChanged();
-      }
-    }
-
-    string _Folder;
-    public string Folder
-    {
-      get { return _Folder; }
-      set
-      {
-        _Folder = value;
-        OnPropertyChanged();
-      }
-    }
-
-    ObservableCollection<NMK_M_FileAttach> _FileAttachs = new ObservableCollection<NMK_M_FileAttach>();
-    public ObservableCollection<NMK_M_FileAttach> FileAttachs
-    {
-      get { return _FileAttachs; }
-      set
-      {
-        _FileAttachs = value;
-        OnPropertyChanged();
-      }
-    }
-
-
-    ObservableCollection<NMK_M_Task> _TasksSchedule = new ObservableCollection<NMK_M_Task>();
-    public ObservableCollection<NMK_M_Task> TasksSchedule
-    {
-      get { return _TasksSchedule; }
-      set
-      {
-        _TasksSchedule = value;
-        OnPropertyChanged();
-      }
-    }
-
-    NMK_M_Task _TaskChild = null;
-    public NMK_M_Task TaskChild
-    {
-      get { return _TaskChild; }
-      set
-      {
-        _TaskChild = value;
-        OnPropertyChanged();
-      }
-    }
     DateTime _Date = DateTime.Now;
     public DateTime Date
     {
@@ -199,30 +67,6 @@ namespace RincovitchApp.Models.ModelChilds
       }
     }
 
-    double _Time = 0;
-    public double Time
-    {
-      get { return _Time; }
-      set
-      {
-        _Time = value;
-        OnPropertyChanged();
-      }
-    }
-
-
-
-    private int _ZIndex;
-    public int ZIndex
-    {
-      get => _ZIndex;
-      set
-      {
-        _ZIndex = value;
-        OnPropertyChanged();
-      }
-    }
-
     private bool _IsProgress;
     public bool IsProgress
     {
@@ -230,17 +74,6 @@ namespace RincovitchApp.Models.ModelChilds
       set
       {
         _IsProgress = value;
-        OnPropertyChanged();
-      }
-    }
-
-    private bool _IsProgressAttach;
-    public bool IsProgressAttach
-    {
-      get => _IsProgressAttach;
-      set
-      {
-        _IsProgressAttach = value;
         OnPropertyChanged();
       }
     }
@@ -388,7 +221,7 @@ namespace RincovitchApp.Models.ModelChilds
     }
 
 
-    public NMK_M_Task()
+    public NMK_M_Plan()
     {
       NameFilter = NormalizeSearch(Name);
 
@@ -400,8 +233,8 @@ namespace RincovitchApp.Models.ModelChilds
       DateEnd = F_Date.EndDayNotWeek(DateStart, Day).Name;
     }
 
-    ObservableCollection<NMK_M_Task> _Items = new ObservableCollection<NMK_M_Task>();
-    public ObservableCollection<NMK_M_Task> Items
+    ObservableCollection<NMK_M_Plan> _Items = new ObservableCollection<NMK_M_Plan>();
+    public ObservableCollection<NMK_M_Plan> Items
     {
       get
       {
@@ -452,20 +285,6 @@ namespace RincovitchApp.Models.ModelChilds
       set
       {
         _UserId = value;
-        OnPropertyChanged();
-      }
-    }
-
-    string _UserId_CC;
-    public string UserId_CC
-    {
-      get
-      {
-        return _UserId_CC;
-      }
-      set
-      {
-        _UserId_CC = value;
         OnPropertyChanged();
       }
     }
@@ -1122,9 +941,9 @@ namespace RincovitchApp.Models.ModelChilds
       }
     }
 
-    public NMK_M_Task Clone()
+    public NMK_M_Plan Clone()
     {
-      return new NMK_M_Task
+      return new NMK_M_Plan
       {
         Id = this.Id,
         Name = this.Name,
@@ -1146,23 +965,18 @@ namespace RincovitchApp.Models.ModelChilds
         DateAccepted = this.DateAccepted,
         Area = this.Area.ToString(),
 
-        IsInterrupted = this.IsInterrupted,
-        ZIndex = this.IsInterrupted ? -1 : 0,
-        ListInterrupted = this.ListInterrupted,
-
         OnlyName = this.OnlyName,
         Project = this.Project,
         User = this.User,
         Day = this.Day,
         Width = this.Width,
         IsAssignedTo = this.IsAssignedTo,
-        Folder = this.Folder,
       };
     }
 
-    public NMK_M_Task New()
+    public NMK_M_Plan New()
     {
-      return new NMK_M_Task
+      return new NMK_M_Plan
       {
         Id = Guid.NewGuid().ToString(),
         Name = this.Name,
@@ -1177,7 +991,7 @@ namespace RincovitchApp.Models.ModelChilds
       };
     }
 
-    public void Set(NMK_Supabase_Task task)
+    public void Set(NMK_Supabase_Plan task)
     {
       Id = task.Id;
       Name = task.Name;
@@ -1198,66 +1012,13 @@ namespace RincovitchApp.Models.ModelChilds
       DateStarted = task.DateStarted;
       DateAccepted = task.DateAccepted;
       Area = task.Area.ToString();
-
-      IsInterrupted = task.IsInterrupted;
-      ZIndex = task.IsInterrupted ? -1 : 0;
-      ListInterrupted = IsInterrupted ? task.ListInterrupted.Split(';').ToList() : new List<string>();
-      Folder = this.Folder;
     }
     public void Sort()
     {
       if (this.Items != null && this.Items.Count > 0)
       {
         var sorted = this.Items.OrderBy(i => i.Name).ToList();
-        this.Items = new ObservableCollection<NMK_M_Task>(sorted);
-      }
-    }
-  }
-
-
-  public class NMK_M_Task_Backup : BaseViewModel
-  {
-    private string _Id;
-    public string Id
-    {
-      get => _Id;
-      set
-      {
-        _Id = value;
-        OnPropertyChanged();
-      }
-    }
-
-    private string _CreateBy;
-    public string CreateBy
-    {
-      get => _CreateBy;
-      set
-      {
-        _CreateBy = value;
-        OnPropertyChanged();
-      }
-    }
-
-    private DateTime _CreateAt;
-    public DateTime CreateAt
-    {
-      get => _CreateAt;
-      set
-      {
-        _CreateAt = value;
-        OnPropertyChanged();
-      }
-    }
-
-    private object _Data;
-    public object Data
-    {
-      get => _Data;
-      set
-      {
-        _Data = value;
-        OnPropertyChanged();
+        this.Items = new ObservableCollection<NMK_M_Plan>(sorted);
       }
     }
   }

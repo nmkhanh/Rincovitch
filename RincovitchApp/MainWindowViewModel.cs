@@ -3141,17 +3141,25 @@ namespace RincovitchApp
     {
       try
       {
+        var week = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(DateTime.Now, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        var day = F_Date.GetWeekdaysOfWeek(DateTime.Today.Year, week);
+        var days = F_Date.CreateDayList(day.Start, day.End);
         NMK_M.TasksTemporary.Items.Add(new NMK_M_Task()
         {
+          CreateBy = NMK_M.UserCurrent.Email,
           IsChecked = true,
           Id = Guid.NewGuid().ToString(),
           Name = "NEW TASK",
-          DateStart = DateTime.Now.Date,
-          DateEnd = DateTime.Now.Date,
-          HourStart = 8,
-          HourEnd = 17,
-          MinutesStart = 30,
-          MinutesEnd = 30,
+          LeaveList = new ObservableCollection<NMK_M_LeaveDay>(
+            days.Select(x => new NMK_M_LeaveDay()
+            {
+              Start = x.Name.Date,
+              End = x.Name.Date,
+              StartH = 8,
+              StartM = 30,
+              EndH = 17,
+              EndM = 30,
+            }))
         });
       }
       catch (Exception ex)

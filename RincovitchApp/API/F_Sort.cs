@@ -17,8 +17,8 @@ namespace RincovitchApp.API
     {
       var taskX = x as NMK_M_Leave;
       var taskY = y as NMK_M_Leave;
-      return StrCmpLogicalW($"{taskX.Approval}-{taskX.CreateAt.ToString("yyyy/MM/dd HH:mm:ss")}",
-                            $"{taskY.Approval}-{taskY.CreateAt.ToString("yyyy/MM/dd HH:mm:ss")}");
+      return StrCmpLogicalW($"{taskX.Approval}-{taskX.CreateBy}-{taskX.LeaveReason}-{taskX.CreateAt.ToString("yyyy/MM/dd HH:mm:ss")}",
+                            $"{taskY.Approval}-{taskY.CreateBy}-{taskY.LeaveReason}-{taskY.CreateAt.ToString("yyyy/MM/dd HH:mm:ss")}");
     }
   }
 

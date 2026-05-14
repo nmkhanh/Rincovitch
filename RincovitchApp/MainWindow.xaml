@@ -141,7 +141,7 @@
             Visibility="{Binding NMK_M.RoleVisible.VisibleLeader}">
             <RadioButton
               GroupName="Navigation"
-              Content="Temporary"
+              Content="Weekly Plan"
               Name="Temporary"
               Style="{StaticResource RadioButtonIconContentVerticalStyle}"
               theme:UI.Icon="SitemapOutline" />
@@ -2550,24 +2550,7 @@
                   Margin="10 0"
                   IsSynchronizedWithCurrentItem="False"
                   SelectedValue="{Binding Project, UpdateSourceTrigger=PropertyChanged}"
-                  ItemsSource="{Binding ElementName=window, Path=DataContext.NMK_M.ProjectsCollectionNotProject}" />
-              </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
-          <DataGridTemplateColumn
-            Header="User"
-            Width="150">
-            <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate>
-                <ComboBox
-                  Padding="0"
-                  Style="{StaticResource ComboBoxTransparentAnyAll}"
-                  DisplayMemberPath="Name"
-                  IsEditable="True"
-                  Margin="10 0"
-                  IsSynchronizedWithCurrentItem="False"
-                  SelectedValue="{Binding User, UpdateSourceTrigger=PropertyChanged}"
-                  ItemsSource="{Binding ElementName=window, Path=DataContext.NMK_M.UsersCollectionRole}" />
+                  ItemsSource="{Binding ElementName=window, Path=DataContext.NMK_M.Projects.Items}" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
@@ -2576,118 +2559,36 @@
             Width="*">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <Grid>
-                  <Grid.RowDefinitions>
-                    <RowDefinition
-                      Height="*" />
-                    <RowDefinition
-                      Height="*" />
-                  </Grid.RowDefinitions>
-                  <ComboBox
-                    Margin="10 0"
-                    Padding="0"
-                    Style="{StaticResource ComboBoxTransparentAnyAllUpper}"
-                    DisplayMemberPath="OnlyName"
-                    Text="{Binding OnlyName, UpdateSourceTrigger=PropertyChanged}"
-                    IsEditable="True"
-                    ItemsSource="{Binding ElementName=window, Path=DataContext.NMK_M.TasksAssignedto.Items}" />
-                  <TextBox
-                    Margin="10 0"
-                    theme:UI.Hint="Note"
-                    Grid.Row="1"
-                    CharacterCasing="Upper"
-                    VerticalAlignment="Center"
-                    Text="{Binding Detail, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-              </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
-          <DataGridTemplateColumn
-            Width="60">
-            <DataGridTemplateColumn.HeaderTemplate>
-              <DataTemplate>
-                <TextBlock
-                  Width="40"
-                  Text="Area"
-                  TextAlignment="Center" />
-              </DataTemplate>
-            </DataGridTemplateColumn.HeaderTemplate>
-            <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate>
                 <TextBox
-                  Width="50"
-                  TextAlignment="Center"
                   BorderThickness="0"
+                  BorderBrush="Transparent"
                   Style="{StaticResource TextBoxTransparent}"
+                  Margin="0 0"
+                  Grid.Row="1"
+                  CharacterCasing="Upper"
                   VerticalAlignment="Center"
-                  Text="{Binding Area, UpdateSourceTrigger=PropertyChanged}" />
+                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn
-            Header="Start"
-            Width="120">
+            Header="Status"
+            Width="150">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
-                <Grid
-                  Margin="0 5">
-                  <Grid.RowDefinitions>
-                    <RowDefinition
-                      Height="*" />
-                    <RowDefinition
-                      Height="*" />
-                  </Grid.RowDefinitions>
-                  <DatePicker
-                    Margin="10 0"
-                    SelectedDate="{Binding DateStart, UpdateSourceTrigger=PropertyChanged}"
-                    VerticalContentAlignment="Center"
-                    Height="30" />
-                  <Grid
-                    Margin="10 10 0 0"
-                    Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                      <ColumnDefinition
-                        Width="Auto" />
-                      <ColumnDefinition
-                        Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox
-                      theme:UI.Hint="HH"
-                      Width="50"
-                      TextAlignment="Center"
-                      VerticalAlignment="Center"
-                      Text="{Binding HourStart, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBox
-                      Grid.Column="1"
-                      theme:UI.Hint="mm"
-                      Width="50"
-                      TextAlignment="Center"
-                      VerticalAlignment="Center"
-                      Text="{Binding MinutesStart, UpdateSourceTrigger=PropertyChanged}" />
-                  </Grid>
-                </Grid>
+                <ComboBox
+                  Padding="0"
+                  Style="{StaticResource ComboBoxTransparentAnyAll}"
+                  Margin="10 0"
+                  IsSynchronizedWithCurrentItem="False"
+                  SelectedValue="{Binding StatusPlan, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding StatusPlans}" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn
-            Header="      Day"
-            Width="80">
-            <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate>
-                <TextBox
-                  theme:UI.Hint="Hour"
-                  Width="80"
-                  TextAlignment="Center"
-                  BorderThickness="0"
-                  Style="{StaticResource TextBoxTransparent}"
-                  VerticalAlignment="Center"
-                  Text="{Binding Day, UpdateSourceTrigger=PropertyChanged}" />
-              </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
-          <DataGridTemplateColumn
-            Header="End"
-            Width="170">
+            Header="Created by"
+            Width="300">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
                 <Grid>
@@ -2695,91 +2596,152 @@
                     <ColumnDefinition
                       Width="*" />
                     <ColumnDefinition
-                      Width="50" />
+                      Width="100" />
                   </Grid.ColumnDefinitions>
-                  <Grid
-                    Margin="0 5">
-                    <Grid.RowDefinitions>
-                      <RowDefinition
-                        Height="*" />
-                      <RowDefinition
-                        Height="*" />
-                    </Grid.RowDefinitions>
-                    <DatePicker
-                      Width="100"
-                      IsEnabled="False"
-                      Margin="10 0"
-                      SelectedDate="{Binding DateEnd, UpdateSourceTrigger=PropertyChanged}"
-                      VerticalContentAlignment="Center"
-                      HorizontalAlignment="Left"
-                      Height="30" />
-                    <Grid
-                      Margin="10 10 0 0"
-                      Grid.Row="1">
-                      <Grid.ColumnDefinitions>
-                        <ColumnDefinition
-                          Width="Auto" />
-                        <ColumnDefinition
-                          Width="*" />
-                      </Grid.ColumnDefinitions>
-                      <TextBox
-                        theme:UI.Hint="HH"
-                        Width="50"
-                        TextAlignment="Center"
-                        VerticalAlignment="Center"
-                        Text="{Binding HourEnd, UpdateSourceTrigger=PropertyChanged}" />
-                      <TextBox
-                        Grid.Column="1"
-                        theme:UI.Hint="mm"
-                        Width="50"
-                        TextAlignment="Center"
-                        VerticalAlignment="Center"
-                        Text="{Binding MinutesEnd, UpdateSourceTrigger=PropertyChanged}" />
-                    </Grid>
-                  </Grid>
-                  <Grid
+                  <TextBlock
+                    TextTrimming="CharacterEllipsis"
                     Margin="10 0"
-                    Grid.Column="1">
-                    <Grid
-                      x:Name="Delete"
-                      Visibility="Collapsed">
-                      <ToggleButton
-                        Visibility="{Binding IsProgress, Converter={StaticResource BoolConverterReverse}}"
-                        Width="25"
-                        Height="25"
-                        theme:UI.IconWidth="20"
-                        theme:UI.IconHeight="20"
-                        Command="{Binding ElementName=window,Path=DataContext.TemporaryDeleteCommand}"
-                        CommandParameter="{Binding}"
-                        Style="{StaticResource ToggleButtonRound}"
-                        ToolTip="Delete"
-                        theme:UI.IconFalse="Close"
-                        theme:UI.IconTrue="Close" />
-                    </Grid>
-                    <ProgressBar
-                      theme:UI.Thickness="2"
-                      x:Name="Progress"
+                    VerticalAlignment="Center"
+                    Text="{Binding CreateBy, UpdateSourceTrigger=PropertyChanged}" />
+                  <StackPanel
+                    Margin="10 0"
+                    Grid.Column="1"
+                    Visibility="{Binding ApprovalStatusAssign, Converter={StaticResource BoolConverter}}"
+                    Orientation="Horizontal">
+                    <ToggleButton
+                      ToolTip="Show time"
+                      IsChecked="{Binding ViewDetail, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="10 0 0 0"
                       Width="25"
                       Height="25"
-                      IsIndeterminate="True"
-                      Visibility="{Binding IsProgress, Converter={StaticResource BoolConverter}}"
-                      Style="{StaticResource ProgressBarSpinner}" />
-                  </Grid>
+                      theme:UI.IconWidth="20"
+                      theme:UI.IconHeight="20"
+                      theme:UI.IconFalse="TimerOutline"
+                      theme:UI.IconTrue="TimerOutline"
+                      Style="{StaticResource ToggleButtonRound}"/>
+                    <Grid
+                      Margin="5 0">
+                      <Grid>
+                        <ToggleButton
+                          Visibility="{Binding IsProgress, Converter={StaticResource BoolConverterReverse}}"
+                          Width="25"
+                          Height="25"
+                          theme:UI.IconWidth="20"
+                          theme:UI.IconHeight="20"
+                          Command="{Binding ElementName=window,Path=DataContext.TemporaryDeleteCommand}"
+                          CommandParameter="{Binding}"
+                          Style="{StaticResource ToggleButtonRound}"
+                          ToolTip="Delete"
+                          theme:UI.IconFalse="Close"
+                          theme:UI.IconTrue="Close" />
+                      </Grid>
+                      <ProgressBar
+                        theme:UI.Thickness="2"
+                        x:Name="Progress"
+                        Width="25"
+                        Height="25"
+                        IsIndeterminate="True"
+                        Visibility="{Binding IsProgress, Converter={StaticResource BoolConverter}}"
+                        Style="{StaticResource ProgressBarSpinner}" />
+                    </Grid>
+                  </StackPanel>
                 </Grid>
                 <DataTemplate.Triggers>
                   <DataTrigger
                     Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=DataGridRow}}"
                     Value="True">
-                    <Setter
+                    <!--<Setter
                       TargetName="Delete"
                       Property="Visibility"
-                      Value="Visible" />
+                      Value="Visible" />-->
                   </DataTrigger>
                 </DataTemplate.Triggers>
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
         </DataGrid.Columns>
+        <DataGrid.RowStyle>
+          <Style
+            TargetType="DataGridRow"
+            BasedOn="{StaticResource DataGridRowDefault}">
+            <Setter
+              Property="DetailsVisibility"
+              Value="{Binding ViewDetail, Converter={StaticResource BoolConverter}}" />
+          </Style>
+        </DataGrid.RowStyle>
+        <DataGrid.RowDetailsTemplate>
+          <DataTemplate>
+            <ListBox
+              Background="White"
+              BorderThickness="0"
+              ItemContainerStyle="{StaticResource ListBoxItemTransparent}"
+              ItemsSource="{Binding LeaveList, UpdateSourceTrigger=PropertyChanged}">
+              <ListBox.ItemTemplate>
+                <DataTemplate>
+                  <StackPanel
+                    Margin="40 0 0 0"
+                    Height="40"
+                    Orientation="Horizontal">
+                    <TextBlock
+                      Width="30"
+                      VerticalAlignment="Center"
+                      Text="{Binding LeaveStart,StringFormat='{}{0:ddd}'}" />
+                    <TextBlock
+                      VerticalAlignment="Center"
+                      Text="{Binding LeaveStart,StringFormat='{}{0: - dd/MM/yyyy HH:mm}', UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                      Margin="5 0"
+                      VerticalAlignment="Center"
+                      Text="-" />
+                    <TextBlock
+                      VerticalAlignment="Center"
+                      Text="{Binding LeaveEnd,StringFormat='{}{0:dd/MM/yyyy HH:mm}', UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock
+                      Margin="50 0 0 0"
+                      VerticalAlignment="Center"
+                      Text="From : " />
+                    <TextBox
+                      TextAlignment="Center"
+                      Padding="0"
+                      theme:UI.Hint="HH"
+                      Width="50"
+                      Margin="10 0"
+                      VerticalAlignment="Center"
+                      Text="{Binding StartH}" />
+                    <TextBox
+                      Width="50"
+                      TextAlignment="Center"
+                      Padding="0"
+                      theme:UI.Hint="MM"
+                      Margin="0 0"
+                      VerticalAlignment="Center"
+                      Text="{Binding StartM}" />
+                    <TextBlock
+                      Margin="10 0 0 0"
+                      VerticalAlignment="Center"
+                      Text="To : " />
+                    <TextBox
+                      Width="50"
+                      TextAlignment="Center"
+                      Padding="0"
+                      theme:UI.Hint="HH"
+                      Margin="10 0"
+                      VerticalAlignment="Center"
+                      Text="{Binding EndH}" />
+                    <TextBox
+                      Width="50"
+                      TextAlignment="Center"
+                      Padding="0"
+                      theme:UI.Hint="MM"
+                      Margin="0 0"
+                      VerticalAlignment="Center"
+                      Text="{Binding EndM}" />
+                  </StackPanel>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </DataTemplate>
+        </DataGrid.RowDetailsTemplate>
       </DataGrid>
       <TextBox
         Grid.Row="0"
@@ -2810,18 +2772,19 @@
         Grid.Row="1"
         Orientation="Horizontal">
         <ToggleButton
+          Margin="10 0"
           Command="{Binding ElementName=window,Path=DataContext.TemporarySaveCommand}"
           Width="120"
           Style="{StaticResource ToggleButtonActive}"
           Content="Save"
           theme:UI.IconFalse="DatabaseArrowUpOutline" />
-        <ToggleButton
+        <!--<ToggleButton
           Margin="10 0"
           Command="{Binding ElementName=window,Path=DataContext.TemporaryAddTaskCommand}"
           Width="120"
           Style="{StaticResource ToggleButtonActive}"
           Content="Add Task"
-          theme:UI.IconFalse="ChartTimeline" />
+          theme:UI.IconFalse="ChartTimeline" />-->
       </StackPanel>
     </Grid>
     <!--#endregion-->

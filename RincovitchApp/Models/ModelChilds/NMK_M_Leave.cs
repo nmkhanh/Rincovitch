@@ -392,7 +392,7 @@ namespace RincovitchApp.Models.ModelChilds
       {
         _Users = value;
         OnPropertyChanged();
-        UsersList = string.Join(", ", Users.Select(x => x.Name));
+        UsersList = Users != null && Users.Count() > 0 ? string.Join(", ", Users.Select(x => x.Name)) : string.Empty;
       }
     }
 

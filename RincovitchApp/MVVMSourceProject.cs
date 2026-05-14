@@ -8,13 +8,14 @@ namespace RincovitchApp
     public static string path_ondrive = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),"OneDrive - Rincovitch","Nhan Nguyen's files - Rincovitch");
     public static List<string> folders = new List<string>()
     {
-      "_COLUMN",
-      "_ELEVATION WALL",
       "_FULL SET",
       "_GA PLAN",
+      "_COLUMN",
+      "_ELEVATION WALL",
       "_LOADING PLAN",
       "_SECTION DETAILS",
       "_SITE RETENTION",
+      "_FOUNDATION",
     };
 
 
