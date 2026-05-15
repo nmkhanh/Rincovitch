@@ -128,6 +128,36 @@ namespace RincovitchApp.Models
     {
       get; set;
     }
+    [Column("full_name")]
+    public string FullName
+    {
+      get; set;
+    }
+    [Column("position")]
+    public string Position
+    {
+      get; set;
+    }
+    [Column("team_name")]
+    public string TeamName
+    {
+      get; set;
+    }
+    [Column("is_assistant")]
+    public bool is_assistant
+    {
+      get; set;
+    }
+    [Column("manager_id")]
+    public string ManagerId
+    {
+      get; set;
+    }
+    [Column("level")]
+    public int Level
+    {
+      get; set;
+    }
 
     public NMK_M_User Clone()
     {
