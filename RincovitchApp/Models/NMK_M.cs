@@ -90,7 +90,9 @@ namespace RincovitchApp.Models
       Projects = new NMK_M_Project();
       Users = new NMK_M_User();
       Tasks = new NMK_M_Task();
-      TasksTemporary = new NMK_M_Task();
+      TasksTemporary = new NMK_M_Task_Temporary();
+      UserList = new ObservableCollection<NMK_M_User>();
+      UserList_CC = new ObservableCollection<NMK_M_User>();
       TasksAdmin = new NMK_M_Task();
 
       DaysLeaves = new NMK_M_Day();
@@ -362,19 +364,14 @@ namespace RincovitchApp.Models
       };
 
       TasksTemporaryCollection = new ListCollectionView(TasksTemporary.Items);
-      TasksTemporaryCollection.CustomSort = new F_SortByDateStart();
+      TasksTemporaryCollection.CustomSort = new F_SortTaskTemporary();
       TasksTemporaryCollection.Filter = (obj) =>
       {
-        if (obj is not NMK_M_Task task)
+        if (obj is not NMK_M_Task_Temporary task)
           return false;
 
         return task.Name.IndexOf(SearchTaskTemporary, StringComparison.OrdinalIgnoreCase) >= 0 ||
-        (task.User != null ? task.User.Name.IndexOf(SearchTaskTemporary, StringComparison.OrdinalIgnoreCase) >= 0 : string.IsNullOrEmpty(SearchTaskTemporary)) ||
-        (task.User != null ? task.User.Email.IndexOf(SearchTaskTemporary, StringComparison.OrdinalIgnoreCase) >= 0 : string.IsNullOrEmpty(SearchTaskTemporary)) ||
-        task.DateStart.ToString("dd/MM/yyyy").IndexOf(SearchTaskTemporary, StringComparison.OrdinalIgnoreCase) >= 0 ||
-        task.DateEnd.ToString("dd/MM/yyyy").IndexOf(SearchTaskTemporary, StringComparison.OrdinalIgnoreCase) >= 0 ||
-        task.DateStart.ToString("dddd").IndexOf(SearchTaskTemporary, StringComparison.OrdinalIgnoreCase) >= 0 ||
-        task.DateEnd.ToString("dddd").IndexOf(SearchTaskTemporary, StringComparison.OrdinalIgnoreCase) >= 0;
+        task.Status.IndexOf(SearchTaskTemporary, StringComparison.OrdinalIgnoreCase) >= 0;
       };
 
 
@@ -1416,7 +1413,13 @@ namespace RincovitchApp.Models
 
     #region Task Temporary
     [ObservableProperty]
-    NMK_M_Task _TasksTemporary = new NMK_M_Task();
+    NMK_M_Task_Temporary _TasksTemporary = new NMK_M_Task_Temporary();
+
+    [ObservableProperty]
+    ObservableCollection<NMK_M_User> _UserList = new ObservableCollection<NMK_M_User>();
+
+    [ObservableProperty]
+    ObservableCollection<NMK_M_User> _UserList_CC = new ObservableCollection<NMK_M_User>();
     #endregion
 
     #region Days

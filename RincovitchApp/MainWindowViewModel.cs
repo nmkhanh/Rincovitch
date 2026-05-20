@@ -6,6 +6,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.WPF;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RincovitchApp.API;
 using RincovitchApp.API.Date;
 using RincovitchApp.Models;
@@ -17,6 +18,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -717,7 +719,8 @@ namespace RincovitchApp
               is_user_change = false;
               if (user_change_.Id == NMK_M.UserCurrent.Id)
               {
-                refreshAsync(user_change_.Email, user_change_.ImageString);
+                if (user_change_.Role != NMK_M.UserCurrent.Role)
+                  refreshAsync(user_change_.Email, user_change_.ImageString);
               }
               else
               {
@@ -858,6 +861,110 @@ namespace RincovitchApp
                 NMK_M.Projects.Items.Remove(NMK_M.Projects.Items.First(x => x.Id == project_delete_.Id));
 
             }
+          });
+        });
+
+        #endregion
+        #endregion
+
+        #region Task Temporary Realtime
+        NMK_M_Task_Temporary clone(NMK_Supabase_Task_Temporary task_temporary_change_)
+        {
+          var week = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(DateTime.Now, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+          var day = F_Date.GetWeekdaysOfWeek(DateTime.Today.Year, week);
+          var days = F_Date.CreateDayList(day.Start, day.End);
+
+          var task_temporary = task_temporary_change_.Clone();
+          task_temporary.TimeList = new ObservableCollection<DateTime>(days.Select(x => x.Name.Date));
+          task_temporary.Project = NMK_M.Projects.Items.FirstOrDefault(x => x.Id == task_temporary.ProjectId);
+          foreach (var u in NMK_M.UserList)
+          {
+            var user = u.Clone();
+            user.IsChecked = task_temporary.UserId != null && task_temporary.UserId.Contains(user.Id);
+            task_temporary.UserList.Add(user);
+
+            var user_cc = u.Clone();
+            user_cc.IsChecked = task_temporary.UserId_CC != null && task_temporary.UserId_CC.Contains(user_cc.Id);
+            task_temporary.UserList_CC.Add(user_cc);
+          }
+          task_temporary.IsEdit = task_temporary.UserId != null && task_temporary.UserId.Contains(NMK_M.UserCurrent.Id) || task_temporary.CreateBy == NMK_M.UserCurrent.Email;
+          task_temporary.UserCount = task_temporary.UserList.Count(x => x.IsChecked);
+          task_temporary.UserCount_CC = task_temporary.UserList_CC.Count(x => x.IsChecked);
+          return task_temporary;
+        }
+        var table_task_temporary = NMK_Supabase.Client.From<NMK_Supabase_Task_Temporary>();
+        #region Update Task Temporary
+        var is_task_temporary_change = false;
+        var task_temporary_change_ = new NMK_Supabase_Task_Temporary();
+        await table_task_temporary.On(ListenType.Updates, (sender, change) =>
+        {
+          // Cách an toàn nhất để lấy dữ liệu:
+          var task_temporary_change = change.Model<NMK_Supabase_Task_Temporary>();
+          task_temporary_change_ = task_temporary_change;
+          is_task_temporary_change = true;
+
+          System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
+          {
+            if (NMK_M.TasksTemporary.Items.Any(x => x.Id == task_temporary_change_.Id))
+            {
+              var change = NMK_M.TasksTemporary.Items.First(x => x.Id == task_temporary_change_.Id);
+              change.Set(clone(task_temporary_change_));
+            }
+            else if (task_temporary_change_.UserId != null && task_temporary_change_.UserId.Contains(NMK_M.UserCurrent.Id) ||
+            task_temporary_change_.UserId_CC != null && task_temporary_change_.UserId_CC.Contains(NMK_M.UserCurrent.Id) ||
+            task_temporary_change_.CreateBy == NMK_M.UserCurrent.Email)
+            {
+              NMK_M.TasksTemporary.Items.Add(clone(task_temporary_change_));
+            }
+            NMK_M.TasksTemporaryCollection.Refresh();
+          });
+        });
+
+        #endregion
+        #region New Task Temporary
+        var is_task_temporary_new = false;
+        var task_temporary_new_ = new NMK_Supabase_Task_Temporary();
+        await table_task_temporary.On(ListenType.Inserts, (sender, change) =>
+        {
+          // Cách an toàn nhất để lấy dữ liệu:
+          var task_temporary_new = change.Model<NMK_Supabase_Task_Temporary>();
+          task_temporary_new_ = task_temporary_new;
+          is_task_temporary_new = true;
+
+          System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
+          {
+            if (task_temporary_new_.UserId != null && task_temporary_new_.UserId.Contains(NMK_M.UserCurrent.Id) ||
+            task_temporary_new_.UserId_CC != null && task_temporary_new_.UserId_CC.Contains(NMK_M.UserCurrent.Id) ||
+            task_temporary_new_.CreateBy == NMK_M.UserCurrent.Email)
+            {
+              NMK_M.TasksTemporary.Items.Add(clone(task_temporary_new_));
+            }
+            NMK_M.TasksTemporaryCollection.Refresh();
+          });
+        });
+
+        #endregion
+        #region Delete Task Temporary
+        var is_task_temporary_delete = false;
+        var task_temporary_delete_ = new NMK_Supabase_Task_Temporary();
+        await table_task_temporary.On(ListenType.Deletes, (sender, change) =>
+        {
+          // Cách an toàn nhất để lấy dữ liệu:
+          var task_temporary_change = change.OldModel<NMK_Supabase_Task_Temporary>();
+          task_temporary_delete_ = task_temporary_change;
+          is_task_temporary_delete = true;
+
+          System.Windows.Application.Current.Dispatcher.BeginInvoke(() =>
+          {
+            if (is_task_temporary_delete)
+            {
+              is_task_temporary_delete = false;
+              var task_temporary = NMK_M.TasksTemporary.Items.Any(x => x.Id == task_temporary_delete_.Id);
+              if (task_temporary)
+                NMK_M.TasksTemporary.Items.Remove(NMK_M.TasksTemporary.Items.First(x => x.Id == task_temporary_delete_.Id));
+
+            }
+            NMK_M.TasksTemporaryCollection.Refresh();
           });
         });
 
@@ -1110,14 +1217,43 @@ namespace RincovitchApp
     }
     async Task LoadTaskTemporary()
     {
-      var task = await NMK_Supabase.get_Task_TemporarysAsync(NMK_M.UserCurrent.Email);
-      foreach (var item in task.Data.OrderBy(x => x.DateStart))
+      var week = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(DateTime.Now, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+      var task = await NMK_Supabase.get_TaskAll_TemporarysAsync(week, DateTime.Now.Year);
+      var users = NMK_M.Users.Items.Where(x => x.RoleEnum != F_Role.RoleType.User && x.RoleEnum != F_Role.RoleType.AdminApp).ToList().OrderBy(x => x.Role).ThenBy(x => x.Team).ThenBy(x => x.Name);
+      foreach (var u in users)
+      {
+        var user = u.Clone();
+        if (user.Email == "vu.donguyen@rincovitch.com.au" || user.Email == "vu@rincovitch.com.au" || user.Email == "nhan.nguyen@rincovitch.com.au")
+          user.IsChecked = true;
+        NMK_M.UserList.Add(user);
+
+        var user_cc = u.Clone();
+        if (user_cc.Email == "cuong.pham@rincovitch.com.au")
+          user_cc.IsChecked = true;
+        NMK_M.UserList_CC.Add(user_cc);
+      }
+      
+
+      var day = F_Date.GetWeekdaysOfWeek(DateTime.Today.Year, week);
+      var days = F_Date.CreateDayList(day.Start, day.End);
+      foreach (var item in task.Data.Where(x => x.CreateBy == NMK_M.UserCurrent.Email || (x.UserId != null && x.UserId.Contains(NMK_M.UserCurrent.Id) || (x.UserId_CC != null && x.UserId_CC.Contains(NMK_M.UserCurrent.Id)))))
       {
         var block = item.Clone();
-        block.OnlyName = block.Name.Split(" : ").Last();
+        block.TimeList = new ObservableCollection<DateTime>(days.Select(x => x.Name.Date));
         block.Project = NMK_M.Projects.Items.FirstOrDefault(x => x.Id == block.ProjectId);
-        block.User = NMK_M.Users.Items.FirstOrDefault(x => x.Id == block.UserId);
-        block.Day = F_Date.CreateDayListNotWeek(block.DateStart.Date, block.DateEnd.Date).Count();
+        foreach (var u in users)
+        {
+          var user = u.Clone();
+          user.IsChecked = block.UserId != null && block.UserId.Contains(user.Id);
+          block.UserList.Add(user);
+
+          var user_cc = u.Clone();
+          user_cc.IsChecked = block.UserId_CC != null && block.UserId_CC.Contains(user_cc.Id);
+          block.UserList_CC.Add(user_cc);
+        }
+        block.IsEdit = block.UserId != null && block.UserId.Contains(NMK_M.UserCurrent.Id) || block.CreateBy == NMK_M.UserCurrent.Email;
+        block.UserCount = block.UserList.Count(x => x.IsChecked);
+        block.UserCount_CC = block.UserList_CC.Count(x => x.IsChecked);
         NMK_M.TasksTemporary.Items.Add(block);
       }
     }
@@ -1372,8 +1508,8 @@ namespace RincovitchApp
           item.IsProgress = true;
         }
 
-        await NMK_Supabase.upsert_leaveAsync(NMK_M.Leaves.Items.Where(x => x.Approval == 2).Select(x => new
-        NMK_Supabase_Leave()
+        await NMK_Supabase.upsert_leaveAsync(NMK_M.Leaves.Items.Where(x => x.Approval == 2).Select(x =>
+        new NMK_Supabase_Leave()
         {
           Id = x.Id,
           SendTo = x.User != null ? x.User.Id : null,
@@ -1973,60 +2109,60 @@ namespace RincovitchApp
       {
         task.IsProgress = true;
 
-        var result = await NMK_Supabase.delete_TasksAsync(task.Id);
-        if (result.Success)
-        {
-          var item = task;
-          var item_supabase = new NMK_Supabase_Task_Temporary()
-          {
-            Id = item.Id,
-            Index = 0,
-            CreatedAt = DateTime.UtcNow,
-            UpdateAt = DateTime.UtcNow,
-            Name = item.Name,
-            ProjectId = item.Project != null ? item.Project.Id : item.ProjectId,
-            UserId = item.User != null ? item.User.Id : item.UserId,
-            DateStart = item.DateStart,
-            DateEnd = item.DateEnd,
-            Detail = item.Detail,
-            Area = double.Parse(item.Area),
-            Color = F_Color.BrushToHexRgb(item.Color),
-            Status = 1,
-            CreateBy = NMK_M.UserCurrent.Email,
-            UpdateBy = NMK_M.UserCurrent.Email,
-          };
-          var result_temporary = await NMK_Supabase.upsert_Task_TemporarysAsync(item_supabase);
+        //var result = await NMK_Supabase.delete_TasksAsync(task.Id);
+        //if (result.Success)
+        //{
+        //  var item = task;
+        //  var item_supabase = new NMK_Supabase_Task_Temporary()
+        //  {
+        //    Id = item.Id,
+        //    Index = 0,
+        //    CreatedAt = DateTime.UtcNow,
+        //    UpdateAt = DateTime.UtcNow,
+        //    Name = item.Name,
+        //    ProjectId = item.Project != null ? item.Project.Id : item.ProjectId,
+        //    UserId = item.User != null ? item.User.Id : item.UserId,
+        //    DateStart = item.DateStart,
+        //    DateEnd = item.DateEnd,
+        //    Detail = item.Detail,
+        //    Area = double.Parse(item.Area),
+        //    Color = F_Color.BrushToHexRgb(item.Color),
+        //    Status = 1,
+        //    CreateBy = NMK_M.UserCurrent.Email,
+        //    UpdateBy = NMK_M.UserCurrent.Email,
+        //  };
+        //  var result_temporary = await NMK_Supabase.upsert_Task_TemporarysAsync(item_supabase);
 
-          if (result_temporary.Success)
-          {
-            item.Set(item_supabase);
-            item.OnlyName = item.Name;
-            item.Width = F_Date.CreateDayListNotWeek(item.DateStart.Date, item.DateEnd.Date).Count() * NMK_M.Tasks.PixelsPerDay;
-            NMK_M.TasksTemporary.Items.Add(item);
-          }
-          else
-          {
-            NMK_M.DialogMessage = new NMK_M_Message()
-            {
-              Show = true,
-              Title = "Error",
-              Message = result.Error,
-              Icon = NMK_M.DialogMessage.Icons[1],
-            };
-          }
-          NMK_M.Tasks.Items.Remove(task);
-          NMK_M.ReloadTask();
-        }
-        else
-        {
-          NMK_M.DialogMessage = new NMK_M_Message()
-          {
-            Show = true,
-            Title = "Error",
-            Message = result.Error,
-            Icon = NMK_M.DialogMessage.Icons[1],
-          };
-        }
+        //  if (result_temporary.Success)
+        //  {
+        //    item.Set(item_supabase);
+        //    item.OnlyName = item.Name;
+        //    item.Width = F_Date.CreateDayListNotWeek(item.DateStart.Date, item.DateEnd.Date).Count() * NMK_M.Tasks.PixelsPerDay;
+        //    NMK_M.TasksTemporary.Items.Add(item);
+        //  }
+        //  else
+        //  {
+        //    NMK_M.DialogMessage = new NMK_M_Message()
+        //    {
+        //      Show = true,
+        //      Title = "Error",
+        //      Message = result.Error,
+        //      Icon = NMK_M.DialogMessage.Icons[1],
+        //    };
+        //  }
+        //  NMK_M.Tasks.Items.Remove(task);
+        //  NMK_M.ReloadTask();
+        //}
+        //else
+        //{
+        //  NMK_M.DialogMessage = new NMK_M_Message()
+        //  {
+        //    Show = true,
+        //    Title = "Error",
+        //    Message = result.Error,
+        //    Icon = NMK_M.DialogMessage.Icons[1],
+        //  };
+        //}
       }
       catch (Exception ex)
       {
@@ -2075,6 +2211,7 @@ namespace RincovitchApp
           TaskId = task.Id
         };
         await NMK_Supabase.insert_notifysAsync(notify);
+        await NMK_Supabase.update45_TasksAsync(task.Id, task, date);
         await NMK_Supabase.update0_TasksAsync(task.Id, task, date);
 
         NMK_M.ReloadTask();
@@ -2920,6 +3057,42 @@ namespace RincovitchApp
     #endregion
 
     #region Task temporary
+    [RelayCommand]
+    async void TemporaryApplyShare(object p)
+    {
+      try
+      {
+        var id = NMK_M.UserList.Where(x => x.IsChecked).Select(x => x.Id);
+        var id_cc = NMK_M.UserList_CC.Where(x => x.IsChecked).Select(x => x.Id);
+        foreach (var item in NMK_M.TasksTemporaryCollection.Cast<NMK_M_Task_Temporary>().Where(x => x.IsChecked))
+        {
+          item.IsProgress = true;
+
+          foreach (var item_ in item.UserList)
+          {
+            item_.IsChecked = id.Contains(item_.Id);
+          }
+          foreach (var item_ in item.UserList_CC)
+          {
+            item_.IsChecked = id_cc.Contains(item_.Id);
+          }
+          item.UserCount = item.UserList.Count(x => x.IsChecked);
+          item.UserCount_CC = item.UserList_CC.Count(x => x.IsChecked);
+
+          item.IsProgress = false;
+        }
+      }
+      catch (Exception ex)
+      {
+        NMK_M.DialogMessage = new NMK_M_Message()
+        {
+          Show = true,
+          Title = "Error",
+          Message = ex.Message,
+          Icon = NMK_M.DialogMessage.Icons[1],
+        };
+      }
+    }
     async void TemporarySelectAllCommandAsync(object p)
     {
       try
@@ -2932,7 +3105,7 @@ namespace RincovitchApp
           item.IsChecked = false;
         }
 
-        foreach (var item in NMK_M.TasksTemporaryCollection.Cast<NMK_M_Task>())
+        foreach (var item in NMK_M.TasksTemporaryCollection.Cast<NMK_M_Task_Temporary>().Where(x => x.IsEdit))
         {
           item.IsChecked = IsChecked;
         }
@@ -2953,35 +3126,33 @@ namespace RincovitchApp
     {
       try
       {
-        foreach (var item in NMK_M.TasksTemporary.Items)
+        foreach (var item in NMK_M.TasksTemporaryCollection.Cast<NMK_M_Task_Temporary>().Where(x => x.IsEdit).Where(x => x.IsChecked))
         {
           item.IsProgress = true;
 
           var item_supabase = new NMK_Supabase_Task_Temporary()
           {
-            Id = item.Id,
-            Index = 0,
             CreatedAt = DateTime.UtcNow,
+            CreateBy = item.CreateBy,
+            Id = item.Id,
+            Name = item.Name,
+            ProjectId = item.Project != null ? item.Project.Id : null,
+            UserId = string.Join(",", item.UserList.Where(x => x.IsChecked).Select(x => x.Id).ToList()),
             UpdateAt = DateTime.UtcNow,
-            Name = $"{item.Project.Key} : {item.OnlyName}",
-            ProjectId = item.Project != null ? item.Project.Id : item.ProjectId,
-            UserId = item.User != null ? item.User.Id : item.UserId,
-            DateStart = item.DateStart.Date.AddHours(item.HourStart).AddMinutes(item.MinutesStart),
-            DateEnd = item.DateEnd.Date.AddHours(item.HourEnd).AddMinutes(item.MinutesEnd),
-            Detail = item.Detail,
-            Area = double.Parse(item.Area),
-            Color = F_Color.BrushToHexRgb(item.Color),
-            Status = 1,
-            CreateBy = NMK_M.UserCurrent.Email,
             UpdateBy = NMK_M.UserCurrent.Email,
+            Time = item.Time.Date.AddHours(item.HH).AddMinutes(item.MM),
+            Status = item.Status,
+            UserId_CC = string.Join(",", item.UserList_CC.Where(x => x.IsChecked).Select(x => x.Id).ToList()),
+            Week = item.Week,
+            Year = item.Year
           };
           var result = await NMK_Supabase.upsert_Task_TemporarysAsync(item_supabase);
 
           if (result.Success)
           {
-            item.Set(item_supabase);
-            item.OnlyName = item.Name;
-            item.Width = F_Date.CreateDayListNotWeek(item.DateStart.Date, item.DateEnd.Date).Count() * NMK_M.Tasks.PixelsPerDay;
+            //item.Set(item_supabase);
+            //item.OnlyName = item.Name;
+            //item.Width = F_Date.CreateDayListNotWeek(item.DateStart.Date, item.DateEnd.Date).Count() * NMK_M.Tasks.PixelsPerDay;
           }
           else
           {
@@ -2995,6 +3166,13 @@ namespace RincovitchApp
           }
           item.IsProgress = false;
         }
+        NMK_M.DialogMessage = new NMK_M_Message()
+        {
+          Show = true,
+          Title = "Success",
+          Message = "Save Success!",
+          Icon = NMK_M.DialogMessage.Icons[1],
+        };
       }
       catch (Exception ex)
       {
@@ -3011,84 +3189,84 @@ namespace RincovitchApp
     {
       try
       {
-        if (NMK_M.TasksTemporary.Items.Where(x => x.IsChecked).Count() == 0)
-        {
-          NMK_M.DialogMessage = new NMK_M_Message()
-          {
-            Show = true,
-            Title = "Warning",
-            Message = "Please select at least one task to add.",
-            Icon = NMK_M.DialogMessage.Icons[2],
-          };
-          return;
-        }
+        //if (NMK_M.TasksTemporary.Items.Where(x => x.IsChecked).Count() == 0)
+        //{
+        //  NMK_M.DialogMessage = new NMK_M_Message()
+        //  {
+        //    Show = true,
+        //    Title = "Warning",
+        //    Message = "Please select at least one task to add.",
+        //    Icon = NMK_M.DialogMessage.Icons[2],
+        //  };
+        //  return;
+        //}
 
-        if (NMK_M.TasksTemporary.Items.Where(x => x.IsChecked).Any(x => x.Project == null) ||
-        NMK_M.TasksTemporary.Items.Where(x => x.IsChecked).Any(x => x.User == null) ||
-        NMK_M.TasksTemporary.Items.Where(x => x.IsChecked).Any(x => string.IsNullOrEmpty(x.Name)))
-        {
-          NMK_M.DialogMessage = new NMK_M_Message()
-          {
-            Show = true,
-            Title = "Warning",
-            Message = "Please make sure all selected tasks have Project, User and Name filled in.",
-            Icon = NMK_M.DialogMessage.Icons[2],
-          };
-          return;
-        }
+        //if (NMK_M.TasksTemporary.Items.Where(x => x.IsChecked).Any(x => x.Project == null) ||
+        //NMK_M.TasksTemporary.Items.Where(x => x.IsChecked).Any(x => x.User == null) ||
+        //NMK_M.TasksTemporary.Items.Where(x => x.IsChecked).Any(x => string.IsNullOrEmpty(x.Name)))
+        //{
+        //  NMK_M.DialogMessage = new NMK_M_Message()
+        //  {
+        //    Show = true,
+        //    Title = "Warning",
+        //    Message = "Please make sure all selected tasks have Project, User and Name filled in.",
+        //    Icon = NMK_M.DialogMessage.Icons[2],
+        //  };
+        //  return;
+        //}
 
-        foreach (var item in NMK_M.TasksTemporary.Items.Where(x => x.IsChecked))
-        {
-          item.IsProgress = true;
+        //foreach (var item in NMK_M.TasksTemporary.Items.Where(x => x.IsChecked))
+        //{
+        //  item.IsProgress = true;
 
-          var item_supabase = new NMK_Supabase_Task()
-          {
-            Id = item.Id,
-            Index = 0,
-            CreatedAt = DateTime.UtcNow,
-            UpdateAt = DateTime.UtcNow,
-            Name = $"{item.Project.Key} : {item.OnlyName}",
-            ProjectId = item.Project.Id,
-            UserId = item.User.Id,
-            DateStart = item.DateStart.Date.AddHours(item.HourStart).AddMinutes(item.MinutesStart),
-            DateEnd = item.DateEnd.Date.AddHours(item.HourEnd).AddMinutes(item.MinutesEnd),
-            Detail = item.Detail,
-            Area = double.Parse(item.Area),
-            Color = F_Color.BrushToHexRgb(item.Color),
-            Status = 1,
-            CreateBy = NMK_M.UserCurrent.Email,
-            UpdateBy = NMK_M.UserCurrent.Email,
-          };
-          var result = await NMK_Supabase.insert_TasksAsync(item_supabase);
+        //  var item_supabase = new NMK_Supabase_Task()
+        //  {
+        //    Id = item.Id,
+        //    Index = 0,
+        //    CreatedAt = DateTime.UtcNow,
+        //    UpdateAt = DateTime.UtcNow,
+        //    Name = $"{item.Project.Key} : {item.OnlyName}",
+        //    ProjectId = item.Project.Id,
+        //    UserId = item.User.Id,
+        //    DateStart = item.DateStart.Date.AddHours(item.HourStart).AddMinutes(item.MinutesStart),
+        //    DateEnd = item.DateEnd.Date.AddHours(item.HourEnd).AddMinutes(item.MinutesEnd),
+        //    Detail = item.Detail,
+        //    Area = double.Parse(item.Area),
+        //    Color = F_Color.BrushToHexRgb(item.Color),
+        //    Status = 1,
+        //    CreateBy = NMK_M.UserCurrent.Email,
+        //    UpdateBy = NMK_M.UserCurrent.Email,
+        //  };
+        //  var result = await NMK_Supabase.insert_TasksAsync(item_supabase);
 
-          if (result.Success)
-          {
-            item.Set(item_supabase);
-            item.OnlyName = item.Name.Split(" : ").Last();
-            item.Width = F_Date.CreateDayListNotWeek(item.DateStart.Date, item.DateEnd.Date).Count() * NMK_M.Tasks.PixelsPerDay;
-            item.Status = 1;
-          }
-          else
-          {
-            NMK_M.DialogMessage = new NMK_M_Message()
-            {
-              Show = true,
-              Title = "Error",
-              Message = result.Error,
-              Icon = NMK_M.DialogMessage.Icons[1],
-            };
-          }
-          item.IsProgress = false;
-        }
-        var list = new List<NMK_M_Task>(NMK_M.TasksTemporary.Items.Where(x => x.IsChecked));
-        foreach (var item in list)
-        {
-          item.IsProgress = true;
-          item.IsAssignedTo = item.UserId == NMK_M.UserCurrent.Id;
-          NMK_M.Tasks.Items.Add(item);
-          TemporaryDeleteCommandAsync(item);
-          item.IsProgress = false;
-        }
+        //  if (result.Success)
+        //  {
+        //    item.Set(item_supabase);
+        //    item.OnlyName = item.Name.Split(" : ").Last();
+        //    item.Width = F_Date.CreateDayListNotWeek(item.DateStart.Date, item.DateEnd.Date).Count() * NMK_M.Tasks.PixelsPerDay;
+        //    item.Status = 1;
+        //  }
+        //  else
+        //  {
+        //    NMK_M.DialogMessage = new NMK_M_Message()
+        //    {
+        //      Show = true,
+        //      Title = "Error",
+        //      Message = result.Error,
+        //      Icon = NMK_M.DialogMessage.Icons[1],
+        //    };
+        //  }
+        //  item.IsProgress = false;
+        //}
+        //var list = new List<NMK_M_Task>(NMK_M.TasksTemporary.Items.Where(x => x.IsChecked));
+        //foreach (var item in list)
+        //{
+        //  item.IsProgress = true;
+        //  item.IsAssignedTo = item.UserId == NMK_M.UserCurrent.Id;
+        //  NMK_M.Tasks.Items.Add(item);
+        //  TemporaryDeleteCommandAsync(item);
+        //  item.IsProgress = false;
+        //}
       }
       catch (Exception ex)
       {
@@ -3103,7 +3281,7 @@ namespace RincovitchApp
     }
     async void TemporaryDeleteCommandAsync(object p)
     {
-      if (p is not NMK_M_Task task)
+      if (p is not NMK_M_Task_Temporary task)
         return;
       try
       {
@@ -3144,22 +3322,25 @@ namespace RincovitchApp
         var week = CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(DateTime.Now, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         var day = F_Date.GetWeekdaysOfWeek(DateTime.Today.Year, week);
         var days = F_Date.CreateDayList(day.Start, day.End);
-        NMK_M.TasksTemporary.Items.Add(new NMK_M_Task()
+        var users = NMK_M.Users.Items.Where(x => x.RoleEnum != F_Role.RoleType.User && x.RoleEnum != F_Role.RoleType.AdminApp).ToList().OrderBy(x => x.Role).ThenBy(x => x.Team).ThenBy(x => x.Name);
+        NMK_M.TasksTemporary.Items.Add(new NMK_M_Task_Temporary()
         {
+          IsEdit = true,
+          Week = week,
+          Year = DateTime.Today.Year,
+          UserList = new ObservableCollection<NMK_M_User>(users.Select(x => x.Clone())),
+          UserList_CC = new ObservableCollection<NMK_M_User>(users.Select(x => x.Clone())),
+
+          TimeList = new ObservableCollection<DateTime>(days.Select(x => x.Name.Date)),
+          HH = 17,
+          MM = 30,
+
           CreateBy = NMK_M.UserCurrent.Email,
           IsChecked = true,
           Id = Guid.NewGuid().ToString(),
           Name = "NEW TASK",
-          LeaveList = new ObservableCollection<NMK_M_LeaveDay>(
-            days.Select(x => new NMK_M_LeaveDay()
-            {
-              Start = x.Name.Date,
-              End = x.Name.Date,
-              StartH = 8,
-              StartM = 30,
-              EndH = 17,
-              EndM = 30,
-            }))
+          Status = "WIP",
+          
         });
       }
       catch (Exception ex)

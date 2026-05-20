@@ -290,6 +290,17 @@ namespace RincovitchApp.Models.ModelChilds
 
     }
 
+    bool _IsChecked;
+    public bool IsChecked
+    {
+      get { return _IsChecked; }
+      set
+      {
+        _IsChecked = value;
+        OnPropertyChanged();
+      }
+    }
+
     DateTime _LeaveStart;
     public DateTime LeaveStart
     {

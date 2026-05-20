@@ -504,6 +504,28 @@
     </Setter>
   </Style>
   <!-- #endregion -->
+  <!-- #region ToggleButtonRoundContentActive -->
+  <Style
+    BasedOn="{StaticResource ToggleButtonRoundContent}"
+    x:Key="ToggleButtonRoundContentActive"
+    TargetType="ToggleButton">
+    <Style.Triggers>
+      <Trigger
+        Property="IsChecked"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="{DynamicResource AccentBlackBrush}" />
+        <Setter
+          Property="BorderBrush"
+          Value="{DynamicResource AccentBlackBrush}" />
+        <Setter
+          Property="Foreground"
+          Value="{DynamicResource AccentBlackForegroundBrush}" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+  <!-- #endregion -->
   <!-- #region ToggleButtonTwoContent -->
   <Style
     TargetType="ToggleButton"
@@ -656,6 +678,28 @@
         <Setter
           Property="Background"
           Value="{DynamicResource AccentBlackHoverBrush}" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+  <!-- #endregion -->
+  <!-- #region ToggleButtonState -->
+  <Style
+    BasedOn="{StaticResource BaseToggleButton}"
+    x:Key="ToggleButtonState"
+    TargetType="ToggleButton">
+    <Style.Triggers>
+      <Trigger
+        Property="IsChecked"
+        Value="True">
+        <Setter
+          Property="Background"
+          Value="{DynamicResource AccentBlackBrush}" />
+        <Setter
+          Property="BorderBrush"
+          Value="{DynamicResource AccentBlackBrush}" />
+        <Setter
+          Property="Foreground"
+          Value="{DynamicResource AccentBlackForegroundBrush}" />
       </Trigger>
     </Style.Triggers>
   </Style>

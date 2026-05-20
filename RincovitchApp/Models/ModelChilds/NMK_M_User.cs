@@ -16,6 +16,17 @@ namespace RincovitchApp.Models.ModelChilds
 {
   public class NMK_M_User : BaseViewModel
   {
+    private bool _IsChecked;
+    public bool IsChecked
+    {
+      get => _IsChecked;
+      set
+      {
+        _IsChecked = value;
+        OnPropertyChanged();
+      }
+    }
+
     private F_Role.RoleType _RoleEnum;
     public F_Role.RoleType RoleEnum
     {

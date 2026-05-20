@@ -2543,23 +2543,43 @@
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
                 <ComboBox
+                  Foreground="{Binding StatusColor}"
                   Padding="0"
                   Style="{StaticResource ComboBoxTransparentAnyAll}"
                   DisplayMemberPath="Key"
                   IsEditable="True"
-                  Margin="10 0"
+                  Margin="8 0"
                   IsSynchronizedWithCurrentItem="False"
                   SelectedValue="{Binding Project, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding ElementName=window, Path=DataContext.NMK_M.Projects.Items}" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
+          <!--<DataGridTemplateColumn
+            Header="Priority"
+            Width="50">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBox
+                  Foreground="{Binding StatusColor}"
+                  BorderThickness="0"
+                  BorderBrush="Transparent"
+                  Style="{StaticResource TextBoxTransparent}"
+                  Margin="0 0"
+                  Grid.Row="1"
+                  CharacterCasing="Upper"
+                  VerticalAlignment="Center"
+                  Text="{Binding HighPriority, UpdateSourceTrigger=PropertyChanged}" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>-->
           <DataGridTemplateColumn
             Header="Task"
             Width="*">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
                 <TextBox
+                  Foreground="{Binding StatusColor}"
                   BorderThickness="0"
                   BorderBrush="Transparent"
                   Style="{StaticResource TextBoxTransparent}"
@@ -2573,22 +2593,96 @@
           </DataGridTemplateColumn>
           <DataGridTemplateColumn
             Header="Status"
-            Width="150">
+            Width="130">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
                 <ComboBox
+                  Foreground="{Binding StatusColor}"
                   Padding="0"
                   Style="{StaticResource ComboBoxTransparentAnyAll}"
-                  Margin="10 0"
+                  Margin="10 0 0 0"
                   IsSynchronizedWithCurrentItem="False"
-                  SelectedValue="{Binding StatusPlan, UpdateSourceTrigger=PropertyChanged}"
-                  ItemsSource="{Binding StatusPlans}" />
+                  SelectedValue="{Binding Status, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding StatusList}" />
               </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
           </DataGridTemplateColumn>
           <DataGridTemplateColumn
-            Header="Created by"
-            Width="300">
+            Header="Date"
+            Width="150">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <ComboBox
+                  Foreground="{Binding StatusColor}"
+                  Padding="0"
+                  Style="{StaticResource ComboBoxTransparentAnyAll}"
+                  Margin="10 0"
+                  IsSynchronizedWithCurrentItem="False"
+                  SelectedValue="{Binding Time, UpdateSourceTrigger=PropertyChanged}"
+                  ItemsSource="{Binding TimeList}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock
+                        VerticalAlignment="Center"
+                        Text="{Binding StringFormat='{}{0: dd/MM/yyyy - ddd}', UpdateSourceTrigger=PropertyChanged}" />
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn
+            Header="Time"
+            Width="150">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <StackPanel
+                  Orientation="Horizontal">
+                  <TextBox
+                    Foreground="{Binding StatusColor}"
+                    BorderThickness="0"
+                    BorderBrush="Transparent"
+                    Style="{StaticResource TextBoxTransparent}"
+                    Margin="0 0"
+                    Grid.Row="1"
+                    Width="40"
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    Text="{Binding HH, UpdateSourceTrigger=PropertyChanged}" />
+                  <TextBlock
+                    Foreground="{Binding StatusColor}"
+                    VerticalAlignment="Center"
+                    Text=":" />
+                  <TextBox
+                    Foreground="{Binding StatusColor}"
+                    BorderThickness="0"
+                    BorderBrush="Transparent"
+                    Style="{StaticResource TextBoxTransparent}"
+                    Margin="0 0"
+                    Width="40"
+                    VerticalAlignment="Center"
+                    TextAlignment="Center"
+                    Text="{Binding MM, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn
+            Header="User"
+            Width="50">
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock
+                  Foreground="{Binding StatusColor}"
+                  Margin="10 0"
+                  VerticalAlignment="Center"
+                  Text="{Binding UserCount}" />
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTemplateColumn
+            Header="CC"
+            Width="130">
             <DataGridTemplateColumn.CellTemplate>
               <DataTemplate>
                 <Grid>
@@ -2599,16 +2693,17 @@
                       Width="100" />
                   </Grid.ColumnDefinitions>
                   <TextBlock
-                    TextTrimming="CharacterEllipsis"
+                    Foreground="{Binding StatusColor}"
                     Margin="10 0"
                     VerticalAlignment="Center"
-                    Text="{Binding CreateBy, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding UserCount_CC}" />
                   <StackPanel
                     Margin="10 0"
                     Grid.Column="1"
                     Visibility="{Binding ApprovalStatusAssign, Converter={StaticResource BoolConverter}}"
                     Orientation="Horizontal">
                     <ToggleButton
+                      Foreground="{Binding StatusColor}"
                       ToolTip="Show time"
                       IsChecked="{Binding ViewDetail, UpdateSourceTrigger=PropertyChanged}"
                       Margin="10 0 0 0"
@@ -2616,13 +2711,14 @@
                       Height="25"
                       theme:UI.IconWidth="20"
                       theme:UI.IconHeight="20"
-                      theme:UI.IconFalse="TimerOutline"
-                      theme:UI.IconTrue="TimerOutline"
-                      Style="{StaticResource ToggleButtonRound}"/>
+                      theme:UI.IconFalse="UserOutline"
+                      theme:UI.IconTrue="UserOutline"
+                      Style="{StaticResource ToggleButtonRound}" />
                     <Grid
                       Margin="5 0">
                       <Grid>
                         <ToggleButton
+                          Foreground="{Binding StatusColor}"
                           Visibility="{Binding IsProgress, Converter={StaticResource BoolConverterReverse}}"
                           Width="25"
                           Height="25"
@@ -2667,82 +2763,175 @@
             <Setter
               Property="DetailsVisibility"
               Value="{Binding ViewDetail, Converter={StaticResource BoolConverter}}" />
+            <Setter
+              Property="IsEnabled"
+              Value="{Binding IsEdit}" />
+            <!--<Setter
+              Property="Foreground"
+              Value="{Binding StatusColor}" />-->
           </Style>
         </DataGrid.RowStyle>
         <DataGrid.RowDetailsTemplate>
           <DataTemplate>
-            <ListBox
-              Background="White"
-              BorderThickness="0"
-              ItemContainerStyle="{StaticResource ListBoxItemTransparent}"
-              ItemsSource="{Binding LeaveList, UpdateSourceTrigger=PropertyChanged}">
-              <ListBox.ItemTemplate>
-                <DataTemplate>
-                  <StackPanel
-                    Margin="40 0 0 0"
-                    Height="40"
-                    Orientation="Horizontal">
-                    <TextBlock
-                      Width="30"
-                      VerticalAlignment="Center"
-                      Text="{Binding LeaveStart,StringFormat='{}{0:ddd}'}" />
-                    <TextBlock
-                      VerticalAlignment="Center"
-                      Text="{Binding LeaveStart,StringFormat='{}{0: - dd/MM/yyyy HH:mm}', UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock
-                      Margin="5 0"
-                      VerticalAlignment="Center"
-                      Text="-" />
-                    <TextBlock
-                      VerticalAlignment="Center"
-                      Text="{Binding LeaveEnd,StringFormat='{}{0:dd/MM/yyyy HH:mm}', UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock
-                      Margin="50 0 0 0"
-                      VerticalAlignment="Center"
-                      Text="From : " />
-                    <TextBox
-                      TextAlignment="Center"
-                      Padding="0"
-                      theme:UI.Hint="HH"
-                      Width="50"
-                      Margin="10 0"
-                      VerticalAlignment="Center"
-                      Text="{Binding StartH}" />
-                    <TextBox
-                      Width="50"
-                      TextAlignment="Center"
-                      Padding="0"
-                      theme:UI.Hint="MM"
-                      Margin="0 0"
-                      VerticalAlignment="Center"
-                      Text="{Binding StartM}" />
-                    <TextBlock
-                      Margin="10 0 0 0"
-                      VerticalAlignment="Center"
-                      Text="To : " />
-                    <TextBox
-                      Width="50"
-                      TextAlignment="Center"
-                      Padding="0"
-                      theme:UI.Hint="HH"
-                      Margin="10 0"
-                      VerticalAlignment="Center"
-                      Text="{Binding EndH}" />
-                    <TextBox
-                      Width="50"
-                      TextAlignment="Center"
-                      Padding="0"
-                      theme:UI.Hint="MM"
-                      Margin="0 0"
-                      VerticalAlignment="Center"
-                      Text="{Binding EndM}" />
-                  </StackPanel>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
-            </ListBox>
+            <StackPanel
+              Background="White">
+              <StackPanel
+                Margin="0 5"
+                Orientation="Horizontal">
+                <TextBlock
+                  Margin="12 0 0 0"
+                  VerticalAlignment="Center"
+                  Width="50"
+                  Text="Edit :" />
+                <ListBox
+                  BorderThickness="0"
+                  Background="White"
+                  BorderBrush="{StaticResource ControlBorderBrush}"
+                  ItemContainerStyle="{StaticResource ListBoxItemTransparent}"
+                  ItemsSource="{Binding UserList, UpdateSourceTrigger=PropertyChanged}">
+                  <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel
+                        Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </ListBox.ItemsPanel>
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <ToggleButton
+                        theme:UI.BDCorner="15"
+                        IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="10 0 0 0"
+                        Style="{StaticResource ToggleButtonState}">
+                        <TextBlock
+                          VerticalAlignment="Center"
+                          Text="{Binding Name}" />
+                      </ToggleButton>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </StackPanel>
+              <StackPanel
+                Margin="0 5"
+                Orientation="Horizontal">
+                <TextBlock
+                  Margin="12 0 0 0"
+                  VerticalAlignment="Center"
+                  Width="50"
+                  Text="View :" />
+                <ListBox
+                  BorderThickness="0"
+                  Background="White"
+                  BorderBrush="{StaticResource ControlBorderBrush}"
+                  ItemContainerStyle="{StaticResource ListBoxItemTransparent}"
+                  ItemsSource="{Binding UserList_CC, UpdateSourceTrigger=PropertyChanged}">
+                  <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel
+                        Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </ListBox.ItemsPanel>
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <ToggleButton
+                        theme:UI.BDCorner="15"
+                        IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="10 0 0 0"
+                        Style="{StaticResource ToggleButtonState}">
+                        <TextBlock
+                          VerticalAlignment="Center"
+                          Text="{Binding Name}" />
+                      </ToggleButton>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </StackPanel>
+            </StackPanel>
           </DataTemplate>
         </DataGrid.RowDetailsTemplate>
       </DataGrid>
+      <CheckBox
+        VerticalAlignment="Top"
+        Grid.Row="2"
+        HorizontalAlignment="Left"
+        Margin="11 20 0 0"
+        Command="{Binding ElementName=window,Path=DataContext.TemporarySelectAllCommand}"
+        CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
+        Width="120"
+        theme:UI.IconFalse="SelectAll" />
+      <StackPanel
+        Grid.Row="1"
+        Background="White">
+        <StackPanel
+          Margin="0 5"
+          Orientation="Horizontal">
+          <TextBlock
+            Margin="12 0 0 0"
+            VerticalAlignment="Center"
+            Width="50"
+            Text="Edit :" />
+          <ListBox
+            BorderThickness="0"
+            Background="White"
+            BorderBrush="{StaticResource ControlBorderBrush}"
+            ItemContainerStyle="{StaticResource ListBoxItemTransparent}"
+            ItemsSource="{Binding NMK_M.UserList, UpdateSourceTrigger=PropertyChanged}">
+            <ListBox.ItemsPanel>
+              <ItemsPanelTemplate>
+                <StackPanel
+                  Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <ToggleButton
+                  theme:UI.BDCorner="15"
+                  IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                  Margin="10 0 0 0"
+                  Style="{StaticResource ToggleButtonState}">
+                  <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{Binding Name}" />
+                </ToggleButton>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </StackPanel>
+        <StackPanel
+          Margin="0 5"
+          Orientation="Horizontal">
+          <TextBlock
+            Margin="12 0 0 0"
+            VerticalAlignment="Center"
+            Width="50"
+            Text="View :" />
+          <ListBox
+            BorderThickness="0"
+            Background="White"
+            BorderBrush="{StaticResource ControlBorderBrush}"
+            ItemContainerStyle="{StaticResource ListBoxItemTransparent}"
+            ItemsSource="{Binding NMK_M.UserList_CC, UpdateSourceTrigger=PropertyChanged}">
+            <ListBox.ItemsPanel>
+              <ItemsPanelTemplate>
+                <StackPanel
+                  Orientation="Horizontal" />
+              </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <ToggleButton
+                  theme:UI.BDCorner="15"
+                  IsChecked="{Binding IsChecked, UpdateSourceTrigger=PropertyChanged}"
+                  Margin="10 0 0 0"
+                  Style="{StaticResource ToggleButtonState}">
+                  <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{Binding Name}" />
+                </ToggleButton>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </StackPanel>
+      </StackPanel>
       <TextBox
         Grid.Row="0"
         Margin="10"
@@ -2750,34 +2939,37 @@
         AcceptsReturn="True"
         Text="{Binding NMK_M.SearchTaskTemporary, UpdateSourceTrigger=PropertyChanged}"
         theme:UI.Hint="Search..." />
-      <StackPanel
-        HorizontalAlignment="Left"
-        Grid.Row="1"
-        Orientation="Horizontal">
-        <ToggleButton
-          Margin="10 0"
-          Command="{Binding ElementName=window,Path=DataContext.TemporarySelectAllCommand}"
-          CommandParameter="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}"
-          Width="120"
-          Content="Select All"
-          theme:UI.IconFalse="SelectAll" />
-        <ToggleButton
-          Command="{Binding ElementName=window,Path=DataContext.TemporaryAddCommand}"
-          Width="120"
-          Content="Add"
-          theme:UI.IconFalse="Plus" />
-      </StackPanel>
-      <StackPanel
+      <ToggleButton
+        Width="80"
+        VerticalAlignment="Top"
         HorizontalAlignment="Right"
-        Grid.Row="1"
-        Orientation="Horizontal">
+        Margin="0 10 10 0"
+        Grid.Row="2"
+        Style="{StaticResource ToggleButtonActive}"
+        Command="{Binding ElementName=window,Path=DataContext.TemporaryAddCommand}"
+        Content="Add"
+        theme:UI.IconFalse="Plus" />
+      <StackPanel
+        Margin="0 7 0 0"
+        HorizontalAlignment="Right"
+        Grid.Row="1">
         <ToggleButton
+          Width="80"
           Margin="10 0"
           Command="{Binding ElementName=window,Path=DataContext.TemporarySaveCommand}"
-          Width="120"
           Style="{StaticResource ToggleButtonActive}"
           Content="Save"
           theme:UI.IconFalse="DatabaseArrowUpOutline" />
+        <ToggleButton
+          Width="80"
+          VerticalAlignment="Top"
+          HorizontalAlignment="Right"
+          Margin="0 10 10 0"
+          Grid.Row="2"
+          Style="{StaticResource ToggleButtonActive}"
+          Command="{Binding ElementName=window,Path=DataContext.TemporaryApplyShareCommand}"
+          Content="Share"
+          theme:UI.IconFalse="ShareVariantOutline" />
         <!--<ToggleButton
           Margin="10 0"
           Command="{Binding ElementName=window,Path=DataContext.TemporaryAddTaskCommand}"
@@ -3401,62 +3593,62 @@
                                                         Text="{Binding User.Email}" />
                                                     </StackPanel>
                                                     <StackPanel>
-                                                    <StackPanel
-                                                      Visibility="{Binding TaskChild, Converter={StaticResource ObjectNullConverter}}">
-                                                      <TextBlock
-                                                        Margin="0 0 0 5"
-                                                        FontWeight="Bold"
-                                                        Text="Support" />
-                                                      <ListBox
-                                                        ItemsSource="{Binding TaskChild.Items}">
-                                                        <ListBox.ItemContainerStyle>
-                                                          <Style
-                                                            TargetType="ListBoxItem"
-                                                            BasedOn="{StaticResource BaseListBoxItem}">
-                                                            <Setter
-                                                              Property="Height"
-                                                              Value="Auto" />
-                                                          </Style>
-                                                        </ListBox.ItemContainerStyle>
-                                                        <ListBox.ItemTemplate>
-                                                          <DataTemplate>
-                                                            <StackPanel>
+                                                      <StackPanel
+                                                        Visibility="{Binding TaskChild, Converter={StaticResource ObjectNullConverter}}">
+                                                        <TextBlock
+                                                          Margin="0 0 0 5"
+                                                          FontWeight="Bold"
+                                                          Text="Support" />
+                                                        <ListBox
+                                                          ItemsSource="{Binding TaskChild.Items}">
+                                                          <ListBox.ItemContainerStyle>
+                                                            <Style
+                                                              TargetType="ListBoxItem"
+                                                              BasedOn="{StaticResource BaseListBoxItem}">
+                                                              <Setter
+                                                                Property="Height"
+                                                                Value="Auto" />
+                                                            </Style>
+                                                          </ListBox.ItemContainerStyle>
+                                                          <ListBox.ItemTemplate>
+                                                            <DataTemplate>
                                                               <StackPanel>
                                                                 <StackPanel>
-                                                                  <StackPanel
-                                                                    Orientation="Horizontal">
-                                                                    <TextBlock
-                                                                      Text="{Binding Name}" />
-                                                                    <TextBlock
-                                                                      Text=" : " />
-                                                                    <TextBlock
-                                                                      Foreground="{DynamicResource AccentBrush}"
-                                                                      Text="{Binding Time, StringFormat='{}-{0}'}" />
-                                                                  </StackPanel>
-                                                                  <StackPanel
-                                                                    Margin="0 5"
-                                                                    Orientation="Horizontal">
-                                                                    <TextBlock
-                                                                      Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                                      FontWeight="Bold"
-                                                                      Text="AssignedTo" />
-                                                                    <TextBlock
-                                                                      Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                                      Text=" : " />
-                                                                    <TextBlock
-                                                                      Foreground="{DynamicResource SecondaryForegroundBrush}"
-                                                                      Text="{Binding User.Email}" />
+                                                                  <StackPanel>
+                                                                    <StackPanel
+                                                                      Orientation="Horizontal">
+                                                                      <TextBlock
+                                                                        Text="{Binding Name}" />
+                                                                      <TextBlock
+                                                                        Text=" : " />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource AccentBrush}"
+                                                                        Text="{Binding Time, StringFormat='{}-{0}'}" />
+                                                                    </StackPanel>
+                                                                    <StackPanel
+                                                                      Margin="0 5"
+                                                                      Orientation="Horizontal">
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        FontWeight="Bold"
+                                                                        Text="AssignedTo" />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        Text=" : " />
+                                                                      <TextBlock
+                                                                        Foreground="{DynamicResource SecondaryForegroundBrush}"
+                                                                        Text="{Binding User.Email}" />
+                                                                    </StackPanel>
                                                                   </StackPanel>
                                                                 </StackPanel>
+                                                                <Separator />
                                                               </StackPanel>
-                                                              <Separator />
-                                                            </StackPanel>
-                                                          </DataTemplate>
-                                                        </ListBox.ItemTemplate>
-                                                      </ListBox>
+                                                            </DataTemplate>
+                                                          </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                      </StackPanel>
                                                     </StackPanel>
-                                                  </StackPanel>
-                                                  <Separator />
+                                                    <Separator />
                                                   </StackPanel>
                                                 </DataTemplate>
                                               </ListBox.ItemTemplate>

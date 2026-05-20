@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using Windows.ApplicationModel.Activation;
 using static Supabase.Postgrest.Constants;
 using static Supabase.Postgrest.QueryOptions;
 using Brush = System.Windows.Media.Brush;
@@ -432,17 +433,13 @@ namespace RincovitchApp.Models
     }
   }
 
-  [Table("NMK_Plan")]
-  public class NMK_Supabase_Plan : BaseModel
+
+  [Table("NMK_Task_Temporary")]
+  public class NMK_Supabase_Task_Temporary : BaseModel
   {
     [PrimaryKey("id", false)]
     [Column("id")]
     public string Id
-    {
-      get; set;
-    }
-    [Column("index")]
-    public int Index
     {
       get; set;
     }
@@ -471,31 +468,6 @@ namespace RincovitchApp.Models
     {
       get; set;
     }
-    [Column("date_start")]
-    public DateTime DateStart
-    {
-      get; set;
-    }
-    [Column("date_end")]
-    public DateTime DateEnd
-    {
-      get; set;
-    }
-    [Column("detail")]
-    public string Detail
-    {
-      get; set;
-    }
-    [Column("color")]
-    public string Color
-    {
-      get; set;
-    }
-    [Column("status")]
-    public int Status
-    {
-      get; set;
-    }
     [Column("create_by")]
     public string CreateBy
     {
@@ -506,108 +478,13 @@ namespace RincovitchApp.Models
     {
       get; set;
     }
-    [Column("date_complete")]
-    public DateTime DateComplete
+    [Column("time")]
+    public DateTime Time
     {
       get; set;
     }
-    [Column("parent_id")]
-    public string ParentId
-    {
-      get; set;
-    }
-    [Column("date_checked")]
-    public DateTime DateChecked
-    {
-      get; set;
-    }
-    [Column("area")]
-    public double Area
-    {
-      get; set;
-    }
-    [Column("is_interrupted")]
-    public bool IsInterrupted
-    {
-      get; set;
-    }
-    [Column("list_interrupted")]
-    public string ListInterrupted
-    {
-      get; set;
-    }
-    [Column("date_started")]
-    public DateTime DateStarted
-    {
-      get; set;
-    }
-    [Column("date_accepted")]
-    public DateTime DateAccepted
-    {
-      get; set;
-    }
-    [Column("file_attach")]
-    public string FileAttach
-    {
-      get; set;
-    }
-    [Column("is_onlychecked")]
-    public bool IsOnlyChecked
-    {
-      get; set;
-    }
-    [Column("folder")]
-    public string Folder
-    {
-      get; set;
-    }
-
-    public NMK_M_Plan Clone()
-    {
-      return new NMK_M_Plan
-      {
-        Id = this.Id,
-        Name = this.Name,
-        ProjectId = this.ProjectId,
-        Index = this.Index,
-        Color = !string.IsNullOrEmpty(this.Color) ? (Brush)new BrushConverter().ConvertFromString(this.Color) : null,
-        UserId = this.UserId,
-        DateStart = this.DateStart,
-        HourStart = this.DateStart.Hour,
-        MinutesStart = this.DateStart.Minute,
-        DateEnd = this.DateEnd,
-        HourEnd = this.DateEnd.Hour,
-        MinutesEnd = this.DateEnd.Minute,
-        Detail = this.Detail,
-        Status = this.Status,
-        CreateAt = this.CreatedAt,
-        CreateBy = this.CreateBy,
-        DateComplete = this.DateComplete,
-        ParentId = this.ParentId,
-        IsOnlyChecked = this.IsOnlyChecked,
-        DateChecked = this.DateChecked,
-        DateStarted = this.DateStarted,
-        DateAccepted = this.DateAccepted,
-        Area = this.Area.ToString(),
-      };
-    }
-  }
-
-  [Table("NMK_Task_Temporary")]
-  public class NMK_Supabase_Task_Temporary : NMK_Supabase_Task
-  {
-    [Column("leave_list")]
-    public string LeaveList
-    {
-      get; set;
-    }
-    [Column("status_plan")]
-    public string StatusPlan
-    {
-      get; set;
-    }
-    [Column("high_priority")]
-    public int HighPriority
+    [Column("status")]
+    public string Status
     {
       get; set;
     }
@@ -616,45 +493,37 @@ namespace RincovitchApp.Models
     {
       get; set;
     }
-    public NMK_M_Task Clone()
+    [Column("week")]
+    public int Week
     {
-      return new NMK_M_Task
+      get; set;
+    }
+    [Column("year")]
+    public int Year
+    {
+      get; set;
+    }
+    public NMK_M_Task_Temporary Clone()
+    {
+      return new NMK_M_Task_Temporary
       {
+        CreateAt = this.CreatedAt,
+        CreateBy = this.CreateBy,
         Id = this.Id,
         Name = this.Name,
         ProjectId = this.ProjectId,
-        Index = this.Index,
-        Color = !string.IsNullOrEmpty(this.Color) ? (Brush)new BrushConverter().ConvertFromString(this.Color) : null,
         UserId = this.UserId,
-        UserId_CC = this.UserId_CC,
-        DateStart = this.DateStart,
-        HourStart = this.DateStart.Hour,
-        MinutesStart = this.DateStart.Minute,
-        DateEnd = this.DateEnd,
-        HourEnd = this.DateEnd.Hour,
-        MinutesEnd = this.DateEnd.Minute,
-        Detail = this.Detail,
+        UpdateAt = this.UpdateAt,
+        UpdateBy = this.UpdateBy,
+
+        Time = this.Time.Date,
+        HH = this.Time.Hour,
+        MM = this.Time.Minute,
+
         Status = this.Status,
-        CreateAt = this.CreatedAt,
-        CreateBy = this.CreateBy,
-        DateComplete = this.DateComplete,
-        ParentId = this.ParentId,
-        IsOnlyChecked = this.IsOnlyChecked,
-        DateChecked = this.DateChecked,
-        DateStarted = this.DateStarted,
-        DateAccepted = this.DateAccepted,
-        Area = this.Area.ToString(),
-
-        IsInterrupted = this.IsInterrupted,
-        ZIndex = this.IsInterrupted ? -1 : (this.Status == 0 ? -2 : 0),
-        ListInterrupted = IsInterrupted ? this.ListInterrupted.Split(',').ToList() : new List<string>(),
-
-        FileAttachs = !string.IsNullOrEmpty(this.FileAttach) ? JsonConvert.DeserializeObject<ObservableCollection<NMK_M_FileAttach>>(this.FileAttach) : new ObservableCollection<NMK_M_FileAttach>(),
-        Folder = this.Folder,
-
-        LeaveList = !string.IsNullOrEmpty(this.LeaveList)
-        ? Newtonsoft.Json.JsonConvert.DeserializeObject<ObservableCollection<NMK_M_LeaveDay>>(this.LeaveList)
-        : new ObservableCollection<NMK_M_LeaveDay>(),
+        UserId_CC = this.UserId_CC,
+        Week = this.Week,
+        Year = this.Year
       };
     }
   }
@@ -844,8 +713,14 @@ namespace RincovitchApp.Models
   {
     //static string url = "https://slswxupqnjxnqpfkknqu.supabase.co";
     //static string key = "sb_publishable_-6l8WMlZCW3dMlUshBQzNw_9Lbd7JMC";
-    static string url = "https://ondwkhoelyfpzugwyqnd.supabase.co";
-    static string key = "sb_publishable_lkCPpfLoeGVUIgIm0nFJkQ_ltk_pUeY";
+
+    #region support local
+    //static string url = "https://yzgbyhmcnspqzcuhsjge.supabase.co";
+    //static string key = "sb_publishable_iQ8bYsYxQhRcfwpgyU2LjQ_vPR5U-7J";
+
+    static string url = "https://fabuhzarlzstcsaerfut.supabase.co";
+    static string key = "sb_publishable_gmnEl52U7VAkWW_3lZLTFw_hJ9BgLLm";
+    #endregion
 
     private static Supabase.Client _client;
     public static Supabase.Client Client => _client;
@@ -1980,6 +1855,48 @@ namespace RincovitchApp.Models
     }
 
 
+    public static async Task<NMK_M_Return<List<NMK_Supabase_Task_Temporary>>> get_TaskAll_TemporarysAsync(int week, int year)
+    {
+      try
+      {
+        var options = new Supabase.SupabaseOptions
+        {
+          AutoConnectRealtime = true
+        };
+        var supabase = new Supabase.Client(url, key, options);
+        await supabase.InitializeAsync();
+
+        var result = await supabase.From<NMK_Supabase_Task_Temporary>().Where(x => x.Week == week && x.Year == year).Get();
+
+        if (result.ResponseMessage.IsSuccessStatusCode)
+        {
+          return new NMK_M_Return<List<NMK_Supabase_Task_Temporary>>
+          {
+            Success = true,
+            Data = result.Models,
+            Error = null
+          };
+        }
+        else
+        {
+          return new NMK_M_Return<List<NMK_Supabase_Task_Temporary>>
+          {
+            Success = false,
+            Data = null,
+            Error = $"Get failed :  {(int)result.ResponseMessage.StatusCode}: {result.ResponseMessage.ReasonPhrase}"
+          };
+        }
+      }
+      catch (Exception ex)
+      {
+        return new NMK_M_Return<List<NMK_Supabase_Task_Temporary>>
+        {
+          Success = false,
+          Data = null,
+          Error = ex.Message
+        };
+      }
+    }
     public static async Task<NMK_M_Return<List<NMK_Supabase_Task_Temporary>>> get_Task_TemporarysAsync(string createby)
     {
       try
